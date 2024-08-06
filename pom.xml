@@ -80,6 +80,9 @@
 			<version>3.0.3</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- 아래로 OAuth2에 사용되는 라이브러리 -->
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
@@ -89,6 +92,13 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>1.33.0</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
