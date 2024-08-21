@@ -1,5 +1,6 @@
 package com.kh.soundcast.song.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -15,19 +16,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SongServiceImpl implements SongService {
 	
-	private final SongDao dao;
+private final SongDao dao;
 	
 	@Override
 	public Song selectSong(int songNo) {
 		return dao.selectSong(songNo);
 	}
-
+	
 	@Override
-	public List selectSongList() {
-		
-		return dao.selectSongList();
+	public List<Song> selectSongList(HashMap<String, Object> param) {
+		return dao.selectSongList(param);
 	}
-
+	
 	@Override
 	public List<Genre> selectAllGenres() {
 		return dao.selectAllGenres();
@@ -37,5 +37,7 @@ public class SongServiceImpl implements SongService {
 	public List<Mood> selectAllMoods() {
 		return dao.selectAllMoods();
 	}
-
+	
+	
+	
 }
