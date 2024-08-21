@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProfileImage {
-	private int profileImageNo;
-	private String profileImagePath; // 파일명을 포함한 경로
+public class MemberSocial {
+   private int memberSocialMemberNo;
+   private String memberSocialSocialId;
+   private String memberSocialSocialName;
 }

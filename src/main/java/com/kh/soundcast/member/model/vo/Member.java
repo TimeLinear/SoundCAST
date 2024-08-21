@@ -1,24 +1,53 @@
 package com.kh.soundcast.member.model.vo;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member {
+public class Member implements UserDetails {
 	
 	private int memberNo; // 회원 번호
-	private int memberProfileImgNo; // 프로필 이미지 번호
-	private int memberBannerNo; // 마이페이지 배너 이미지 번호
-	private int memberSocialCategory; // 로그인한 소셜명(0:구글, 1:네이버, 2:카카오)
-	private int memberGradeNo; // 회원 등급
+	
 	private String memberNickname;
 	private String memberEmail; // 카카오의 경우엔 null 허용
+	
 	private String memberIntroduce; // 자기 소개 내용
+	
 	private String memberCreateDate; // 가입일자
 	private String memberModifyDate; // 수정일자
 	private String memberStatus; // 계정 유효 여부
+	
+	
+	private List<SimpleGrantedAuthority> authorities;
+	
+	public Collection<? extends GrantedAuthority> getAuthorities(){
+		return authorities;
+	}
+
+	@Override
+	public String getPassword() {
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		return null;
+	}
+	
+	
+	
 	
 }
