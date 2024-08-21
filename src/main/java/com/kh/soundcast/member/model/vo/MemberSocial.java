@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SocialCategory {
-	private int socialCategoryNo;
-	private String socialCategoryName;
+public class MemberSocial {
+	private int memberSocialMemberNo;
+	private String memberSocialSocialId;
+	private String memberSocialSocialName;
 }
