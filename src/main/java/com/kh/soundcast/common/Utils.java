@@ -2,6 +2,7 @@ package com.kh.soundcast.common;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,11 +20,11 @@ public class Utils {
 		int random = (int) (Math.random() * 90000 + 10000); // 10000~99999(5자리 랜덤값)
 		String ext = originName.substring(originName.lastIndexOf(".")); // test.jpg -> .jpg
 		
-		String changeName = "soundcast" + currentTime + random + ext;
+		String changeName = "soundcast-" + currentTime + random + ext;
 
 		// 파일 저장
 		try {
-			upfile.transferTo(new File(path + changeName));
+			upfile.transferTo(new File(Paths.get(path + changeName).toAbsolutePath().toString()));
 		} catch (IllegalStateException | IOException e) {
 			e.printStackTrace();
 		}
