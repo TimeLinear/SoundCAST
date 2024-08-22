@@ -99,6 +99,20 @@
 			<version>1.33.0</version>
 		</dependency>
 		
+		<!-- JSON WEB TOKEN 관련 -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+		
+		<!-- JWT 디코딩에 필요 -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
