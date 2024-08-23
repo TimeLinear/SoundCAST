@@ -1,4 +1,4 @@
-package com.kh.soundcast.member.filter;
+package com.kh.soundcast.api.auth.filter;
 
 import java.io.IOException;
 
@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
-import com.kh.soundcast.member.jwt.JwtProvider;
+import com.kh.soundcast.api.auth.jwt.JwtProvider;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class MemberFilter extends GenericFilterBean {
+public class AuthFilter extends GenericFilterBean {
 	
 	private final JwtProvider jwtProvider;
 	

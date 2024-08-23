@@ -58,13 +58,13 @@
            	<result column="PROFILE_IMAGE_PATH" property="profileImagePath"/>
 		</association>
 		
-      <collection property="authorities"
+		<collection property="authorities"
                javaType="list"
                ofType="simpleGrantedAuthority">
-         <constructor>
+			<constructor>
                <arg column="MEMBER_GRADE_NAME" javaType="string"/>
-           </constructor>
-      </collection>
+			</constructor>
+		</collection>
        
 
    </resultMap>
@@ -190,10 +190,89 @@ GROUP BY
  	-->
    
    
+   <!-- 회원 마이페이지 자기 수정 -->
+   <insert id="insertMemberProfile" useGeneratedKeys="true"> <!-- 회원 프로필사진경로 삽입 -->
+   		<selectKey keyProperty="profileImageNo" resultType="int" order="BEFORE">
+			SELECT SEQ_MEMBER_PROFILE_IMAGE_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO PROFILE_IMAGE
+		VALUES(
+			#{profileImageNo},
+			#{profileImagePath}
+		)
+		
+   </insert>
    
+   <insert id="insertMemberBanner"> <!-- 회원 배너사진경로 삽입 -->
+   		<selectKey keyProperty="memberBannerNo" resultType="int" order="BEFORE">
+			SELECT SEQ_MEMBER_BANNER_NO.NEXTVAL FROM DUAL
+		</selectKey>
+   		
+   		INSERT INTO MEMBER_BANNER
+   		VALUES(
+			#{memberBannerNo},
+			#{memberBannerPath}
+		)
+   </insert>
    
+   <!-- 회원 배너 사진, 프로필사진, 닉네임,이메일 , 자기소개 변경 쿼리문 -->
+   <update id="updateMemberProfile" >
+   		UPDATE MEMBER
+   		SET 
+   			<if test="memberProfileImageNo != 0 and memberProfileImageNo != null">
+	   			MEMBER_PROFILE_IMAGE_NO = #{memberProfileImageNo},
+   			</if>
+   			<if test="memberBannerNo != 0 and memberBannerNo != null">
+   				MEMBER_BANNER_NO = #{memberBannerNo},
+   			</if>
+   			MEMBER_NICKNAME = #{nickName},
+   			MEMBER_EMAIL = #{email},
+   			MEMBER_INTRODUCE = #{introduce}
+   		WHERE
+   			MEMBER_NO = #{memberNo}
+   </update>
    
+   <!-- 회원 마이페이지 자기 수정 끝-->
    
+	<resultMap id="modifyMemberExtMap" type="memberExt">
+		<id column="MEMBER_NO" property="memberNo" />
+		<result column="MEMBER_NICKNAME" property="memberNickname" />
+		<result column="MEMBER_EMAIL" property="memberEmail" />
+		<result column="MEMBER_INTRODUCE" property="memberIntroduce"/>
+		
+		<association property="memberBanner" javaType="memberBanner">
+           <id column="MEMBER_BANNER_NO" property="memberBannerNo"/>
+           <result column="MEMBER_BANNER_PATH" property="memberBannerPath"/>
+       </association>
+		
+		<association property="profileImage" javaType="profileImage">
+			<id column="PROFILE_IMAGE_NO" property="profileImageNo"/>
+           	<result column="PROFILE_IMAGE_PATH" property="profileImagePath"/>
+		</association>
+		
+		
+	</resultMap>
+   
+   <!-- 수정한 회원 정보 가져오기-->
+   	<select id="selectModifymember" resultMap="modifyMemberExtMap">
+   		SELECT 
+   			PROFILE_IMAGE_PATH,
+   			MEMBER_BANNER_PATH,
+   			MEMBER_NICKNAME,
+   			MEMBER_EMAIL,
+   			MEMBER_INTRODUCE
+   		FROM 
+   			MEMBER
+   		JOIN MEMBER_BANNER USING(MEMBER_BANNER_NO)
+   		JOIN PROFILE_IMAGE ON MEMBER_PROFILE_IMAGE_NO = PROFILE_IMAGE_NO
+   		WHERE
+   			MEMBER_NO = #{memberNo}
+   			AND
+   			MEMBER_STATUS = 'Y'
+   	</select>
+   
+   <!-- 수정한 회원 정보 가져오기 종료-->
    
    
    

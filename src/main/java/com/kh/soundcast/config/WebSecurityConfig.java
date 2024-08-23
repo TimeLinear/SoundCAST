@@ -2,18 +2,20 @@ package com.kh.soundcast.config;
 
 import java.util.Collections;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import com.kh.soundcast.member.filter.MemberFilter;
-import com.kh.soundcast.member.jwt.JwtProvider;
+import com.kh.soundcast.api.auth.filter.AuthFilter;
+import com.kh.soundcast.api.auth.jwt.JwtProvider;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -54,8 +56,17 @@ public class WebSecurityConfig {
 				// .requestMatcher("/admin/**).hasRole("ADMIN") 관리자경우
 				.anyRequest().authenticated()
 		)
-		.addFilterBefore(new MemberFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class );
+		.addFilterBefore(new AuthFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class );
 		
 		return http.build();
 	}
+	
+	@Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+    	return web -> web.ignoring()
+        	.requestMatchers(PathRequest
+            	.toStaticResources()
+                .atCommonLocations()
+                 );
+     }
 }

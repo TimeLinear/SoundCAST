@@ -1,4 +1,4 @@
-package com.kh.soundcast.member.jwt;
+package com.kh.soundcast.api.auth.jwt;
 
 import java.util.Base64;
 import java.util.Date;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kh.soundcast.member.model.service.UserDetailServiceImpl;
+import com.kh.soundcast.api.auth.model.service.UserDetailServiceImpl;
 import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberExt;
 import com.kh.soundcast.member.model.vo.MemberSocial;

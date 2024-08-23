@@ -84,16 +84,15 @@
 		MEMBER_STATUS = 'Y'
 	</select>
 	
-	<insert id="insertProfileImage" useGeneratedKeys="true">
-	
-		<selectKey keyProperty="profileImageNo" resultType="int" order="BEFORE">
-			SELECT SEQ_MEMBER_PROFILE_IMAGE_NO.NEXTVAL FROM DUAL
-		</selectKey>
-	
-		INSERT INTO PROFILE_IMAGE
-		VALUES(
-			#{profileImageNo},
-			#{profileImagePath}
+	<insert id="insertProfileImage" parameterType="memberExt" useGeneratedKeys="true">
+ 		<selectKey resultType="int" order="BEFORE" keyProperty="profileImage.profileImageNo" >
+ 			SELECT SEQ_MEMBER_PROFILE_IMAGE_NO.NEXTVAL FROM DUAL
+ 		</selectKey>
+ 	
+ 		INSERT INTO PROFILE_IMAGE
+ 		VALUES(
+			#{profileImage.profileImageNo},
+			#{profileImage.profileImagePath}
 		)
 	</insert>
 	
