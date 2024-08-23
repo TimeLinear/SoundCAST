@@ -1,0 +1,131 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="auth">
+
+	
+	<resultMap id="authorityMap" type="simpleGrantedAuthority">
+		<constructor>
+			<arg column="authority" javaType="string" />
+		</constructor>
+	</resultMap>
+	
+	
+	<resultMap id="memberExtMap" type="memberExt">
+			<id column="MEMBER_NO" property="memberNo"/>
+			<result column="MEMBER_NICKNAME" property="memberNickname"/>
+			<result column="MEMBER_EMAIL" property="memberEmail"/>
+			<result column="MEMBER_INTRODUCE" property="memberIntroduce"/>
+			<result column="MEMBER_CREATE_DATE" property="memberCreateDate"/>
+			<result column="MEMBER_MODIFY_DATE" property="memberModifyDate"/>
+			<result column="MEMBER_STATUS" property="memberStatus"/>
+       
+       <association property="comment" javaType="comment">
+           <id column="COMMENT_NO" property="commentNo"/>
+           <result column="COMMENT_WRITER_MEMBER_NO" property="commentWriterMemberNo"/>
+           <result column="COMMENT_MEMBER_NO" property="commentMemberNo"/>
+           <result column="COMMENT_TEXT" property="commentText"/>
+           <result column="COMMENT_CREATE_DATE" property="commentCreateDate"/>
+           <result column="COMMENT_MODIFY_DATE" property="commentModifyDate"/>
+       </association>
+       
+       <association property="memberBanner" javaType="memberBanner">
+           <id column="MEMBER_BANNER_NO" property="memberBannerNo"/>
+           <result column="MEMBER_BANNER_PATH" property="memberBannerPath"/>
+       </association>
+       
+<!--       <association property="memberGrade" javaType="memberGrade">
+           <id column="MEMBER_GRADE_NO" property="memberGradeNo"/>
+           <result column="MEMBER_GRADE_NAME" property="memberGradeName"/>
+       </association>
+       -->
+       
+       <association property="memberSocial" javaType="memberSocial">
+           <id column="MEMBER_SOCIAL_MEMBER_NO" property="memberSocialMemberNo"/>
+           <result column="MEMBER_SOCIAL_SOCIAL_NAME" property="memberSocialSocialName"/>
+           <result column="MEMBER_SOCIAL_SOCIAL_ID" property="memberSocialSocialId"/>
+       </association>
+
+		<collection property="authorities"
+					javaType="list"
+					ofType="simpleGrantedAuthority">
+			<constructor>
+            	<arg column="MEMBER_GRADE_NAME" javaType="string"/>
+        	</constructor>
+		</collection>
+   
+       <collection property="profileImage" ofType="profileImage">
+           <id column="PROFILE_IMAGE_NO" property="profileImageNo"/>
+           <result column="PROFILE_IMAGE_PATH" property="profileImagePath"/>
+       </collection>
+   </resultMap>
+ 
+	
+	<select id="loadUserByUsername" resultMap="memberExtMap">
+		SELECT 
+			MEMBER_NO, PROFILE_IMAGE_PATH, 
+			MEMBER_BANNER_PATH,
+			MEMBER_SOCIAL_SOCIAL_NAME, 
+			MEMBER_SOCIAL_SOCIAL_ID,
+			MEMBER_NICKNAME, MEMBER_EMAIL, 
+			MEMBER_INTRODUCE, 
+			MEMBER_GRADE_NAME,
+			PROFILE_IMAGE_NO
+		FROM MEMBER
+		JOIN MEMBER_SOCIAL ON MEMBER_SOCIAL_MEMBER_NO = MEMBER_NO
+		JOIN MEMBER_GRADE USING(MEMBER_GRADE_NO)
+		JOIN MEMBER_BANNER USING(MEMBER_BANNER_NO)
+		JOIN PROFILE_IMAGE ON MEMBER_PROFILE_IMAGE_NO = PROFILE_IMAGE_NO
+		WHERE
+		MEMBER_SOCIAL_SOCIAL_ID = #{socialId}
+		AND
+		MEMBER_SOCIAL_SOCIAL_NAME = #{socialType}
+		AND
+		MEMBER_STATUS = 'Y'
+	</select>
+	
+	<insert id="insertProfileImage" parameterType="memberExt" useGeneratedKeys="true">
+ 		<selectKey resultType="int" order="BEFORE" keyProperty="profileImage.profileImageNo" >
+ 			SELECT SEQ_MEMBER_PROFILE_IMAGE_NO.NEXTVAL FROM DUAL
+ 		</selectKey>
+ 	
+ 		INSERT INTO PROFILE_IMAGE
+ 		VALUES(
+			#{profileImage.profileImageNo},
+			#{profileImage.profileImagePath}
+		)
+	</insert>
+	
+	<insert id="insertMember" useGeneratedKeys="true">
+		<selectKey resultType="int" order="BEFORE" keyProperty="memberNo">
+			SELECT SEQ_MEMBER_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO MEMBER
+		VALUES(
+			#{memberNo},
+			#{profileImage.profileImageNo},
+			DEFAULT,
+			DEFAULT,
+			#{memberNickname},
+			#{memberEmail},
+			DEFAULT,
+			DEFAULT,
+			DEFAULT,
+			DEFAULT
+		)
+	</insert>
+	
+	<insert id="insertMemberSocial">
+		INSERT INTO MEMBER_SOCIAL
+		VALUES(
+			#{memberNo},
+			#{memberSocial.memberSocialSocialName},
+			#{memberSocial.memberSocialSocialId}
+		)
+	</insert>
+	
+	
+	
+	
+
+</mapper>

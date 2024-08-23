@@ -99,6 +99,17 @@
 			<version>1.33.0</version>
 		</dependency>
 		
+		<dependency>
+           <groupId>io.jsonwebtoken</groupId>
+           <artifactId>jjwt</artifactId>
+           <version>0.9.1</version>
+       </dependency>
+       <dependency><!-- io.jsonwebtoken 하위호환 세트라 생각  -->
+          <groupId>javax.xml.bind</groupId>
+          <artifactId>jaxb-api</artifactId>
+          <version>2.3.1</version>
+      </dependency>
+		
 	</dependencies>
 
 	<build>
