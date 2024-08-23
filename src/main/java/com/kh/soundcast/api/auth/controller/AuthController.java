@@ -1,4 +1,4 @@
-package com.kh.soundcast.member.controller;
+package com.kh.soundcast.api.auth.controller;
 
 
 
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kh.soundcast.api.auth.jwt.JwtProvider;
-import com.kh.soundcast.member.model.service.AuthService;
+import com.kh.soundcast.api.auth.service.AuthService;
 import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberExt;
 
@@ -133,9 +133,17 @@ public class AuthController {
 				) throws JsonProcessingException{
 			
 			MemberExt member = (MemberExt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			log.debug("토큰 로그인 시도 유저 정보 - {}", member);
+			log.debug("토큰 로그인 시도 유저 정보1 - {}", member);
+			
+			int mNo = member.getMemberNo();
+			MemberExt followCheck = (MemberExt)authService.login(mNo);
+			member.setFollower(followCheck.getFollower());
+			member.setFollowing(followCheck.getFollowing());
+			
+			log.debug("토큰 로그인 시도 유저 정보2 - {}", member);
 			
 			HashMap<String,Object> map = new HashMap<>();
+			
 			
 			if(member != null) {
 				map.put("member", member);

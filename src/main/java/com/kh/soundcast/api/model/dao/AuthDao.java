@@ -1,6 +1,7 @@
-package com.kh.soundcast.member.model.dao;
+package com.kh.soundcast.api.model.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
 import com.kh.soundcast.member.model.dto.GoogleUserInfoResponse;
+import com.kh.soundcast.member.model.vo.Comment;
 import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberExt;
 
@@ -39,7 +41,7 @@ public class AuthDao {
 		return session.insert("auth.insertProfileImage",m);
 		
 	}
-
+	
 	public int insertMemberSocial(MemberExt m) {
 		return session.insert("auth.insertMemberSocial",m);
 		
@@ -48,6 +50,23 @@ public class AuthDao {
 	public int insertMemberGrade(MemberExt m) {
 		return session.insert("auth.insertMemberGrade",m);
 	}
+
+	public List<MemberExt> selectFollowList(int mNo) {
+		return session.selectList("member.selectFollowList", mNo);
+	}
+
+	public int selectFollower(int mNo) {
+		if(session.selectOne("member.selectFollowerCount", mNo) == null) {
+			return 0;
+		}
+		
+		return session.selectOne("member.selectFollowerCount", mNo);
+	}
+
+	public List<MemberExt> selectComment(int mNo) {
+		return session.selectList("member.selectComment", mNo);
+	}
+
 
 //	public void countFollow(String socialType, String sub) {
 //		Map<String,Object> param = new HashMap<>();

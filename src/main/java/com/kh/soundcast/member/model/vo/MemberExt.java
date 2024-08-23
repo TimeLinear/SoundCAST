@@ -20,9 +20,9 @@ public class MemberExt extends Member{
 	private MemberSocial memberSocial;
 	private ProfileImage profileImage; 
 	private Comment comment;
-	private Follow follow;
 	private int follower;
-	private List<Follow> following;
-
+	private List<MemberExt> following;
+	private int commentCount;
+	private List<MemberExt> commentList;
 	
 }

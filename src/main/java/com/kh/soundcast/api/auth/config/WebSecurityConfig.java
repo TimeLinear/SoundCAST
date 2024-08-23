@@ -33,7 +33,7 @@ public class WebSecurityConfig {
 			@Override
 			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 				CorsConfiguration config = new CorsConfiguration();
-				config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+				config.setAllowedOrigins(Collections.singletonList("http://localhost:3000/"));
 				config.setAllowedMethods(Collections.singletonList("*"));
 				config.setAllowCredentials(true); //jwt가 반드시 있어야만 사용가능
 				config.setAllowedHeaders(Collections.singletonList("*"));
@@ -47,6 +47,7 @@ public class WebSecurityConfig {
 			config.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				)
 		.authorizeHttpRequests((authorizeRequest) -> authorizeRequest
+				.requestMatchers("/member/**").permitAll()
 				.requestMatchers("/auth/**").permitAll() // 누구나 이용가능한 url
 				.requestMatchers("/**").hasRole("USER") //그외는 user권한이 필요
 				//.requestMatcher("/admin/**").hasRole("ADMIN") authority테이블에 ROLE_ADMIN

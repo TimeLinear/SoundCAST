@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Follow {
 	private int followMemberNo;
-	private int followTargetMemberNo;
+	private int followTargetMemberNo; 
+	
 }

@@ -1,10 +1,12 @@
-package com.kh.soundcast.member.model.service;
+package com.kh.soundcast.api.auth.service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,9 +21,10 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.kh.soundcast.api.auth.jwt.JwtProvider;
-import com.kh.soundcast.member.model.dao.AuthDao;
+import com.kh.soundcast.api.model.dao.AuthDao;
 import com.kh.soundcast.member.model.dto.GoogleUserInfoResponse;
 import com.kh.soundcast.member.model.dto.KakaoUserInfoResponse;
+import com.kh.soundcast.member.model.vo.Comment;
 import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberExt;
 import com.kh.soundcast.member.model.vo.MemberSocial;
@@ -89,6 +92,28 @@ public class AuthService {
 		
 		//현재 app 에 사용자 정보 유무 조회
 		MemberExt member = authDao.loadUserByUsername(socialType, socialId);
+		
+		int mNo = member.getMemberNo();
+		
+		if(member != null) {
+			// 팔로우 정보들 가져오기
+			List<MemberExt> following = authDao.selectFollowList(mNo);
+			int follower = authDao.selectFollower(mNo);
+			List<MemberExt> commentList = authDao.selectComment(mNo);
+
+			log.debug("팔로잉, 팔로워 = {}, {}", following, follower);
+			log.debug("mNo = {}", mNo);
+//			
+//			if(member.getCommentList() == null) {
+//				member.setCommentList(new ArrayList<MemberExt>());				
+//			}
+			member.setCommentList(commentList);
+			member.setFollowing(following);
+			member.setFollower(follower);
+		}
+		
+		
+		
 		log.info("service m = {}", member);
 		
 		HashMap<String, Object> map = new HashMap<>();	
@@ -164,6 +189,8 @@ public class AuthService {
 			}
 			
 			member = (MemberExt)authDao.loadUserByUsername(socialType, userInfo.getSub());
+			
+			
 //			authDao.countFollow(socialType, userInfo.getSub());
 //			authDao.countFollower(socialType, userInfo.getSub());
 		}
@@ -248,8 +275,33 @@ public class AuthService {
 //			dao.insertMemberSocial(m);
 			// 위 주석부터 해당 주석 사이의 코드들은 MemberExt 클래스 완성이 선행되어야함
 			member = (MemberExt) authDao.loadUserByUsername(socialType, socialId);
+			
+			
 		}
 		return member;
 		
 	}
+
+
+
+
+
+
+	public MemberExt login(int mNo) {
+		MemberExt member = new MemberExt();
+		List<MemberExt> following = authDao.selectFollowList(mNo);
+		int follower = authDao.selectFollower(mNo);
+		List<MemberExt> commentList = authDao.selectComment(mNo);
+//		if(member.getCommentList() == null) {
+//			member.setCommentList(new ArrayList<MemberExt>());				
+//		}
+		member.setCommentList(commentList);
+		member.setFollowing(following);
+		member.setFollower(follower);
+		log.info("Login following, follow = {},{}",following,follower);
+		
+		return member;
+	}
+
+
 }

@@ -1,4 +1,4 @@
-package com.kh.soundcast.member.model.service;
+package com.kh.soundcast.api.auth.service;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
