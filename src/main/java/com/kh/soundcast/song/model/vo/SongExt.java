@@ -13,10 +13,10 @@ public class SongExt extends Song {
 	private String memberNickname;
 	
 	// 음원 분위기 명(songMoodNo 필드와 짝)
-	private String moodName;
+	private String songMoodName;
 	
 	// 음원 장르 명(songGenreNo 필드와 짝)
-	private String genreName;
+	private String songGenreName;
 	
 	// 음원 커버 이미지 객체(songImageNo 필드와 짝)
 	private SongImage songImage;

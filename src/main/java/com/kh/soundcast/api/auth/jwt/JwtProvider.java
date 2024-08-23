@@ -1,4 +1,4 @@
-package com.kh.soundcast.auth.jwt;
+package com.kh.soundcast.api.auth.jwt;
 
 import java.util.Base64;
 import java.util.Date;

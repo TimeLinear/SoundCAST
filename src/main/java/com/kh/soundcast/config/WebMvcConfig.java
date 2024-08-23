@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
 	
 	@Value("${file.upload-dir}")
-	private String uploadBaseDir; // SoundCastWorkspace/SoundCAST_resources/images
+	private String uploadBaseDir; // SoundCastWorkspace/SoundCAST_resources/
 	
 	/* 
 	 * WebMvcConfig란
@@ -24,7 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		Path path = FileSystems.getDefault().getRootDirectories().iterator().next();
-		final String osRootPath = path.toString().replace("\\", "");
+		final String osRootPath = path.toString().replace("\\\\", "");
 		
         // "/images/**" URL 패턴을 외부 디렉토리와 매핑
         registry.addResourceHandler("/images/**")

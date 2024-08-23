@@ -14,8 +14,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import com.kh.soundcast.auth.filter.AuthFilter;
-import com.kh.soundcast.auth.jwt.JwtProvider;
+import com.kh.soundcast.api.auth.filter.AuthFilter;
+import com.kh.soundcast.api.auth.jwt.JwtProvider;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +52,7 @@ public class WebSecurityConfig {
 		.authorizeHttpRequests((authorizeRequest)-> authorizeRequest
 				.requestMatchers("/auth/login/**").permitAll() // 누구나이용가능한 url
 				.requestMatchers("/member/**").permitAll() // 누구나이용가능한 url
+				.requestMatchers("/resource/**").permitAll() // 누구나이용가능한 url
 				.requestMatchers("/**").hasRole("USER") // 그 외는 user권환이 필요
 				// .requestMatcher("/admin/**).hasRole("ADMIN") 관리자경우
 				.anyRequest().authenticated()
@@ -67,6 +68,7 @@ public class WebSecurityConfig {
         	.requestMatchers(PathRequest
             	.toStaticResources()
                 .atCommonLocations()
-                 );
+                 )
+        	.requestMatchers("resource/**");
      }
 }
