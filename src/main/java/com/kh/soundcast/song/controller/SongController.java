@@ -3,10 +3,13 @@ package com.kh.soundcast.song.controller;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.soundcast.song.model.service.SongService;
@@ -25,38 +28,36 @@ public class SongController {
 	
 private final SongService service;
 	
-
-	//키워드가 있는 ?
-	@CrossOrigin(origins = {"*"})
-	@GetMapping("/search/{placeNo}/{genreNo}/{moodNo}/{keyword}")
+	@CrossOrigin(origins = {"http://localhost:3000"})
+	@GetMapping("/search")
 	public List<Song> selectSongList(
-			@PathVariable int placeNo,
-			@PathVariable int genreNo,
-			@PathVariable int moodNo,
-			@PathVariable String keyword			
-			) {
-
-		log.info("placeNo ? {}", placeNo);
-		log.info("genreNo ? {}", genreNo);
-		log.info("moodNo ? {}", moodNo);
+			@RequestParam String keyword,
+			@RequestParam int genre,
+			@RequestParam int mood,
+			@RequestParam int placeNo 
+			){
+		
 		log.info("keyword ? {}", keyword);
+		log.info("genre ? {}", genre);
+		log.info("mood ? {}", mood);
+		log.info("placeNo ? {}", placeNo);
 		
-		HashMap<String, Object> param = new HashMap<>();
-		param.put("placeNo", placeNo);
-		param.put("genreNo", genreNo);
-		param.put("moodNo", moodNo);
-		param.put("keyword", keyword.toUpperCase());
+		HashMap<String, Object> params = new HashMap<>();
 		
-		List<Song> result = service.selectSongList(param);
+		params.put("keyword", keyword.toUpperCase());
+		params.put("genre", genre);
+		params.put("mood", mood);
+		params.put("placeNo", placeNo);
+		
+		List<Song> result = service.selectSongList(params);
 		
 		log.info("result ? {}", result);
+		log.info("size ? {}", result.size());		
 		
 		return result;
-		
 	}
 	
-	//키워드가 없는 주소를 만들어야 하나..?
-	
+
 	
 	@CrossOrigin(origins = {"http://localhost:3000"})
 	@GetMapping("/genres")

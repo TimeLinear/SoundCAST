@@ -18,10 +18,6 @@ public class SongDaoImpl implements SongDao{
 
 	private final SqlSession session;
 
-	@Override
-	public Song selectSong(int songNo) {
-		return session.selectOne("song.selectSong", songNo);
-	}
 	
 	@Override
 	public List<Song> selectSongList(HashMap<String, Object> param) {
@@ -36,6 +32,11 @@ public class SongDaoImpl implements SongDao{
 	@Override
 	public List<Mood> selectAllMoods() {
 		return session.selectList("song.selectAllMoods");
+	}
+
+	@Override
+	public List<Song> selectSongMainList(int placeNo) {
+		return session.selectList("song.selectSongMainList", placeNo);
 	}
 
 	
