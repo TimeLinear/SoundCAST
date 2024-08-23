@@ -52,6 +52,7 @@ public class WebSecurityConfig {
 		.authorizeHttpRequests((authorizeRequest)-> authorizeRequest
 				.requestMatchers("/auth/login/**").permitAll() // 누구나이용가능한 url
 				.requestMatchers("/member/**").permitAll() // 누구나이용가능한 url
+				.requestMatchers("/resource/**").permitAll() // 누구나이용가능한 url
 				.requestMatchers("/**").hasRole("USER") // 그 외는 user권환이 필요
 				// .requestMatcher("/admin/**).hasRole("ADMIN") 관리자경우
 				.anyRequest().authenticated()
@@ -67,6 +68,7 @@ public class WebSecurityConfig {
         	.requestMatchers(PathRequest
             	.toStaticResources()
                 .atCommonLocations()
-                 );
+                 )
+        	.requestMatchers("resource/**");
      }
 }

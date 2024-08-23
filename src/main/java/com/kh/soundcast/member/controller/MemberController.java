@@ -56,13 +56,15 @@ public class MemberController {
     		log.debug("가져온 데이터들 - {}", params);
     		
     		Path path = FileSystems.getDefault().getRootDirectories().iterator().next();
-    		final String osRootPath = path.toString();
+    		final String osRootPath = path.toString().replace("\\\\", "");
     	
     		// 현재 로그인한 회원의 회원 정보
     		MemberExt loginMember = (MemberExt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    		final String bannerSavePath = osRootPath + uploadBaseDir + "member/banner/";
-    		final String profileSavePath = osRootPath + uploadBaseDir + "member/profile/";
+    		final String bannerSavePath = osRootPath + uploadBaseDir + "images/member/banner/";
+    		final String profileSavePath = osRootPath + uploadBaseDir + "images/member/profile/";
+    		
+    		log.debug("배너 경로 - {}, 프로필 경로 - {}", bannerSavePath, profileSavePath);
     		
     		// 파일 처리
             // MEMBER_BANNER 테이블에만 삽입
