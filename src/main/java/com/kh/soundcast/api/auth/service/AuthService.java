@@ -43,9 +43,6 @@ public class AuthService {
 	private final AuthDao authDao;
 	private final JwtProvider jwtProvider;
 	
-	@Value("{google.client.id}")
-	private String clientId;
-	
 	public HashMap<String, Object> authCheck(String socialType, HashMap<String, String> param) throws Exception {
 		
 		String socialId = null;
@@ -76,15 +73,18 @@ public class AuthService {
 			}
 			
 			socialId = userInfo.getSub();
+			log.info("구글로그인체크흐름={}",socialId);
 			
 		break;
 			
 		case "kakao":
 			//카카오
 			String AccToken = param.get("accessToken");
+			log.info("kakaoaccesstoken={}", AccToken);
 			KakaoUserInfoResponse userInfoKakao = kakaoApi.getUserInfo(AccToken);
 			socialId = String.valueOf(userInfoKakao.getId());
 			log.info("kakao의 socialId={}", socialId);
+			
 		break;
 		
 		}
@@ -93,9 +93,9 @@ public class AuthService {
 		//현재 app 에 사용자 정보 유무 조회
 		MemberExt member = authDao.loadUserByUsername(socialType, socialId);
 		
-		int mNo = member.getMemberNo();
 		
 		if(member != null) {
+			int mNo = member.getMemberNo();
 			// 팔로우 정보들 가져오기
 			List<MemberExt> following = authDao.selectFollowList(mNo);
 			int follower = authDao.selectFollower(mNo);
@@ -111,8 +111,6 @@ public class AuthService {
 			member.setFollowing(following);
 			member.setFollower(follower);
 		}
-		
-		
 		
 		log.info("service m = {}", member);
 		
@@ -151,7 +149,6 @@ public class AuthService {
 		String header = new String(Base64.getUrlDecoder().decode(parts[0]));
 		String payloadJson = new String(Base64.getUrlDecoder().decode(parts[1]));
 		
-		
 		ObjectMapper objectMapper = new ObjectMapper();
 		GoogleUserInfoResponse userInfo = new GoogleUserInfoResponse();
 		try {
@@ -165,9 +162,6 @@ public class AuthService {
 		//현재 app 에 사용자 정보 유무 조회
 		MemberExt member = authDao.loadUserByUsername(socialType, userInfo.getSub());
 		log.info("최초로 검색한 유저 정보 - {}", member);
-	
-		
-		
 		
 		int result = 1;
 		if(member == null) {
@@ -194,9 +188,7 @@ public class AuthService {
 //			authDao.countFollow(socialType, userInfo.getSub());
 //			authDao.countFollower(socialType, userInfo.getSub());
 		}
-		
-		
-				
+			
 		log.debug("로그인 시도 유저 정보 - {}", member);
 		
 		return member;
@@ -215,7 +207,6 @@ public class AuthService {
 				// Base64Url 디코딩
 				String header = new String(Base64.getUrlDecoder().decode(parts[0]));
 				String payloadJson = new String(Base64.getUrlDecoder().decode(parts[1]));
-				
 				
 				ObjectMapper objectMapper = new ObjectMapper();
 				GoogleUserInfoResponse userInfo = new GoogleUserInfoResponse();

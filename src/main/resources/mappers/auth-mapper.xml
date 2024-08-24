@@ -49,12 +49,6 @@
            <result column="MEMBER_SOCIAL_SOCIAL_ID" property="memberSocialSocialId"/>
        </association>
 
-		
-       <association property="profileImage" javaType="profileImage">
-			<id column="PROFILE_IMAGE_NO" property="profileImageNo"/>
-           	<result column="PROFILE_IMAGE_PATH" property="profileImagePath"/>
-		</association>
-
       <collection property="authorities"
                javaType="list"
                ofType="simpleGrantedAuthority">
@@ -63,7 +57,10 @@
            </constructor>
       </collection>
    
-     
+     <collection property="profileImage" ofType="profileImage">
+           <id column="PROFILE_IMAGE_NO" property="profileImageNo"/>
+           <result column="PROFILE_IMAGE_PATH" property="profileImagePath"/>
+       </collection>
    </resultMap>
  
  <select id="loadUserByUsername" resultMap="memberExtMap">

@@ -6,10 +6,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kh.soundcast.common.Utils;
 import com.kh.soundcast.member.model.dao.MemberDao;
 import com.kh.soundcast.member.model.vo.Comment;
 import com.kh.soundcast.member.model.vo.Follow;
+import com.kh.soundcast.member.model.vo.MemberBanner;
 import com.kh.soundcast.member.model.vo.MemberExt;
+import com.kh.soundcast.member.model.vo.ProfileImage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,29 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 	
 	private final MemberDao memberDao;
+	
+
+	@Transactional(rollbackFor = Exception.class)
+	public void updateMemberProfile(HashMap<String, Object> params) {
+		memberDao.updateMemberProfile(params);
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public int insertMemberBanner(MemberBanner banner) {
+		return memberDao.insertMemberBanner(banner);
+		
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public int insertMemberProfile(ProfileImage profile) {
+		return memberDao.insertMemberProfile(profile);
+		
+	}
+
+
+	public MemberExt selectModifyMember(int memberNo) {
+		return memberDao.selectModifymember(memberNo);
+	}
 	
 	public MemberExt selectOneMember(int mNo) {
 		
@@ -35,7 +61,18 @@ public class MemberService {
 		
 		List<MemberExt> comment = memberDao.selectComment(mNo);
 		
+		if(!comment.isEmpty()) {
+			String commentText = comment.get(0).getComment().getCommentText();
+			String safeCommentText = Utils.newLineHandling(Utils.XSSHandling(commentText));  
+			
+			comment.get(0).getComment().setCommentText(safeCommentText);
+			
+			member.setCommentList(comment);
+		}
+			
 		member.setCommentList(comment);
+
+		
 		
 		log.info("commentList={}", member.getCommentList());
 		
@@ -54,9 +91,20 @@ public class MemberService {
 	
 	@Transactional(rollbackFor = Exception.class)
 	public int insertComment(HashMap<String, Object> param) {
+		
+		String comment = (String) param.get("comment");
+		
+		String safeComment = Utils.newLineClear(comment);
+		
+		param.put("safeComment", safeComment);
+		
 		return memberDao.insertComment(param);
 	}
 
-	
+	@Transactional(rollbackFor = Exception.class)
+	public int deleteComment(HashMap<String, Object> param) {
+		
+		return memberDao.deleteComment(param);
+	}
 
 }
