@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="song">
+ 	
+	<select id="selectTop5Music" resultMap="songResultMap">
+		SELECT
+			*
+		FROM SONG
+		LEFT JOIN SONG_IMAGE (USING SONG_IMAGE_NO)
+		LEFT JOIN IMAGE_PATH ON (SONG_IMAGE_PATH_NO = IMAGE_PATH_NO)
+		LEFT JOIN MEMBER ON (SONG_MEMBER_NO = MEMBER_NO)
+		LEFT JOIN DOWNLOAD_COUNT ON (SONG_NO = DOWNLOAD_COUNT_SONG_NO)
+		WHERE MEMBER_STATUS = 'Y'
+		ORDER BY DOWNLOAD_COUNT_NUMBER DESC
+	</select>
+	
+	<resultMap id="memberResultMap" type="memberExt">
+	    <id property="memberNo" column="member_no"/>
+	    <result property="memberNickname" column="member_nickname"/>
+	    <result property="memberEmail" column="member_email"/>
+	    
+	    <!-- ProfileImage 객체 매핑 -->
+	    <association property="profileImage" javaType="profileImage">
+	        <id property="profileImageNo" column="PROFILE_IMAGE_NO"/>
+	        <result property="profileImagePath" column="PROFILE_IMAGE_PATH"/>
+	    </association>
+	</resultMap>
+ 
+ </mapper>

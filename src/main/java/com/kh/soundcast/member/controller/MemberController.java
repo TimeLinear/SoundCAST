@@ -7,13 +7,19 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +34,7 @@ import com.kh.soundcast.member.model.vo.MemberBanner;
 import com.kh.soundcast.member.model.vo.MemberExt;
 import com.kh.soundcast.member.model.vo.ProfileImage;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -136,4 +143,44 @@ public class MemberController {
     		
     	
     }
+    
+    // 관리자페이지 시작
+    @CrossOrigin(origins = {"*"})
+	@GetMapping("/selectMembers")
+	public List<MemberExt> selectMembers(HttpServletResponse response){
+		
+		List<MemberExt> list = memberService.selectMembers();
+		log.debug("list {}", list);
+		
+		//response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost:3000");
+		
+		return list;
+	}
+	
+	@CrossOrigin(origins = {"*"})
+	@GetMapping("/searchMembers/type/{type}/searchTerm/{searchTerm}")
+	public List<MemberExt> searchMembers(
+			@PathVariable String type ,
+			@PathVariable String searchTerm
+			){
+		log.debug("type = {}, searchTerm = {}", type, searchTerm);
+		Map<String, Object> param = new HashMap<>();
+		param.put("type", type);
+		param.put("searchTerm", searchTerm);
+		
+		List<MemberExt> list = memberService.searchMembers(param);
+		
+		log.debug("list {}", list);
+		
+		return list;
+	}
+	
+	@CrossOrigin(origins = {"*"})
+	@PutMapping("/deleteMembers")
+    public int deleteMembers(@RequestBody List<Long> deleteList) {
+
+		return memberService.deleteMembers(deleteList);
+        
+	}
+	// 관리자 페이지 끝
 }

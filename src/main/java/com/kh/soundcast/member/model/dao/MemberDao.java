@@ -1,6 +1,7 @@
 package com.kh.soundcast.member.model.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -37,5 +38,17 @@ public class MemberDao {
 		return session.selectOne("member.selectModifymember",memberNo);
 	}
 	
-	
+	// 관리자 페이지 시작
+	public List<MemberExt> selectMembers() {
+		return session.selectList("member.selectMembers");
+	}
+
+	public List<MemberExt> searchMembers(Map<String, Object> param) {
+		return session.selectList("member.searchMembers", param);
+	}
+
+	public int deleteMembers(List<Long> deleteList) {
+		return session.update("member.deleteMembers", deleteList);
+	}
+	// 관리자 페이지 끝
 }

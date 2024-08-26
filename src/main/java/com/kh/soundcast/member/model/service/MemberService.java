@@ -1,6 +1,8 @@
 package com.kh.soundcast.member.model.service;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -39,4 +41,17 @@ public class MemberService {
 		return dao.selectModifymember(memberNo);
 	}
 	
+	// 관리자페이지 시작
+	public List<MemberExt> selectMembers() {
+		return dao.selectMembers();
+	}
+
+	public List<MemberExt> searchMembers(Map<String, Object> param) {
+		return dao.searchMembers(param);
+	}
+
+	public int deleteMembers(List<Long> deleteList) {
+		return dao.deleteMembers(deleteList);
+	}
+	// 관리자페이지 끝
 }
