@@ -1,5 +1,6 @@
 package com.kh.soundcast.api.auth.model.service;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -90,7 +91,14 @@ public HashMap<String, Object> authCheck(String socialType, HashMap<String, Stri
 			log.debug("mNo = {}", mNo);
 			
 			
+			
+			
 			member.setFollowing(following);
+			
+			if(member.getFollowing().get(0) == null) {
+				member.setFollowing(new ArrayList<MemberExt>());
+			}
+			
 			member.setFollower(follower);
 		}
 		
@@ -162,6 +170,10 @@ public HashMap<String, Object> authCheck(String socialType, HashMap<String, Stri
 //		authDao.countFollower(socialType, userInfo.getSub());
 		}
 
+		if(member.getFollowing().get(0) == null) {
+			member.setFollowing(new ArrayList<MemberExt>());
+		}
+		
 		log.debug("로그인 시도 유저 정보 - {}", member);
 
 		return member;
@@ -236,6 +248,24 @@ public HashMap<String, Object> authCheck(String socialType, HashMap<String, Stri
 			// 위 주석부터 해당 주석 사이의 코드들은 MemberExt 클래스 완성이 선행되어야함
 			user = dao.loadUserByUsername(socialId, socialType);
 		}
+		
+//		if(user.getFollowing() == null) {
+//			user.setFollowing(new ArrayList<MemberExt>());
+//		}
+		
+	
+		
+		int mNo = user.getMemberNo();
+		
+		List<MemberExt> following = dao.selectFollowList(mNo);
+		int follower = dao.selectFollower(mNo);
+
+		user.setFollowing(following);
+		user.setFollower(follower);
+		
+		
+		
+		
 		return user;
 		
 	}

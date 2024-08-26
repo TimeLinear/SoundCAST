@@ -1,11 +1,13 @@
 package com.kh.soundcast.member.model.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.soundcast.member.model.vo.Follow;
 import com.kh.soundcast.member.model.vo.MemberBanner;
 import com.kh.soundcast.member.model.vo.MemberExt;
 import com.kh.soundcast.member.model.vo.ProfileImage;
@@ -36,6 +38,6 @@ public class MemberDao {
 	public MemberExt selectModifymember(int memberNo) {
 		return session.selectOne("member.selectModifymember",memberNo);
 	}
-	
+
 	
 }

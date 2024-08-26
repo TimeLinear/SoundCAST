@@ -1,5 +1,6 @@
 package com.kh.soundcast.api.auth.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.http.ResponseEntity;
@@ -115,6 +116,12 @@ public class AuthController {
 		MemberExt followCheck = (MemberExt)authService.login(mNo);
 		member.setFollower(followCheck.getFollower());
 		member.setFollowing(followCheck.getFollowing());
+		
+		if(member.getFollowing().get(0) == null) {
+			member.setFollowing(new ArrayList<MemberExt>());
+		}
+		
+		
 		
 		log.debug("토큰 로그인 시도 유저 정보2 - {}", member);
 		

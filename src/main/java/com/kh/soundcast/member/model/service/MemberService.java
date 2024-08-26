@@ -1,11 +1,13 @@
 package com.kh.soundcast.member.model.service;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.kh.soundcast.api.auth.model.dao.AuthDao;
 import com.kh.soundcast.member.model.dao.MemberDao;
+import com.kh.soundcast.member.model.vo.Follow;
 import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberBanner;
 import com.kh.soundcast.member.model.vo.MemberExt;
@@ -38,5 +40,7 @@ public class MemberService {
 	public MemberExt selectModifyMember(int memberNo) {
 		return dao.selectModifymember(memberNo);
 	}
+
+	
 	
 }
