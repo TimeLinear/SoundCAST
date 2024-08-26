@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SongFileExt extends SongFile {
 	// 음원 파일 경로 명(songFilePathNo 필드와 짝)
-	private String songPathName; 
+	private String songFilePathName; 
 }
