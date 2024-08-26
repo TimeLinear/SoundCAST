@@ -136,6 +136,7 @@
   	<select id="selectComment" resultMap="memberExtMap2">
    		SELECT 
 			COMMENT_NO, 
+			COMMENT_MEMBER_NO,
 			COMMENT_WRITER_MEMBER_NO, 
 			COMMENT_TEXT, 
 			PROFILE_IMAGE.PROFILE_IMAGE_PATH, 

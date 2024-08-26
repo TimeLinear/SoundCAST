@@ -1,13 +1,21 @@
 package com.kh.soundcast.member.model.service;
 
+import java.net.URL;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.kh.soundcast.common.Utils;
 import com.kh.soundcast.member.model.dao.MemberDao;
+import com.kh.soundcast.member.model.dto.GoogleUserInfoResponse;
 import com.kh.soundcast.member.model.vo.Comment;
 import com.kh.soundcast.member.model.vo.Follow;
 import com.kh.soundcast.member.model.vo.MemberBanner;
@@ -23,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 	
 	private final MemberDao memberDao;
-	
+	private final WebApplicationContext applicationContext;
 
 	@Transactional(rollbackFor = Exception.class)
 	public void updateMemberProfile(HashMap<String, Object> params) {
@@ -71,7 +79,13 @@ public class MemberService {
 		}
 			
 		member.setCommentList(comment);
-
+		
+		if(!(member.getMemberIntroduce()==null)) {
+			String introduce = member.getMemberIntroduce();
+			String safeMemberIntroduce = Utils.newLineHandling(Utils.XSSHandling(introduce));
+		member.setMemberIntroduce(safeMemberIntroduce);
+		
+		}
 		
 		
 		log.info("commentList={}", member.getCommentList());

@@ -1,17 +1,23 @@
 package com.kh.soundcast.api.model.dao;
 
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.soundcast.common.Utils;
 import com.kh.soundcast.member.model.dto.GoogleUserInfoResponse;
 import com.kh.soundcast.member.model.vo.Comment;
 import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberExt;
+import com.kh.soundcast.member.model.vo.ProfileImage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthDao {
 
 	private final SqlSessionTemplate session;
+	
+	@Value("${file.upload-dir}")
+	private String uploadBaseDir; 
 
 	public MemberExt loadUserByUsername(String socialType, String socialId) {
 		Map<String,Object> param = new HashMap<>();
@@ -38,6 +47,22 @@ public class AuthDao {
 	}
 
 	public int insertProfileImage(MemberExt m) {
+		
+		Path path = FileSystems.getDefault().getRootDirectories().iterator().next();
+		log.info("Path={}",path);
+		final String osRootPath = path.toString().replace("\\\\", "");
+		log.info("osRootPath={}",osRootPath);
+		
+		final String profileSavePath = osRootPath + uploadBaseDir + "images/member/profile/";
+		
+		String fileUrl = m.getProfileImage().getProfileImagePath();
+		
+		String changeProfileName = "images/member/profile/"+Utils.urlSaveFile(fileUrl, profileSavePath);
+		
+		log.info("changeProfileName= {}", changeProfileName);
+		
+		m.getProfileImage().setProfileImagePath(changeProfileName);
+		
 		return session.insert("auth.insertProfileImage",m);
 		
 	}
@@ -64,6 +89,9 @@ public class AuthDao {
 	}
 
 	public List<MemberExt> selectComment(int mNo) {
+		
+		
+		
 		return session.selectList("member.selectComment", mNo);
 	}
 

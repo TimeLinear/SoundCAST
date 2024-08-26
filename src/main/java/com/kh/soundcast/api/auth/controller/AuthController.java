@@ -2,6 +2,7 @@ package com.kh.soundcast.api.auth.controller;
 
 
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 
@@ -13,11 +14,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kh.soundcast.api.auth.jwt.JwtProvider;
 import com.kh.soundcast.api.auth.service.AuthService;
+import com.kh.soundcast.member.model.service.MemberService;
 import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberExt;
 
@@ -36,7 +40,8 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthController {
 		private final AuthService authService;
 		private final JwtProvider jwtProvider;
-	
+		private final MemberService memberService;
+		
 		@PostMapping("/login/{socialType}")
 		public ResponseEntity<HashMap<String, Object>> authCheck(
 				@PathVariable String socialType,
@@ -83,6 +88,7 @@ public class AuthController {
 		@PostMapping("/enroll/{socialType}")
 		public ResponseEntity<HashMap<String, Object>> enroll(
 				@PathVariable String socialType,
+				@RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
 				@RequestBody HashMap<String, String> param
 				) throws Exception{
 			
@@ -90,8 +96,10 @@ public class AuthController {
 			MemberExt member;
 			switch (socialType) {
 		    case "google":
+		    	param.put("socialType", socialType);
 		        member = authService.googleLogin(socialType, param);
-		        clientId = authService.getClientId(param);
+		    	clientId = authService.getClientId(param);
+		        
 		        break;
 //		    case "naver":
 //		        member = authService.naverLogin(socialType, credential);
@@ -142,14 +150,25 @@ public class AuthController {
 			log.debug("토큰 로그인 시도 유저 정보1 - {}", member);
 			
 			int mNo = member.getMemberNo();
-			MemberExt followCheck = (MemberExt)authService.login(mNo);
-			member.setFollower(followCheck.getFollower());
-			member.setFollowing(followCheck.getFollowing());
+			member = (MemberExt)memberService.selectOneMember(mNo);
+			
+//			MemberExt followCheck = (MemberExt)authService.login(mNo);
+//			member.setFollower(followCheck.getFollower());
+//			member.setCommentList(followCheck.getCommentList());
+//			member.setFollowing(followCheck.getFollowing());
+//			log.info("어스컨트롤러 Following={}", member.getFollowing().get(0));
+			
+			if(member.getFollowing().get(0) == null) {
+				member.setFollowing(new ArrayList<MemberExt>());
+			}
+
+			if(member.getMemberIntroduce() == null) {
+				member.setMemberIntroduce("");
+			}
 			
 			log.debug("토큰 로그인 시도 유저 정보2 - {}", member);
 			
 			HashMap<String,Object> map = new HashMap<>();
-			
 			
 			if(member != null) {
 				map.put("member", member);

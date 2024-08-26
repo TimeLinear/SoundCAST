@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -22,6 +23,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.kh.soundcast.api.auth.jwt.JwtProvider;
 import com.kh.soundcast.api.model.dao.AuthDao;
+import com.kh.soundcast.common.Utils;
 import com.kh.soundcast.member.model.dto.GoogleUserInfoResponse;
 import com.kh.soundcast.member.model.dto.KakaoUserInfoResponse;
 import com.kh.soundcast.member.model.vo.Comment;
@@ -103,16 +105,17 @@ public class AuthService {
 
 			log.debug("팔로잉, 팔로워 = {}, {}", following, follower);
 			log.debug("mNo = {}", mNo);
-//			
-//			if(member.getCommentList() == null) {
-//				member.setCommentList(new ArrayList<MemberExt>());				
-//			}
-			member.setCommentList(commentList);
 			member.setFollowing(following);
+			
+			if(member.getFollowing().get(0) == null) {
+				member.setFollowing(new ArrayList<MemberExt>());
+			}
+			
+			member.setCommentList(commentList);
 			member.setFollower(follower);
 		}
 		
-		log.info("service m = {}", member);
+		log.info("service m_getfollowing = {}", member.getFollowing());
 		
 		HashMap<String, Object> map = new HashMap<>();	
 		HashMap<String, Object> userPk = new HashMap<>();	
@@ -188,7 +191,18 @@ public class AuthService {
 //			authDao.countFollow(socialType, userInfo.getSub());
 //			authDao.countFollower(socialType, userInfo.getSub());
 		}
+		int mNo= member.getMemberNo();
+		int follower = authDao.selectFollower(mNo);
+		List<MemberExt> commentList = authDao.selectComment(mNo);
 			
+		if(member.getFollowing().get(0) == null) {
+			member.setFollowing(new ArrayList<MemberExt>());
+		}
+		
+		if(member.getMemberIntroduce()==null) {
+			member.setMemberIntroduce("");
+		}
+		
 		log.debug("로그인 시도 유저 정보 - {}", member);
 		
 		return member;
@@ -233,7 +247,6 @@ public class AuthService {
 		
 		String socialId = String.valueOf(userInfo.getId());
 		
-		
 		log.debug("유저 식별 값 - {}, 유저 소셜명 - {}", socialId, socialType);
 		MemberExt member = (MemberExt)authDao.loadUserByUsername(socialType, socialId);
 		log.debug("찾은 유저 정보 - {}", member);
@@ -261,14 +274,26 @@ public class AuthService {
 			authDao.insertProfileImage(m);
 			authDao.insertMember(m);
 			authDao.insertMemberSocial(m);
-//			dao.insertProfileImage(m.getProfileImage());
-//			dao.insertMember(m);
-//			dao.insertMemberSocial(m);
-			// 위 주석부터 해당 주석 사이의 코드들은 MemberExt 클래스 완성이 선행되어야함
+			
 			member = (MemberExt) authDao.loadUserByUsername(socialType, socialId);
 			
 			
 		}
+		
+		int mNo= member.getMemberNo();
+		int follower = authDao.selectFollower(mNo);
+		List<MemberExt> commentList = authDao.selectComment(mNo);
+		
+		if(member.getFollowing() == null) {
+			member.setFollowing(new ArrayList<MemberExt>());
+		}
+		
+		if(member.getMemberIntroduce()==null) {
+			member.setMemberIntroduce("");
+		}
+		
+		
+		
 		return member;
 		
 	}
@@ -283,16 +308,31 @@ public class AuthService {
 		List<MemberExt> following = authDao.selectFollowList(mNo);
 		int follower = authDao.selectFollower(mNo);
 		List<MemberExt> commentList = authDao.selectComment(mNo);
+		log.info("login의followingList={}", following.get(0));
+		
+		if(!commentList.isEmpty()) {
+			String commentText = commentList.get(0).getComment().getCommentText();
+			String safeCommentText = Utils.newLineHandling(Utils.XSSHandling(commentText));  
+			
+			commentList.get(0).getComment().setCommentText(safeCommentText);
+			
+			member.setCommentList(commentList);
+		}
+			
 //		if(member.getCommentList() == null) {
 //			member.setCommentList(new ArrayList<MemberExt>());				
 //		}
 		member.setCommentList(commentList);
+		
 		member.setFollowing(following);
 		member.setFollower(follower);
-		log.info("Login following, follow = {},{}",following,follower);
+		
+		log.info("Login following, follow, introduce, commentList = {},{},{},{}",following,follower,member.getMemberIntroduce(),commentList);
 		
 		return member;
 	}
+
+
 
 
 }

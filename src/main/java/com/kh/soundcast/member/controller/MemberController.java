@@ -64,12 +64,13 @@ public class MemberController {
 	    		
 	    		Path path = FileSystems.getDefault().getRootDirectories().iterator().next();
 	    		final String osRootPath = path.toString().replace("\\\\", "");
-	    	
 	    		// 현재 로그인한 회원의 회원 정보
 	    		MemberExt loginMember = (MemberExt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-	    		final String bannerSavePath = osRootPath + uploadBaseDir + "images/member/banner/";
-	    		final String profileSavePath = osRootPath + uploadBaseDir + "images/member/profile/";
+	    		String bannerDir = "images/member/banner/";
+	    		String profileDir= "images/member/profile/";
+	    		
+	    		final String bannerSavePath = osRootPath + uploadBaseDir + bannerDir;
+	    		final String profileSavePath = osRootPath + uploadBaseDir + profileDir;
 	    		
 	    		log.debug("배너 경로 - {}, 프로필 경로 - {}", bannerSavePath, profileSavePath);
 	    		
@@ -88,7 +89,8 @@ public class MemberController {
 	    				throw new Exception();
 	    			}
 	    			
-	    			MemberBanner memberBanner = new MemberBanner(0, bannerSavePath + changeBannerName);
+	    			MemberBanner memberBanner = new MemberBanner(0, bannerDir+changeBannerName);
+	    			log.info("memberBannerObj={}",memberBanner);
 	    			
 	    			memberService.insertMemberBanner(memberBanner);
 	    			
@@ -109,7 +111,7 @@ public class MemberController {
 	    				throw new Exception();
 	    			}
 //	    			String profilePath = profileSavePath + "/" + changeProfileName;
-	    			ProfileImage memberProfile = new ProfileImage(0, profileSavePath + changeProfileName);  
+	    			ProfileImage memberProfile = new ProfileImage(0, profileDir + changeProfileName);  
 	    			
 	    			memberService.insertMemberProfile(memberProfile);
 	    			
@@ -154,7 +156,7 @@ public class MemberController {
 		int mNo = Integer.parseInt(memberNo);
 		MemberExt member = memberService.selectOneMember(mNo);
 		log.info("memberselect={}",member);
-		
+		log.info("멤버페이지팔로잉정보={}",member.getFollowing());
 	
 //		HashMap<String, Object> map = new HashMap<>();
 //		
@@ -242,14 +244,12 @@ public class MemberController {
 		
 	}
 	
-	@DeleteMapping("/comment/delete/{commentNo}")
+	@DeleteMapping("/comment/delete")
 	public Map<String,Object> deleteComment(
-			@PathVariable int commentNo,
-			@RequestParam HashMap<String, Object>param
+			
+			@RequestBody HashMap<String, Object>param
 			){
 		log.info("deletecomment param = {}",param);
-		
-		param.put("commentNo", commentNo);
 		
 		int result = memberService.deleteComment(param);
 		
