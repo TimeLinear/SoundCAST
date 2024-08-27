@@ -155,6 +155,22 @@
 		
 	</select>
 	
+	<update id="updateSongBasicInfo">
+		UPDATE
+			SONG
+		SET
+			SONG_MOOD_NO = #{songMoodNo},
+			SONG_GENRE_NO = #{songGenreNo},
+			SONG_TITLE = #{songTitle},
+			SONG_LICENSE = #{songLicense},
+			SONG_DETAIL = #{songDetail},
+			SONG_MODIFY_DATE = SYSDATE
+			
+		WHERE
+			SONG_NO = #{songNo}
+	
+	</update>
+	
 
 
 

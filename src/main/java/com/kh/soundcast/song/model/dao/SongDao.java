@@ -6,6 +6,7 @@ import java.util.List;
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
 import com.kh.soundcast.song.model.vo.Song;
+import com.kh.soundcast.song.model.vo.SongExt;
 
 public interface SongDao {
 
@@ -16,6 +17,8 @@ public interface SongDao {
 	List<Genre> selectAllGenres();
 
 	List<Mood> selectAllMoods();
+
+	int updateSongBasicInfo(Song updateSong);
 
 
 

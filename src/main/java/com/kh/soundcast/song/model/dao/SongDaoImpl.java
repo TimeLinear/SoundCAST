@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
 import com.kh.soundcast.song.model.vo.Song;
+import com.kh.soundcast.song.model.vo.SongExt;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +38,11 @@ public class SongDaoImpl implements SongDao{
 	@Override
 	public List<Song> selectSongMainList(int placeNo) {
 		return session.selectList("song.selectSongMainList", placeNo);
+	}
+
+	@Override
+	public int updateSongBasicInfo(Song updateSong) {
+		return session.update("song.updateSongBasicInfo", updateSong);
 	}
 
 	

@@ -3,19 +3,23 @@ package com.kh.soundcast.song.controller;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.soundcast.song.model.service.SongService;
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
 import com.kh.soundcast.song.model.vo.Song;
+import com.kh.soundcast.song.model.vo.SongExt;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,6 +81,28 @@ private final SongService service;
 		
 		return moods;
 	}
+	
+	
+	@CrossOrigin(origins = {"http://localhost:3000"})
+	@PutMapping("/update/{songNo}")
+	public int updateSong(
+			@PathVariable int songNo,
+			@RequestParam SongExt songinfo,
+			@RequestParam MultipartFile file
+			) {
+		
+		log.info("songNo ? {}", songNo);
+		log.info("songinfo ? {}", songinfo);
+		log.info("file ? {}", file);
+		
+		//int result = service.updateSong(songNo, song);
+		
+		
+		return 0;
+	}
+	
+	
+	
 	
 }
 
