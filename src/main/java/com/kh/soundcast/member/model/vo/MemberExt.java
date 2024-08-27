@@ -20,6 +20,9 @@ public class MemberExt extends Member{
 	private MemberSocial memberSocial;
 	private ProfileImage profileImage; 
 	private Comment comment;
-	private int follower; // 다른사람이 나를 팔로우 함
-	private List<MemberExt> following; //내가 다른사람 팔로우중
+	private int follower;
+	private List<MemberExt> following;
+	private int commentCount;
+	private List<MemberExt> commentList;
+	
 }
