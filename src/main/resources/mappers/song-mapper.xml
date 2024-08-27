@@ -6,25 +6,32 @@
  	
 	<select id="selectTop5Music" resultMap="songResultMap">
 		SELECT
-			*
+			SONG_IMAGE_PATH_NAME,
+			SONG_TITLE,
+			MEMBER_NICKNAME,
+			GENRE_NAME,
+			MOOD_NAME,
+			SONG_LICENSE
 		FROM SONG
-		LEFT JOIN SONG_IMAGE (USING SONG_IMAGE_NO)
-		LEFT JOIN IMAGE_PATH ON (SONG_IMAGE_PATH_NO = IMAGE_PATH_NO)
+		LEFT JOIN SONG_IMAGE USING (SONG_IMAGE_NO)
+		LEFT JOIN SONG_IMAGE_PATH USING (SONG_IMAGE_PATH_NO)
 		LEFT JOIN MEMBER ON (SONG_MEMBER_NO = MEMBER_NO)
 		LEFT JOIN DOWNLOAD_COUNT ON (SONG_NO = DOWNLOAD_COUNT_SONG_NO)
-		WHERE MEMBER_STATUS = 'Y'
+		LEFT JOIN MOOD ON (MOOD_NO = SONG_MOOD_NO)
+		LEFT JOIN GENRE ON (GENRE_NO = SONG_GENRE_NO)
+		WHERE SONG_STATUS = 'Y'
 		ORDER BY DOWNLOAD_COUNT_NUMBER DESC
 	</select>
 	
-	<resultMap id="memberResultMap" type="memberExt">
-	    <id property="memberNo" column="member_no"/>
-	    <result property="memberNickname" column="member_nickname"/>
-	    <result property="memberEmail" column="member_email"/>
+	<resultMap id="songResultMap" type="songExt">
+	    <result property="memberNickname" column="MEMBER_NICKNAME"/>
+	    <result property="songTitle" column="SONG_TITLE"/>
+	    <result property="moodName" column="MOOD_NAME"/>
+	    <result property="genreName" column="GENRE_NAME"/>
+	    <result property="songLicense" column="SONG_LICENSE"/>
 	    
-	    <!-- ProfileImage 객체 매핑 -->
-	    <association property="profileImage" javaType="profileImage">
-	        <id property="profileImageNo" column="PROFILE_IMAGE_NO"/>
-	        <result property="profileImagePath" column="PROFILE_IMAGE_PATH"/>
+	    <association property="songImage" javaType="songImageExt">
+	        <result property="songImagePathName" column="SONG_IMAGE_PATH_NAME"/>
 	    </association>
 	</resultMap>
  
