@@ -195,7 +195,7 @@ public class AuthService {
 		int follower = authDao.selectFollower(mNo);
 		List<MemberExt> commentList = authDao.selectComment(mNo);
 			
-		if(member.getFollowing().get(0) == null) {
+		if(member.getFollowing() == null) {
 			member.setFollowing(new ArrayList<MemberExt>());
 		}
 		

@@ -32,6 +32,8 @@ import com.kh.soundcast.member.model.vo.Comment;
 import com.kh.soundcast.member.model.vo.MemberBanner;
 import com.kh.soundcast.member.model.vo.MemberExt;
 import com.kh.soundcast.member.model.vo.ProfileImage;
+import com.kh.soundcast.song.model.service.SongService;
+import com.kh.soundcast.song.model.vo.Song;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 	
 	private final MemberService memberService;
+	private final SongService songService;
 	private final WebApplicationContext applicationContext;
 	
 
@@ -269,6 +272,17 @@ public class MemberController {
 	
 
 	
+	@GetMapping("/song/{memberNo}")
+	public List<Song> getMemberSongList(
+			@PathVariable String memberNo
+			) {
+		int mNo = Integer.parseInt(memberNo);
+		List<Song> song = songService.getMemberSongList(mNo);
+		
+		log.info("songList?={}", song);
+		return song;
+		
+	}
 	
 	
 	

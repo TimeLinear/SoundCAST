@@ -90,8 +90,6 @@ public class AuthDao {
 
 	public List<MemberExt> selectComment(int mNo) {
 		
-		
-		
 		return session.selectList("member.selectComment", mNo);
 	}
 

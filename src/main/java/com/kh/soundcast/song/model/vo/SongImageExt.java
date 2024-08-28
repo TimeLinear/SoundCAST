@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SongPath {
-	private int songPathNo; // 음원 파일 경로 번호
-	private String songPathName; // 음원 파일 경로명
+public class SongImageExt extends SongImage {
+	
+	private String songImagePathName;
 }
