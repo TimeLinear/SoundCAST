@@ -21,7 +21,8 @@ public class MemberExt extends Member{
 	private ProfileImage profileImage; 
 	private Comment comment;
 	private int follower;
-	private List<Follow> following;
-
+	private List<MemberExt> following;
+	private int commentCount;
+	private List<MemberExt> commentList;
 	
 }

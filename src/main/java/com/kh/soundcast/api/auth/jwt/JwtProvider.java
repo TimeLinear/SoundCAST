@@ -124,7 +124,11 @@ public class JwtProvider {
 		
 		Member member = (Member) service.loadUserByUsername(getUserPk(token));
 		
+<<<<<<< HEAD
 		return new UsernamePasswordAuthenticationToken(member, "", member.getAuthorities());
+=======
+		return new UsernamePasswordAuthenticationToken(member, "",member.getAuthorities());
+>>>>>>> origin/myPage_sds
 		
 	}
 	//토큰에서 userPk값을 꺼내는 메서드
@@ -143,4 +147,8 @@ public class JwtProvider {
 
 	
 	
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/myPage_sds

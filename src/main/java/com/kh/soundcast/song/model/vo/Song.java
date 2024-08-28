@@ -14,7 +14,7 @@ public class Song {
 	private int songGenreNo; // 음원 장르 번호
 	private int songImageNo; // 음원 커버 이미지 번호
 	private int songFileNo; // 음원 파일 번호
-	private int songPlaceNo; // 공식 비공식 음원 여부 (1 - 공식, 2 - 비공식)
+	private int songPlaceNo; //공식, 비공식 분류 0 - 공식, 1 - 비공식
 	private String songTitle; // 음원명(유저가 입력)
 	private String songLicense; // 음원 출처(유저가 입력)
 	private String songDetail; // 음원 상세(유저가 입력)

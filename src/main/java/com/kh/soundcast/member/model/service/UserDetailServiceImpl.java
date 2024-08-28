@@ -11,7 +11,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+<<<<<<< HEAD
 import com.kh.soundcast.member.model.dao.AuthDao;
+=======
+import com.kh.soundcast.api.model.dao.AuthDao;
+>>>>>>> origin/myPage_sds
 import com.kh.soundcast.member.model.vo.Member;
 
 import lombok.RequiredArgsConstructor;
@@ -44,10 +48,18 @@ public class UserDetailServiceImpl implements UserDetailsService {
 			e.printStackTrace();
 		}
 	
+<<<<<<< HEAD
 		return (UserDetails) authDao.loadUserByUsername(socialType, socialId);
+=======
+		return authDao.loadUserByUsername(socialType, socialId);
+>>>>>>> origin/myPage_sds
 		
 	}
 
 
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/myPage_sds
