@@ -259,12 +259,12 @@
    			MEMBER_NO = #{memberNo}
    </update>
    
-   <!-- 회원 탈퇴 쿼리문 -->
    <update id="updateMemberStatus">
    		UPDATE MEMBER
    		SET MEMBER_STATUS = 'N'
-   		WHERE MEMBER_NO = #{mNo}
+   		WHERE MEMBER_NO =#{mNo}
    </update>
+   
    
    <!-- 회원 마이페이지 자기 수정 끝-->
    

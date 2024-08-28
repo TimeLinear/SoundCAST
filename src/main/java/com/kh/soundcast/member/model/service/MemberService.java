@@ -18,7 +18,6 @@ import com.kh.soundcast.member.model.dao.MemberDao;
 import com.kh.soundcast.member.model.dto.GoogleUserInfoResponse;
 import com.kh.soundcast.member.model.vo.Comment;
 import com.kh.soundcast.member.model.vo.Follow;
-import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberBanner;
 import com.kh.soundcast.member.model.vo.MemberExt;
 import com.kh.soundcast.member.model.vo.ProfileImage;
@@ -36,6 +35,12 @@ public class MemberService {
 
 	@Transactional(rollbackFor = Exception.class)
 	public void updateMemberProfile(HashMap<String, Object> params) {
+		log.info("업데이트 파람 ={}",params);
+		if(!(params.get("introduce")==null)) {
+			String introduce = (String) params.get("introduce");
+			String safeMemberIntroduce = Utils.newLineClear(Utils.XSSHandling(introduce));
+			params.put("introduce", safeMemberIntroduce);		
+		}
 		memberDao.updateMemberProfile(params);
 	}
 
@@ -80,7 +85,14 @@ public class MemberService {
 		}
 			
 		member.setCommentList(comment);
-
+		
+		if(!(member.getMemberIntroduce()==null)) {
+			String introduce = member.getMemberIntroduce();
+			String safeMemberIntroduce = Utils.newLineHandling(Utils.XSSHandling(introduce));
+		member.setMemberIntroduce(safeMemberIntroduce);
+		
+		}
+		
 		
 		log.info("commentList={}", member.getCommentList());
 		
@@ -96,8 +108,6 @@ public class MemberService {
 	public int deleteFollow(HashMap<String, Object> param) {
 		return memberDao.deleteFollow(param);
 	}
-	
-
 	
 	@Transactional(rollbackFor = Exception.class)
 	public int insertComment(HashMap<String, Object> param) {
@@ -117,8 +127,8 @@ public class MemberService {
 		return memberDao.deleteComment(param);
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	public int updateMemberStatus(int mNo) {
-		
 		return memberDao.updateMemberStatus(mNo);
 	}
 

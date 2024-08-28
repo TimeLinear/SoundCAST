@@ -150,11 +150,13 @@ public class AuthController {
 			log.debug("토큰 로그인 시도 유저 정보1 - {}", member);
 			
 			int mNo = member.getMemberNo();
-			MemberExt followCheck = (MemberExt)authService.login(mNo);
-			member.setFollower(followCheck.getFollower());
-			member.setCommentList(followCheck.getCommentList());
-			member.setFollowing(followCheck.getFollowing());
-			log.info("어스컨트롤러 Following={}", member.getFollowing().get(0));
+			member = (MemberExt)memberService.selectOneMember(mNo);
+			
+//			MemberExt followCheck = (MemberExt)authService.login(mNo);
+//			member.setFollower(followCheck.getFollower());
+//			member.setCommentList(followCheck.getCommentList());
+//			member.setFollowing(followCheck.getFollowing());
+//			log.info("어스컨트롤러 Following={}", member.getFollowing().get(0));
 			
 			if(member.getFollowing().get(0) == null) {
 				member.setFollowing(new ArrayList<MemberExt>());
@@ -163,7 +165,7 @@ public class AuthController {
 			if(member.getMemberIntroduce() == null) {
 				member.setMemberIntroduce("");
 			}
-			log.info("어스컨트롤러 Following2={}", member.getFollowing().get(0));
+			
 			log.debug("토큰 로그인 시도 유저 정보2 - {}", member);
 			
 			HashMap<String,Object> map = new HashMap<>();

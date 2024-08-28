@@ -30,10 +30,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.soundcast.common.Utils;
 import com.kh.soundcast.member.model.service.MemberService;
 import com.kh.soundcast.member.model.vo.Comment;
-import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberBanner;
 import com.kh.soundcast.member.model.vo.MemberExt;
 import com.kh.soundcast.member.model.vo.ProfileImage;
+import com.kh.soundcast.song.model.service.SongService;
+import com.kh.soundcast.song.model.vo.Song;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +47,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 	
 	private final MemberService memberService;
+	private final SongService songService;
 	private final WebApplicationContext applicationContext;
 	
 
@@ -136,7 +138,7 @@ public class MemberController {
 	                // 위 3가지 방법 중 한가지 선택
 	                MemberExt modifyMember = memberService.selectModifyMember(loginMember.getMemberNo());
 	                
-	                log.debug("수정된 회원 정보 - {}, {}, {}", modifyMember, modifyMember.getMemberNickname(), modifyMember.getProfileImage());
+	                log.debug("수정된 회원 정보 - {}, {}", modifyMember, modifyMember.getMemberNickname());
 	                
 	                // 성공 시 변경된 회원 정보 보내기
 	                return modifyMember;
@@ -147,14 +149,16 @@ public class MemberController {
 	    		
 	    	
 	    }
+	
+	  @PostMapping("/leave/{memberNo}")
+		public ResponseEntity<String> modifyMemberStatus(@PathVariable("memberNo") int memberNo){
+			int mNo = memberNo;
+			int member = memberService.updateMemberStatus(mNo);
+			
+			return ResponseEntity.ok("회원 탈퇴 성공");
+		}
 	  
-	@PostMapping("/leave/{memberNo}")
-	public ResponseEntity<String> modifyMemberStatus(@PathVariable("memberNo") int memberNo){
-		int mNo = memberNo;
-		int member = memberService.updateMemberStatus(mNo);
-		
-		return ResponseEntity.ok("회원 탈퇴 성공");
-	}
+	  
 	
 	//유저 인포 페이지 
 	@GetMapping("/memberInfo/{memberNo}")
@@ -207,7 +211,6 @@ public class MemberController {
 	}
 	
 	
-	// 마이페이지에서 팔로잉리스트 Delete버튼 삭제기능과 , member/memberInfo/{memberNo}주소로 입력시 나오는 팔로우,팔로우취소 기능도 포함
 	@DeleteMapping("/unfollow/{memberNo}")
 	public Map<String, Object> deleteFollow(
 			@PathVariable String memberNo,
@@ -226,9 +229,9 @@ public class MemberController {
 		
 		return map;
 		
+		
+		
 	}
-	
-
 	
 	@PostMapping("/comment/insert/{memberNo}")
 	public Map<String, Object> insertComment(
@@ -237,12 +240,11 @@ public class MemberController {
 			){
 		int mNo = Integer.parseInt(memberNo);
 		param.put("mNo", mNo);
+		Map<String, Object> map  = new HashMap<>();
 		
 		log.info("commentParam={}", param);	
 		
 		int result = memberService.insertComment(param);
-		
-		Map<String, Object> map  = new HashMap<>();
 		
 		if(result>0) {
 			map.put("msg", "댓글 등록 완료");
@@ -254,14 +256,12 @@ public class MemberController {
 		
 	}
 	
-	@DeleteMapping("/comment/delete/{commentNo}")
+	@DeleteMapping("/comment/delete")
 	public Map<String,Object> deleteComment(
-			@PathVariable int commentNo,
-			@RequestParam HashMap<String, Object>param
+			
+			@RequestBody HashMap<String, Object>param
 			){
 		log.info("deletecomment param = {}",param);
-		
-		param.put("commentNo", commentNo);
 		
 		int result = memberService.deleteComment(param);
 		
@@ -279,7 +279,7 @@ public class MemberController {
 		
 	}
 	
-	
+
 	
 	
 	

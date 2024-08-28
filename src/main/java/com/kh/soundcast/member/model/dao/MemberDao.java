@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.soundcast.member.model.vo.Comment;
 import com.kh.soundcast.member.model.vo.Follow;
-import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberBanner;
 import com.kh.soundcast.member.model.vo.MemberExt;
 import com.kh.soundcast.member.model.vo.ProfileImage;
@@ -70,8 +69,6 @@ public class MemberDao {
 	public int deleteFollow(HashMap<String, Object> param) {
 		return session.delete("member.deleteFollow",param);
 	}
-	
-
 
 	public int insertComment(HashMap<String, Object> param) {
 		
@@ -89,8 +86,7 @@ public class MemberDao {
 	}
 
 	public int updateMemberStatus(int mNo) {
-		
-		return session.update("updateMemberStatus", mNo);
+		return session.update("member.updateMemberStatus", mNo);
 	}
 
 	
