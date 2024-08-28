@@ -18,6 +18,7 @@ import com.kh.soundcast.member.model.dao.MemberDao;
 import com.kh.soundcast.member.model.dto.GoogleUserInfoResponse;
 import com.kh.soundcast.member.model.vo.Comment;
 import com.kh.soundcast.member.model.vo.Follow;
+import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberBanner;
 import com.kh.soundcast.member.model.vo.MemberExt;
 import com.kh.soundcast.member.model.vo.ProfileImage;
@@ -114,6 +115,11 @@ public class MemberService {
 	public int deleteComment(HashMap<String, Object> param) {
 		
 		return memberDao.deleteComment(param);
+	}
+
+	public int updateMemberStatus(int mNo) {
+		
+		return memberDao.updateMemberStatus(mNo);
 	}
 
 }

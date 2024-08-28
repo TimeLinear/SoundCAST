@@ -11,6 +11,7 @@ import java.util.ListIterator;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.soundcast.common.Utils;
 import com.kh.soundcast.member.model.service.MemberService;
 import com.kh.soundcast.member.model.vo.Comment;
+import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberBanner;
 import com.kh.soundcast.member.model.vo.MemberExt;
 import com.kh.soundcast.member.model.vo.ProfileImage;
@@ -134,7 +136,7 @@ public class MemberController {
 	                // 위 3가지 방법 중 한가지 선택
 	                MemberExt modifyMember = memberService.selectModifyMember(loginMember.getMemberNo());
 	                
-	                log.debug("수정된 회원 정보 - {}, {}", modifyMember, modifyMember.getMemberNickname());
+	                log.debug("수정된 회원 정보 - {}, {}, {}", modifyMember, modifyMember.getMemberNickname(), modifyMember.getProfileImage());
 	                
 	                // 성공 시 변경된 회원 정보 보내기
 	                return modifyMember;
@@ -145,7 +147,14 @@ public class MemberController {
 	    		
 	    	
 	    }
-	
+	  
+	@PostMapping("/leave/{memberNo}")
+	public ResponseEntity<String> modifyMemberStatus(@PathVariable("memberNo") int memberNo){
+		int mNo = memberNo;
+		int member = memberService.updateMemberStatus(mNo);
+		
+		return ResponseEntity.ok("회원 탈퇴 성공");
+	}
 	
 	//유저 인포 페이지 
 	@GetMapping("/memberInfo/{memberNo}")
