@@ -35,7 +35,7 @@
 			<id column="SONG_FILE_PATH_NO" property="songFilePathNo" />
 			<result column="SONG_FILE_CHANGE_NAME" property="songFileChangeName" />
 			<result column="SONG_FILE_ORIGIN_NAME" property="songFileOriginName" />
-			<result column="SONG_PATH_NAME" property="songPathName" />
+			<result column="SONG_PATH_NAME" property="songFileSongPathName" />
 		</association>
 	</resultMap>
 	
@@ -102,11 +102,13 @@
 	<select id="selectAllGenres" resultType="genre">
 		SELECT *
 		FROM GENRE
+		ORDER BY GENRE_NO
 	</select>
 
 	<select id="selectAllMoods" resultType="mood">
 		SELECT *
 		FROM MOOD
+		ORDER BY MOOD_NO
 	</select>
 	
 	<select id="selectSongMainList" resultMap="songExtMap">
