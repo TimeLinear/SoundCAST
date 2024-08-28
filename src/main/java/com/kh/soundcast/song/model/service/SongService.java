@@ -1,25 +1,10 @@
-<<<<<<< HEAD
 package com.kh.soundcast.song.model.service;
 
-import org.springframework.stereotype.Service;
-
-import com.kh.soundcast.song.model.dao.SongDao;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
-@Service
-@RequiredArgsConstructor
-public class SongService {
-	
-	private final SongDao songDao;
-}
-=======
-package com.kh.soundcast.song.model.service;
-
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
@@ -38,7 +23,6 @@ public interface SongService {
 
 	List<Song> getMemberSongList(int mNo);
 
-
+	SongExt insertUnofficialSong(MultipartFile songFile, MultipartFile songImage, Song song) throws Exception;
 
 }
->>>>>>> origin/myPage_sds

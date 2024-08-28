@@ -218,7 +218,69 @@
 	
 	</select>
 
+	<select id="selectSongPath" resultType="string">
+		SELECT SONG_PATH_NAME
+		FROM SONG_PATH
+		WHERE SONG_PATH_NO = #{songPathNo}
+	</select>
+	
+	<select id="selectSongImagePath" resultType="string">
+		SELECT SONG_IMAGE_PATH_NAME
+		FROM SONG_IMAGE_PATH
+		WHERE SONG_IMAGE_PATH_NO = #{songImagePathNo}
+	</select>
+	
+	<insert id="insertSongFile" useGeneratedKeys="true">
+		
+		<selectKey keyProperty="songFileNo" resultType="int" order="BEFORE">
+			SELECT SEQ_SONG_FILE_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO SONG_FILE
+		VALUES(
+			#{songFileNo},
+			#{songFileSongPathNo},
+			#{songFileChangeName},
+			#{songFileOriginName}
+		)
+	</insert>
 
-
+	<insert id="insertSongImage" useGeneratedKeys="true">
+		
+		<selectKey keyProperty="songImageNo" resultType="int" order="BEFORE">
+			SELECT SEQ_SONG_IMAGE_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO SONG_IMAGE
+		VALUES(
+			#{songImageNo},
+			#{songImagePathNo},
+			#{songImageName}
+		)
+	</insert>
+	
+	<insert id="insertSong" useGeneratedKeys="true">
+	
+		<selectKey keyProperty="songNo" resultType="int" order="BEFORE">
+			SELECT SEQ_SONG_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO SONG
+		VALUES(
+			#{songNo},
+			#{songMemberNo},
+			#{songMoodNo},
+			#{songGenreNo},
+			#{songImageNo},
+			#{songFileNo},
+			#{songPlaceNo},
+			#{songTitle},
+			#{songLicense},
+			#{songDetail},
+			SYSDATE,
+			SYSDATE,
+			DEFAULT
+		)
+	</insert>
 
 </mapper>

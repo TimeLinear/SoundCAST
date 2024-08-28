@@ -68,6 +68,7 @@ public class AuthDao {
 	}
 	
 	public int insertMemberSocial(MemberExt m) {
+		log.debug("삽입할 소셜 정보 - {}", m);
 		return session.insert("auth.insertMemberSocial",m);
 		
 	}

@@ -1,5 +1,7 @@
 package com.kh.soundcast.song.model.vo;
 
+import com.kh.soundcast.member.model.vo.MemberExt;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SongFileExt extends SongFile {
-	// 음원 파일 경로 명(songFilePathNo 필드와 짝)
-	private String songFileSongPathName; 
+public class ReportExt extends Report {
+	private SongExt song; // association
+	private MemberExt member; // association
 }

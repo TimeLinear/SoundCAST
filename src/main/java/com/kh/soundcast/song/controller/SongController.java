@@ -1,8 +1,12 @@
 package com.kh.soundcast.song.controller;
 
+import java.io.FileNotFoundException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,8 +15,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.soundcast.common.Utils;
 import com.kh.soundcast.song.model.service.SongService;
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
@@ -28,7 +35,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class SongController {
 	
-private final SongService service;
+	private final SongService service;
+	
 	
 	@CrossOrigin(origins = {"http://localhost:3000"})
 	@GetMapping("/search")
@@ -109,43 +117,17 @@ private final SongService service;
 		
 	}
 	
-	@PostMapping("/upload")
-	public SongExt uploadSong(
-		@RequestBody MultipartFile songFile,
-		@RequestBody MultipartFile songImage,
-		@RequestBody HashMap<String, Object> params
-			) {
+	@PostMapping("/unofficial/upload")
+	public SongExt uploadUnOfficialSong(
+		@RequestPart(value = "songFile", required = false) MultipartFile songFile,
+	    @RequestPart(value = "songImage", required = false) MultipartFile songImage, 
+	    @RequestPart("song") Song song
+			) throws Exception {
 		
+		log.debug("song 정보 - {}", song);
 		
-		return null;
+		SongExt insertedSong = service.insertUnofficialSong(songFile, songImage, song);
+		
+		return insertedSong;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

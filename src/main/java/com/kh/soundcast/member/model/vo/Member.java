@@ -31,26 +31,7 @@ public class Member implements UserDetails {
 	private String memberStatus; // 계정 유효 여부
 
 	private List<SimpleGrantedAuthority> authorities;
-<<<<<<< HEAD
-=======
 	
-	public Collection<? extends GrantedAuthority> getAuthorities(){
-		return authorities;
-	}
-
-	@Override
-	public String getPassword() {
-		return null;
-	}
-
-	@Override
-	public String getUsername() {
-		return null;
-	}
-	
-	
-	
->>>>>>> origin/myPage_sds
 	
 	public Collection<? extends GrantedAuthority> getAuthorities(){
 		return authorities;

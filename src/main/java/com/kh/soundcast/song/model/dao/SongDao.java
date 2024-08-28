@@ -1,20 +1,3 @@
-<<<<<<< HEAD
-package com.kh.soundcast.song.model.dao;
-
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.stereotype.Repository;
-
-import lombok.RequiredArgsConstructor;
-
-@Repository
-@RequiredArgsConstructor
-public class SongDao {
-	
-	private final SqlSessionTemplate session;
-	
-	
-}
-=======
 package com.kh.soundcast.song.model.dao;
 
 import java.util.HashMap;
@@ -24,6 +7,8 @@ import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
 import com.kh.soundcast.song.model.vo.Song;
 import com.kh.soundcast.song.model.vo.SongExt;
+import com.kh.soundcast.song.model.vo.SongFile;
+import com.kh.soundcast.song.model.vo.SongImage;
 
 public interface SongDao {
 
@@ -39,7 +24,16 @@ public interface SongDao {
 
 	List<Song> getMemberSongList(int mNo);
 
+	String selectSongPath(int songPathNo);
 
+	int insertSongFile(SongFile songFileData);
+
+	String selectSongImagePath(int songImagePathNo);
+
+	int insertSongImage(SongImage songImageData);
+
+	int insertSong(Song song);
+
+	SongExt selectSong(Song song);
 
 }
->>>>>>> origin/myPage_sds
