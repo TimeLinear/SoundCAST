@@ -3,5 +3,38 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  <mapper namespace="report">
- 
+ 	<select id="selectRecentReport" resultMap="reportResultMap">
+ 		SELECT
+ 			REPORT_TEXT,
+ 			MEMBER_NICKNAME,
+ 			SONG_IMAGE_NAME,
+			SONG_IMAGE_PATH_NAME,
+			SONG_TITLE
+ 		FROM REPORT
+ 		LEFT JOIN SONG ON (REPORT_SONG_NO = SONG_NO)
+ 		LEFT JOIN MEMBER ON (SONG_MEMBER_NO = MEMBER_NO)
+ 		LEFT JOIN SONG_IMAGE USING (SONG_IMAGE_NO)
+ 		LEFT JOIN SONG_IMAGE_PATH USING (SONG_IMAGE_PATH_NO)
+ 		WHERE REPORT_STATUS = 'N'
+ 		ORDER BY REPORT_DATE DESC
+ 	</select>
+ 	
+ 	<resultMap id="reportResultMap" type="reportExt">
+ 		<result property="reportText" column="REPORT_TEXT"/>
+ 		
+ 		<association property="member" javaType="memberExt">
+ 			<result property="memberNickname" column="MEMBER_NICKNAME"/>
+ 		</association>
+ 		
+ 		<association property="song" javaType="songExt">
+ 			<result property="songTitle" column="SONG_TITLE"/>
+ 			
+ 			<association property="songImage" javaType="songImageExt">
+		        <result property="songImagePathName" column="SONG_IMAGE_PATH_NAME"/>
+		        <result property="songImageName" column="SONG_IMAGE_NAME"/>
+		    </association>
+ 		</association>
+
+ 	</resultMap>
+ 	
  </mapper>

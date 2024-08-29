@@ -18,6 +18,10 @@ public class SongDao {
 	public List<SongExt> selectTop5Music() {
 		return session.selectList("song.selectTop5Music");
 	}
+
+	public List<SongExt> selectNewMusic() {
+		return session.selectList("song.selectNewMusic");
+	}
 	
 	
 }

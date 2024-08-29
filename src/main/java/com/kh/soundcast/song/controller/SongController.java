@@ -32,4 +32,15 @@ public class SongController {
 
 		return list;
 	}
+	
+	@CrossOrigin(origins = {"*"})
+	@GetMapping("/newMusic")
+	public List<SongExt> selectNewMusic(/*HttpServletResponse response*/){
+		
+		List<SongExt> list = songService.selectNewMusic();
+		log.debug("list {}", list);
+
+		return list;
+	}
+	
 }

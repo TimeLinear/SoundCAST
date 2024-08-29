@@ -20,4 +20,8 @@ public class SongService {
 	public List<SongExt> selectTop5Music() {
 		return songDao.selectTop5Music();
 	}
+
+	public List<SongExt> selectNewMusic() {
+		return songDao.selectNewMusic();
+	}
 }
