@@ -191,5 +191,12 @@ public class SongServiceImpl implements SongService {
 	}
 
 	
+	public List<SongExt> selectTop5Music() {
+		return dao.selectTop5Music();
+	}
+
+	public List<SongExt> selectNewMusic() {
+		return dao.selectNewMusic();
+	}
 	
 }

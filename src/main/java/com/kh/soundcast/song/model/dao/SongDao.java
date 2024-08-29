@@ -40,5 +40,9 @@ public interface SongDao {
 	int updateSongStatus(int songNo);
 
 	int insertReport(Report report);
+	
+	public List<SongExt> selectTop5Music();
+	
+	public List<SongExt> selectNewMusic();
 
 }
