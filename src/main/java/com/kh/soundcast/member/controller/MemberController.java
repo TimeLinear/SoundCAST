@@ -191,7 +191,10 @@ public class MemberController {
 		
 		int result = memberService.insertFollow(param);
 		
+		
 		if(result>0) {
+			MemberExt newFollowing = memberService.selectOneMember(Integer.parseInt(memberNo));
+			map.put("newFollowing", newFollowing);
 			map.put("msg", "팔로우 성공");
 		}else {
 			map.put("msg", "팔로우 실패");
