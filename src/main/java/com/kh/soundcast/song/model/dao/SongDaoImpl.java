@@ -81,5 +81,12 @@ public class SongDaoImpl implements SongDao{
 	public SongExt selectSong(Song song) {
 		return session.selectOne("song.selectSong", song);
 	}
+
+	@Override
+	public int updateSongStatus(int songNo) {
+		return session.update("song.updateSongStatus", songNo);
+	}
+	
+	
 	
 }

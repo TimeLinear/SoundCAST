@@ -36,4 +36,6 @@ public interface SongDao {
 
 	SongExt selectSong(Song song);
 
+	int updateSongStatus(int songNo);
+
 }

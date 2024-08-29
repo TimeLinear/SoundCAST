@@ -178,6 +178,11 @@ public class SongServiceImpl implements SongService {
 		return dao.selectSong(song);
 	}
 
+	@Override
+	public int updateSongStatus(int songNo) {
+		return dao.updateSongStatus(songNo);
+	}
+
 	
 	
 }

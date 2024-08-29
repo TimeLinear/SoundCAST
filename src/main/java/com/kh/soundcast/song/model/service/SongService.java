@@ -25,4 +25,6 @@ public interface SongService {
 
 	SongExt insertUnofficialSong(MultipartFile songFile, MultipartFile songImage, Song song) throws Exception;
 
+	int updateSongStatus(int songNo);
+
 }
