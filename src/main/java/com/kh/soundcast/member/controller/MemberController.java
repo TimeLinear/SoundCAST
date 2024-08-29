@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -288,12 +289,43 @@ public class MemberController {
 	}
 	
 	
+	// 관리자페이지 시작
+    @CrossOrigin(origins = {"*"})
+	@GetMapping("/selectMembers")
+	public List<MemberExt> selectMembers(){
+		
+		List<MemberExt> list = memberService.selectMembers();
+		log.debug("list {}", list);
+		
+		//response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost:3000");
+		
+		return list;
+	}
 	
+	@CrossOrigin(origins = {"*"})
+	@GetMapping("/searchMembers/type/{type}/searchTerm/{searchTerm}")
+	public List<MemberExt> searchMembers(
+			@PathVariable String type ,
+			@PathVariable String searchTerm
+			){
+		log.debug("type = {}, searchTerm = {}", type, searchTerm);
+		Map<String, Object> param = new HashMap<>();
+		param.put("type", type);
+		param.put("searchTerm", searchTerm);
+		
+		List<MemberExt> list = memberService.searchMembers(param);
+		
+		log.debug("list {}", list);
+		
+		return list;
+	}
 	
-	
-	
-	
-	
-	
-	
+	@CrossOrigin(origins = {"*"})
+	@PutMapping("/deleteMembers")
+    public int deleteMembers(@RequestBody List<Long> deleteList) {
+
+		return memberService.deleteMembers(deleteList);
+        
+	}
+	// 관리자 페이지 끝
 }

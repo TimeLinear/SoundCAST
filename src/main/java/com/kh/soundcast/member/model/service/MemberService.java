@@ -5,6 +5,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-	
+
 	private final MemberDao memberDao;
 	private final WebApplicationContext applicationContext;
 
@@ -41,58 +42,56 @@ public class MemberService {
 	@Transactional(rollbackFor = Exception.class)
 	public int insertMemberBanner(MemberBanner banner) {
 		return memberDao.insertMemberBanner(banner);
-		
+
 	}
 
 	@Transactional(rollbackFor = Exception.class)
 	public int insertMemberProfile(ProfileImage profile) {
 		return memberDao.insertMemberProfile(profile);
-		
-	}
 
+	}
 
 	public MemberExt selectModifyMember(int memberNo) {
 		return memberDao.selectModifymember(memberNo);
 	}
-	
+
 	public MemberExt selectOneMember(int mNo) {
-		
+
 		MemberExt member = memberDao.selectOneMember(mNo);
-		
+
 		List<MemberExt> following = memberDao.selectFollowList(mNo);
-		
+
 		member.setFollowing(following);
-		
+
 		int follower = memberDao.selectFollower(mNo);
-		
+
 		member.setFollower(follower);
-		
+
 		List<MemberExt> comment = memberDao.selectComment(mNo);
-		
-		if(!comment.isEmpty()) {
+
+		if (!comment.isEmpty()) {
 			String commentText = comment.get(0).getComment().getCommentText();
-			String safeCommentText = Utils.newLineHandling(Utils.XSSHandling(commentText));  
-			
+			String safeCommentText = Utils.newLineHandling(Utils.XSSHandling(commentText));
+
 			comment.get(0).getComment().setCommentText(safeCommentText);
-			
+
 			member.setCommentList(comment);
 		}
-			
+
 		member.setCommentList(comment);
-		
-		if(!(member.getMemberIntroduce()==null)) {
+
+		if (!(member.getMemberIntroduce() == null)) {
 			String introduce = member.getMemberIntroduce();
 			String safeMemberIntroduce = Utils.newLineHandling(Utils.XSSHandling(introduce));
-		member.setMemberIntroduce(safeMemberIntroduce);
-		
+			member.setMemberIntroduce(safeMemberIntroduce);
+
 		}
-		
-		
+
 		log.info("commentList={}", member.getCommentList());
-		
+
 		return member;
 	}
-	
+
 	@Transactional(rollbackFor = Exception.class)
 	public int insertFollow(HashMap<String, Object> param) {
 		return memberDao.insertFollow(param);
@@ -102,23 +101,39 @@ public class MemberService {
 	public int deleteFollow(HashMap<String, Object> param) {
 		return memberDao.deleteFollow(param);
 	}
-	
+
 	@Transactional(rollbackFor = Exception.class)
 	public int insertComment(HashMap<String, Object> param) {
-		
+
 		String comment = (String) param.get("comment");
-		
+
 		String safeComment = Utils.newLineClear(comment);
-		
+
 		param.put("safeComment", safeComment);
-		
+
 		return memberDao.insertComment(param);
 	}
 
 	@Transactional(rollbackFor = Exception.class)
 	public int deleteComment(HashMap<String, Object> param) {
-		
+
 		return memberDao.deleteComment(param);
 	}
 
+	
+	// 관리자페이지 시작
+	public List<MemberExt> selectMembers() {
+		return memberDao.selectMembers();
+	}
+
+	public List<MemberExt> searchMembers(Map<String, Object> param) {
+		return memberDao.searchMembers(param);
+	}
+
+	public int deleteMembers(List<Long> deleteList) {
+		return memberDao.deleteMembers(deleteList);
+	}
+	// 관리자페이지 끝
+
+	
 }

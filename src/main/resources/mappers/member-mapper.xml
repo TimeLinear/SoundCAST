@@ -300,7 +300,67 @@
    
    <!-- 수정한 회원 정보 가져오기 종료-->
    
-   
+   <!-- 관리자페이지 시작 -->
+ 	<select id="selectMembers" resultMap="memberResultMap">
+		SELECT
+			*
+		FROM MEMBER
+		LEFT JOIN PROFILE_IMAGE ON MEMBER_PROFILE_IMAGE_NO = PROFILE_IMAGE_NO
+		WHERE MEMBER_STATUS = 'Y'
+		ORDER BY MEMBER_NO DESC
+	</select>
+	
+	<resultMap id="memberResultMap" type="memberExt">
+	    <id property="memberNo" column="member_no"/>
+	    <result property="memberNickname" column="member_nickname"/>
+	    <result property="memberEmail" column="member_email"/>
+	    
+	    <!-- ProfileImage 객체 매핑 -->
+	    <association property="profileImage" javaType="profileImage">
+	        <id property="profileImageNo" column="PROFILE_IMAGE_NO"/>
+	        <result property="profileImagePath" column="PROFILE_IMAGE_PATH"/>
+	    </association>
+	</resultMap>
+	
+	<select id="searchMembers" resultMap="memberResultMap">
+		SELECT
+			*
+		FROM MEMBER
+		LEFT JOIN PROFILE_IMAGE ON MEMBER_PROFILE_IMAGE_NO = PROFILE_IMAGE_NO
+		<where>
+			<!-- MEMBER_STATUS 조건 추가 -->
+			MEMBER_STATUS = 'Y'
+        	<choose>
+	            <!-- MEMBER_NO 검색 조건 -->
+	            <when test='type == "No" and searchTerm != "defaultSearchTerm"'>
+	                AND MEMBER_NO LIKE '%' || #{searchTerm} || '%'
+	            </when>
+	            <!-- MEMBER_NICKNAME 검색 조건 -->
+	            <when test='type == "닉네임" and searchTerm != "defaultSearchTerm"'>
+	                AND MEMBER_NICKNAME LIKE '%' || #{searchTerm} || '%'
+	            </when>
+	            <!-- MEMBER_EMAIL 검색 조건 -->
+	            <when test='type == "이메일" and searchTerm != "defaultSearchTerm"'>
+	                AND MEMBER_EMAIL LIKE '%' || #{searchTerm} || '%'
+	            </when>
+	            <!-- searchTerm가 빈 문자열인 경우 전체 목록 조회 -->
+	            <otherwise>
+	                <!-- 아무 조건도 추가하지 않음 -->
+	            </otherwise>
+	        </choose>
+	    </where>
+		ORDER BY MEMBER_NO DESC
+	</select>
+	
+	<update id="deleteMembers">
+        UPDATE MEMBER 
+        SET MEMBER_STATUS = 'N'
+        WHERE MEMBER_NO IN
+        <foreach item="memberNo" collection="list" open="(" separator="," close=")">
+            #{memberNo}
+        </foreach>
+    </update>
+    <!-- 관리자페이지 끝 -->
    
    
 
