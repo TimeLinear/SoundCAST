@@ -11,11 +11,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kh.soundcast.member.model.dao.AuthDao;
+import com.kh.soundcast.api.model.dao.AuthDao;
 import com.kh.soundcast.member.model.vo.Member;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserDetailServiceImpl implements UserDetailsService {
@@ -31,8 +33,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
 		
 		try {
 			userPk = new ObjectMapper().readValue(userPks, new TypeReference<HashMap<String, Object>>() {});
-			socialId =(String)userPk.get("SocialId");
-			socialType = (String)userPk.get("SocialType");	
+			log.info("UserDatails userPk(HashMap) = {}", userPk);
+			socialId =(String)userPk.get("socialId");
+			socialType = (String)userPk.get("socialType");	
 			
 		
 		} catch (JsonMappingException e) {

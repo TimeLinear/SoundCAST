@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Follow {
-	private int followMemberNo;
-	private int followTargetMemberNo; 
-	
+public class SocialCategory {
+	private int socialCategoryNo;
+	private String socialCategoryName;
 }

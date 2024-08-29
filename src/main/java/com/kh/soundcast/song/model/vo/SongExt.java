@@ -19,7 +19,7 @@ public class SongExt extends Song {
 	private String songGenreName;
 	
 	// 음원 커버 이미지 객체(songImageNo 필드와 짝)
-	private SongImage songImage;
+	private SongImageExt songImage;
 	
 	// 음원 파일 객체(songFileNo 필드와 짝)
 	// 폴더까지의 경로 번호만 있는 SoneFile 클래스에 경로명까지 추가한 클래스

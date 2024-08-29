@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.soundcast.member.model.service.UserDetailServiceImpl;
 import com.kh.soundcast.member.model.vo.Member;
+import com.kh.soundcast.member.model.vo.MemberExt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -57,8 +58,14 @@ public class JwtProvider {
 	
 
 	public String resolveToken(HttpServletRequest request) {
-		log.info("요청 사항 - {}", request);
-		String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
+		log.info("요청 사항 - {}", request.getHeader("Authorization"));
+		String accessToken = request.getHeader("Authorization");
+				
+		if(accessToken == null) {
+			return null;
+		}
+
+		accessToken = accessToken.replace("Bearer ", "");
 		
 		log.info("resolvetoken={}", accessToken);
 		
@@ -69,11 +76,10 @@ public class JwtProvider {
 	}
 
 	public boolean validationToken(String token) {
-
 		if(token.equals("undefined") || token == null) {
-	         return false;
-	      }
-	      
+			return false;
+		}
+		
 		try {
 			Jws<Claims> claimsJws=Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 			Claims claims = claimsJws.getBody();
@@ -89,7 +95,7 @@ public class JwtProvider {
 //	        
 //	        String socialType = (String)sub.get("SocialType");
 	        
-	        Member member = (Member) service.loadUserByUsername(subJson);
+	        MemberExt member = (MemberExt) service.loadUserByUsername(subJson);
 			
 			return (!claimsJws.getBody().getExpiration().before(new Date()) && !(member == null) );
 					//!claims.getBody().getExpiration().before(new Date());
@@ -98,6 +104,7 @@ public class JwtProvider {
 			
 			
 		}catch(Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 		

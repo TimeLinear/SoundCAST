@@ -1,11 +1,13 @@
-package com.kh.soundcast.api.auth.config;
+package com.kh.soundcast.config;
 
 import java.util.Collections;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class WebSecurityConfig {
 	
 	private final JwtProvider jwtProvider;
+	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 		
@@ -33,7 +36,7 @@ public class WebSecurityConfig {
 			@Override
 			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 				CorsConfiguration config = new CorsConfiguration();
-				config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+				config.setAllowedOrigins(Collections.singletonList("http://localhost:3000/"));
 				config.setAllowedMethods(Collections.singletonList("*"));
 				config.setAllowCredentials(true); //jwt가 반드시 있어야만 사용가능
 				config.setAllowedHeaders(Collections.singletonList("*"));
@@ -47,7 +50,9 @@ public class WebSecurityConfig {
 			config.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				)
 		.authorizeHttpRequests((authorizeRequest) -> authorizeRequest
-				.requestMatchers("/**").permitAll() // 누구나 이용가능한 url
+				.requestMatchers("/member/**").permitAll()  // 누구나 이용가능한 url
+				.requestMatchers("/auth/**").permitAll()
+				.requestMatchers("/song/**").permitAll()
 				.requestMatchers("/**").hasRole("USER") //그외는 user권한이 필요
 				//.requestMatcher("/admin/**").hasRole("ADMIN") authority테이블에 ROLE_ADMIN
 				.anyRequest().authenticated()
@@ -56,5 +61,17 @@ public class WebSecurityConfig {
 		
 		return http.build();
 	}
+	
+	@Bean
+	public WebSecurityCustomizer webSecurityCustomizer() {
+		return web -> web.ignoring()
+	        	.requestMatchers(PathRequest
+	            	.toStaticResources()
+	                .atCommonLocations()
+	                 )
+	        	.requestMatchers("resource/**");
+	}
+	
+	
 	
 }

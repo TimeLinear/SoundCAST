@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="member">
+ 	
+
+ <resultMap id="authorityMap" type="simpleGrantedAuthority">
+      <constructor>
+         <arg column="authority" javaType="string" />
+      </constructor>
+   </resultMap>
+   
+   
+   <resultMap id="memberExtMap" type="memberExt">
+         <id column="MEMBER_NO" property="memberNo"/>
+         <result column="MEMBER_NICKNAME" property="memberNickname"/>
+         <result column="MEMBER_EMAIL" property="memberEmail"/>
+         <result column="MEMBER_INTRODUCE" property="memberIntroduce"/>
+         <result column="MEMBER_CREATE_DATE" property="memberCreateDate"/>
+         <result column="MEMBER_MODIFY_DATE" property="memberModifyDate"/>
+         <result column="MEMBER_STATUS" property="memberStatus"/>
+       
+       <association property="memberBanner" javaType="memberBanner">
+           <id column="MEMBER_BANNER_NO" property="memberBannerNo"/>
+           <result column="MEMBER_BANNER_PATH" property="memberBannerPath"/>
+       </association>
+
+       <association property="memberSocial" javaType="memberSocial">
+           <id column="MEMBER_SOCIAL_MEMBER_NO" property="memberSocialMemberNo"/>
+           <result column="MEMBER_SOCIAL_SOCIAL_NAME" property="memberSocialSocialName"/>
+           <result column="MEMBER_SOCIAL_SOCIAL_ID" property="memberSocialSocialId"/>
+       </association>
+       
+       
+       <association property="profileImage" javaType="profileImage">
+			<id column="PROFILE_IMAGE_NO" property="profileImageNo"/>
+           	<result column="PROFILE_IMAGE_PATH" property="profileImagePath"/>
+		</association>
+		
+      <collection property="authorities"
+               javaType="list"
+               ofType="simpleGrantedAuthority">
+         <constructor>
+               <arg column="MEMBER_GRADE_NAME" javaType="string"/>
+           </constructor>
+      </collection>
+       
+
+   </resultMap>
+   
+   
+   <select id="selectOneMember" resultMap="memberExtMap">
+    SELECT
+	    MEMBER.MEMBER_NO,
+	    PROFILE_IMAGE.PROFILE_IMAGE_PATH,
+	    MEMBER_BANNER.MEMBER_BANNER_PATH,
+	    MEMBER_SOCIAL.MEMBER_SOCIAL_SOCIAL_NAME,
+	    MEMBER_SOCIAL.MEMBER_SOCIAL_SOCIAL_ID,
+	    MEMBER.MEMBER_NICKNAME,
+	    MEMBER.MEMBER_EMAIL,
+	    MEMBER.MEMBER_INTRODUCE,
+	    MEMBER_GRADE.MEMBER_GRADE_NAME
+	   	
+	FROM
+	    MEMBER
+	    JOIN MEMBER_SOCIAL ON MEMBER_SOCIAL.MEMBER_SOCIAL_MEMBER_NO = MEMBER.MEMBER_NO
+	    JOIN MEMBER_GRADE ON MEMBER.MEMBER_GRADE_NO = MEMBER_GRADE.MEMBER_GRADE_NO
+	    JOIN MEMBER_BANNER ON MEMBER.MEMBER_BANNER_NO = MEMBER_BANNER.MEMBER_BANNER_NO
+	    JOIN PROFILE_IMAGE ON MEMBER.MEMBER_PROFILE_IMAGE_NO = PROFILE_IMAGE.PROFILE_IMAGE_NO
+	    
+	    
+	WHERE
+	    MEMBER.MEMBER_NO =#{mNo}
+	    AND MEMBER.MEMBER_STATUS = 'Y'
+
+
+   </select>
+   
+   <select id="selectFollowerCount" resultType="int">
+   		SELECT 
+   			COUNT(FOLLOW_TARGET_MEMBER_NO) AS FOLLOWER_COUNT
+   		FROM
+   			FOLLOW
+   		WHERE
+   			FOLLOW_TARGET_MEMBER_NO = #{mNo}
+   		GROUP BY FOLLOW_TARGET_MEMBER_NO
+
+   </select>
+   
+
+   
+   
+	<resultMap id="memberExtMap2" type="memberExt">
+		<id column="MEMBER_NO" property="memberNo" />
+		<result column="MEMBER_NICKNAME" property="memberNickname" />
+		<result column="MEMBER_EMAIL" property="memberEmail" />
+		
+		<association property="comment" javaType="comment">
+           <id column="COMMENT_NO" property="commentNo"/>
+           <result column="COMMENT_WRITER_MEMBER_NO" property="commentWriterMemberNo"/>
+           <result column="COMMENT_MEMBER_NO" property="commentMemberNo"/>
+           <result column="COMMENT_TEXT" property="commentText"/>
+           <result column="COMMENT_CREATE_DATE" property="commentCreateDate"/>
+           <result column="COMMENT_MODIFY_DATE" property="commentModifyDate"/>
+       </association>
+		
+		
+		<association property="profileImage" javaType="profileImage">
+			<id column="PROFILE_IMAGE_NO" property="profileImageNo"/>
+           	<result column="PROFILE_IMAGE_PATH" property="profileImagePath"/>
+		</association>
+		
+		
+	</resultMap>
+   
+	<select id="selectFollowList" resultMap="memberExtMap2">
+		SELECT
+			FOLLOW.FOLLOW_TARGET_MEMBER_NO AS MEMBER_NO,
+		    TARGET_MEMBER.MEMBER_NICKNAME AS MEMBER_NICKNAME,
+		    TARGET_MEMBER.MEMBER_EMAIL AS MEMBER_EMAIL,
+		    PROFILE_IMAGE.PROFILE_IMAGE_PATH AS PROFILE_IMAGE_PATH,
+		  	PROFILE_IMAGE.PROFILE_IMAGE_NO AS PROFILE_IMAGE_NO
+		FROM MEMBER
+			LEFT JOIN FOLLOW ON FOLLOW.FOLLOW_MEMBER_NO = MEMBER.MEMBER_NO
+			LEFT JOIN MEMBER TARGET_MEMBER ON FOLLOW.FOLLOW_TARGET_MEMBER_NO = TARGET_MEMBER.MEMBER_NO
+			LEFT JOIN PROFILE_IMAGE ON TARGET_MEMBER.MEMBER_PROFILE_IMAGE_NO = PROFILE_IMAGE.PROFILE_IMAGE_NO
+		
+		WHERE MEMBER.MEMBER_NO = #{mNo}
+			AND MEMBER.MEMBER_STATUS = 'Y'
+
+	   		
+	</select>
+   
+  	
+  	<select id="selectComment" resultMap="memberExtMap2">
+   		SELECT 
+			COMMENT_NO, 
+			COMMENT_MEMBER_NO,
+			COMMENT_WRITER_MEMBER_NO, 
+			COMMENT_TEXT, 
+			PROFILE_IMAGE.PROFILE_IMAGE_PATH, 
+			MEMBER.MEMBER_NICKNAME
+			
+		FROM "COMMENT"
+   			LEFT JOIN MEMBER ON MEMBER.MEMBER_NO = COMMENT_WRITER_MEMBER_NO
+   			LEFT JOIN PROFILE_IMAGE ON PROFILE_IMAGE.PROFILE_IMAGE_NO = MEMBER.MEMBER_PROFILE_IMAGE_NO
+   			
+   		WHERE COMMENT_MEMBER_NO = #{mNo}
+   		
+   		ORDER BY COMMENT_NO DESC
+   		
+   
+   </select>
+ 
+   
+   
+   <insert id="insertFollow">
+   		INSERT INTO FOLLOW
+   		VALUES(
+			#{followerMno},
+			#{mNo}
+		)
+   
+   </insert>
+   
+   <select id="follow">
+	    fm.MEMBER_NO AS FOLLOW_MEMBER_NO,
+	    ft.MEMBER_NO AS FOLLOW_TARGET_MEMBER_NO,
+	    COUNT(f.FOLLOW_MEMBER_NO) AS FOLLOW_COUNT,
+	    LISTAGG(f.FOLLOW_TARGET_MEMBER_NO, ',') WITHIN GROUP (ORDER BY f.FOLLOW_TARGET_MEMBER_NO) AS FOLLOW_LIST
+	FROM
+	    FOLLOW f
+	JOIN
+	    MEMBER fm ON f.FOLLOW_MEMBER_NO = fm.MEMBER_NO
+	JOIN
+	    MEMBER ft ON f.FOLLOW_TARGET_MEMBER_NO = ft.MEMBER_NO
+	WHERE
+	    fm.MEMBER_NO = #{mNo}
+	GROUP BY
+	    fm.MEMBER_NO, ft.MEMBER_NO;
+
+   </select>
+
+   
+   <delete id="deleteFollow">
+	DELETE
+		FROM FOLLOW
+	WHERE FOLLOW_MEMBER_NO = #{followerMno}
+	AND
+		FOLLOW_TARGET_MEMBER_NO = #{mNo}		   
+   </delete>
+   
+
+	<insert id="insertComment">
+		INSERT INTO "COMMENT"
+		VALUES(
+			SEQ_COMMENT_NO.NEXTVAL,
+			#{writerNo},
+			#{mNo},
+			#{safeComment},
+			DEFAULT,
+			DEFAULT
+			)
+		
+	
+	</insert>
+   
+   <delete id="deleteComment">
+		DELETE
+			FROM "COMMENT"
+		WHERE
+			COMMENT_WRITER_MEMBER_NO = #{writerNo}
+			AND
+			COMMENT_NO = #{commentNo}
+   </delete>
+   
+     
+   <!-- 회원 마이페이지 자기 수정 -->
+   <insert id="insertMemberProfile" useGeneratedKeys="true"> <!-- 회원 프로필사진경로 삽입 -->
+   		<selectKey keyProperty="profileImageNo" resultType="int" order="BEFORE">
+			SELECT SEQ_MEMBER_PROFILE_IMAGE_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO PROFILE_IMAGE
+		VALUES(
+			#{profileImageNo},
+			#{profileImagePath}
+		)
+		
+   </insert>
+   
+   <insert id="insertMemberBanner"> <!-- 회원 배너사진경로 삽입 -->
+   		<selectKey keyProperty="memberBannerNo" resultType="int" order="BEFORE">
+			SELECT SEQ_MEMBER_BANNER_NO.NEXTVAL FROM DUAL
+		</selectKey>
+   		
+   		INSERT INTO MEMBER_BANNER
+   		VALUES(
+			#{memberBannerNo},
+			#{memberBannerPath}
+		)
+   </insert>
+   
+   <!-- 회원 배너 사진, 프로필사진, 닉네임,이메일 , 자기소개 변경 쿼리문 -->
+   <update id="updateMemberProfile" >
+   		UPDATE MEMBER
+   		SET 
+   			<if test="memberProfileImageNo != 0 and memberProfileImageNo != null">
+	   			MEMBER_PROFILE_IMAGE_NO = #{memberProfileImageNo},
+   			</if>
+   			<if test="memberBannerNo != 0 and memberBannerNo != null">
+   				MEMBER_BANNER_NO = #{memberBannerNo},
+   			</if>
+   			MEMBER_NICKNAME = #{nickName},
+   			MEMBER_EMAIL = #{email},
+   			MEMBER_INTRODUCE = #{introduce}
+   		WHERE
+   			MEMBER_NO = #{memberNo}
+   </update>
+   
+   <update id="updateMemberStatus">
+   		UPDATE MEMBER
+   		SET MEMBER_STATUS = 'N'
+   		WHERE MEMBER_NO =#{mNo}
+   </update>
+   
+   
+   <!-- 회원 마이페이지 자기 수정 끝-->
+   
+	<resultMap id="modifyMemberExtMap" type="memberExt">
+		<id column="MEMBER_NO" property="memberNo" />
+		<result column="MEMBER_NICKNAME" property="memberNickname" />
+		<result column="MEMBER_EMAIL" property="memberEmail" />
+		<result column="MEMBER_INTRODUCE" property="memberIntroduce"/>
+		
+		<association property="memberBanner" javaType="memberBanner">
+           <id column="MEMBER_BANNER_NO" property="memberBannerNo"/>
+           <result column="MEMBER_BANNER_PATH" property="memberBannerPath"/>
+       </association>
+		
+		<association property="profileImage" javaType="profileImage">
+			<id column="PROFILE_IMAGE_NO" property="profileImageNo"/>
+           	<result column="PROFILE_IMAGE_PATH" property="profileImagePath"/>
+		</association>
+		
+		
+	</resultMap>
+   
+   <!-- 수정한 회원 정보 가져오기-->
+   	<select id="selectModifymember" resultMap="modifyMemberExtMap">
+   		SELECT 
+   			PROFILE_IMAGE_PATH,
+   			MEMBER_BANNER_PATH,
+   			MEMBER_NICKNAME,
+   			MEMBER_EMAIL,
+   			MEMBER_INTRODUCE
+   		FROM 
+   			MEMBER
+   		JOIN MEMBER_BANNER USING(MEMBER_BANNER_NO)
+   		JOIN PROFILE_IMAGE ON MEMBER_PROFILE_IMAGE_NO = PROFILE_IMAGE_NO
+   		WHERE
+   			MEMBER_NO = #{memberNo}
+   			AND
+   			MEMBER_STATUS = 'Y'
+   	</select>
+   
+   <!-- 수정한 회원 정보 가져오기 종료-->
+   
+   
+   
+   
+
+ 
+ 	
+ </mapper>
