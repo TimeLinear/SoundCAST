@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
+import com.kh.soundcast.song.model.vo.Report;
 import com.kh.soundcast.song.model.vo.Song;
 import com.kh.soundcast.song.model.vo.SongExt;
 import com.kh.soundcast.song.model.vo.SongFile;
@@ -85,6 +86,11 @@ public class SongDaoImpl implements SongDao{
 	@Override
 	public int updateSongStatus(int songNo) {
 		return session.update("song.updateSongStatus", songNo);
+	}
+
+	@Override
+	public int insertReport(Report report) {
+		return session.insert("report.insertReport", report);
 	}
 	
 	

@@ -24,6 +24,7 @@ import com.kh.soundcast.common.Utils;
 import com.kh.soundcast.song.model.service.SongService;
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
+import com.kh.soundcast.song.model.vo.Report;
 import com.kh.soundcast.song.model.vo.Song;
 import com.kh.soundcast.song.model.vo.SongExt;
 
@@ -137,5 +138,14 @@ public class SongController {
 		@RequestParam int songNo
 			) {
 		return service.updateSongStatus(songNo);
+	}
+	
+	@PostMapping("/report")
+	public int reportSong(
+		@RequestBody Report report
+			) {
+		service.insertReport(report);
+		log.debug("삽입 결과 - {}", report);
+		return report.getReportNo();
 	}
 }

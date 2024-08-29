@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
+import com.kh.soundcast.song.model.vo.Report;
 import com.kh.soundcast.song.model.vo.Song;
 import com.kh.soundcast.song.model.vo.SongExt;
 
@@ -26,5 +27,7 @@ public interface SongService {
 	SongExt insertUnofficialSong(MultipartFile songFile, MultipartFile songImage, Song song) throws Exception;
 
 	int updateSongStatus(int songNo);
+
+	int insertReport(Report report);
 
 }

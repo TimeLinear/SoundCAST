@@ -18,6 +18,7 @@ import com.kh.soundcast.common.Utils;
 import com.kh.soundcast.song.model.dao.SongDao;
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
+import com.kh.soundcast.song.model.vo.Report;
 import com.kh.soundcast.song.model.vo.Song;
 import com.kh.soundcast.song.model.vo.SongExt;
 import com.kh.soundcast.song.model.vo.SongFile;
@@ -181,6 +182,12 @@ public class SongServiceImpl implements SongService {
 	@Override
 	public int updateSongStatus(int songNo) {
 		return dao.updateSongStatus(songNo);
+	}
+
+	@Override
+	@Transactional(rollbackFor = {Exception.class})
+	public int insertReport(Report report) {
+		return dao.insertReport(report);
 	}
 
 	
