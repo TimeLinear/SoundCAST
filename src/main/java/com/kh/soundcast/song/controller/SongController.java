@@ -93,9 +93,10 @@ private final SongService service;
 	}
 	
 	
+	//update 수정 - 2024-08-30
 	@CrossOrigin(origins = {"http://localhost:3000"})
 	@PutMapping("/update/{songNo}")
-	public ResponseEntity<String> updateSong(
+	public ResponseEntity<List<Song>> updateSong(
 			@PathVariable int songNo,
 			@RequestPart("songInfo") SongExt songInfo,
 			@RequestPart(required = false, value="songFile") MultipartFile songFile,
@@ -110,8 +111,14 @@ private final SongService service;
 		
 		int result = service.updateSong(songNo, songInfo, songFile, songImage);
 		
+		
 		if(result > 0) {
-			return ResponseEntity.ok().body("수정 성공 하였습니다.");
+			
+			List<Song> list = service.getMemberSongList(songInfo.getSongMemberNo());
+			
+			return ResponseEntity.ok(list);
+			
+		
 		} else {
 			return ResponseEntity.notFound().build();
 		}
