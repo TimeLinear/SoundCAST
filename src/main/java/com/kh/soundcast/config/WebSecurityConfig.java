@@ -1,4 +1,4 @@
-package com.kh.soundcast.api.auth.config;
+package com.kh.soundcast.config;
 
 import java.util.Collections;
 

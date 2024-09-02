@@ -26,6 +26,7 @@ import com.kh.soundcast.api.model.dao.AuthDao;
 import com.kh.soundcast.common.Utils;
 import com.kh.soundcast.member.model.dto.GoogleUserInfoResponse;
 import com.kh.soundcast.member.model.dto.KakaoUserInfoResponse;
+import com.kh.soundcast.member.model.dto.NaverUserInfoResponse;
 import com.kh.soundcast.member.model.vo.Comment;
 import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberExt;
@@ -44,6 +45,7 @@ public class AuthService {
 	private final KakaoApi kakaoApi;
 	private final AuthDao authDao;
 	private final JwtProvider jwtProvider;
+	private final NaverApi naverApi;
 	
 	public HashMap<String, Object> authCheck(String socialType, HashMap<String, String> param) throws Exception {
 		
@@ -86,6 +88,14 @@ public class AuthService {
 			KakaoUserInfoResponse userInfoKakao = kakaoApi.getUserInfo(AccToken);
 			socialId = String.valueOf(userInfoKakao.getId());
 			log.info("kakao의 socialId={}", socialId);
+		
+		break;
+		
+		case "naver":
+			log.info("naverPARAMS={}",param);
+			String naverAccToken = param.get("accessToken");
+			NaverUserInfoResponse userInfoNaver = naverApi.getUserInfo(naverAccToken);
+			socialId=String.valueOf(userInfoNaver.getResponse().getId());
 			
 		break;
 		
@@ -115,7 +125,7 @@ public class AuthService {
 			member.setFollower(follower);
 		}
 		
-		log.info("service m_getfollowing = {}", member.getFollowing());
+		//log.info("service m_getfollowing = {}", member.getFollowing());
 		
 		HashMap<String, Object> map = new HashMap<>();	
 		HashMap<String, Object> userPk = new HashMap<>();	
@@ -328,6 +338,61 @@ public class AuthService {
 		member.setFollower(follower);
 		
 		log.info("Login following, follow, introduce, commentList = {},{},{},{}",following,follower,member.getMemberIntroduce(),commentList);
+		
+		return member;
+	}
+
+
+
+
+
+	@Transactional(readOnly = true, rollbackFor = Exception.class)
+	public MemberExt naverLogin(String socialType, String accessToken) {
+		NaverUserInfoResponse userInfo = naverApi.getUserInfo(accessToken);
+		
+		String socialId = String.valueOf(userInfo.getResponse().getId());
+		MemberExt member = (MemberExt)authDao.loadUserByUsername(socialType, socialId);
+		
+		if(member == null) {
+			// 회원가입
+			String nickName = userInfo.getResponse().getNickname();
+			String profile  = userInfo.getResponse().getProfile_image();
+			String email = userInfo.getResponse().getEmail();
+	
+			ProfileImage memberProfile = ProfileImage.builder().profileImageNo(0).profileImagePath(profile).build();
+			MemberSocial memberSocial = MemberSocial.builder().memberSocialSocialId(String.valueOf(socialId))
+					.memberSocialSocialName(socialType).build();
+			
+			
+			MemberExt m = MemberExt.builder().
+					memberNickname(nickName)
+					.memberEmail(email)
+					.profileImage(memberProfile)
+					.memberSocial(memberSocial)
+					.build();
+			
+			authDao.insertProfileImage(m);
+			authDao.insertMember(m);
+			authDao.insertMemberSocial(m);
+			
+			member = (MemberExt) authDao.loadUserByUsername(socialType, socialId);
+			
+			
+		}
+		
+		int mNo= member.getMemberNo();
+		int follower = authDao.selectFollower(mNo);
+		List<MemberExt> commentList = authDao.selectComment(mNo);
+		
+		if(member.getFollowing() == null) {
+			member.setFollowing(new ArrayList<MemberExt>());
+		}
+		
+		if(member.getMemberIntroduce()==null) {
+			member.setMemberIntroduce("");
+		}
+		
+		
 		
 		return member;
 	}

@@ -3,6 +3,8 @@ package com.kh.soundcast.song.model.service;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
 import com.kh.soundcast.song.model.vo.Song;
@@ -16,9 +18,11 @@ public interface SongService {
 
 	List<Mood> selectAllMoods();
 
-	int updateSong(int songNo, SongExt song);
-
 	List<Song> getMemberSongList(int mNo);
+
+	int updateSong(int songNo, SongExt songInfo, MultipartFile songFile, MultipartFile songImage);
+
+	SongExt insertUnofficialSong(MultipartFile songFile, MultipartFile songImage, Song song) throws Exception;
 
 
 

@@ -259,6 +259,13 @@
    			MEMBER_NO = #{memberNo}
    </update>
    
+   <update id="updateMemberStatus">
+   		UPDATE MEMBER
+   		SET MEMBER_STATUS = 'N'
+   		WHERE MEMBER_NO =#{mNo}
+   </update>
+   
+   
    <!-- 회원 마이페이지 자기 수정 끝-->
    
 	<resultMap id="modifyMemberExtMap" type="memberExt">

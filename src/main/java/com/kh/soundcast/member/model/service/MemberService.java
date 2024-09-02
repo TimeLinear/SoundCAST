@@ -35,6 +35,12 @@ public class MemberService {
 
 	@Transactional(rollbackFor = Exception.class)
 	public void updateMemberProfile(HashMap<String, Object> params) {
+		log.info("업데이트 파람 ={}",params);
+		if(!(params.get("introduce")==null)) {
+			String introduce = (String) params.get("introduce");
+			String safeMemberIntroduce = Utils.newLineClear(Utils.XSSHandling(introduce));
+			params.put("introduce", safeMemberIntroduce);		
+		}
 		memberDao.updateMemberProfile(params);
 	}
 
@@ -58,37 +64,38 @@ public class MemberService {
 	public MemberExt selectOneMember(int mNo) {
 		
 		MemberExt member = memberDao.selectOneMember(mNo);
-		
-		List<MemberExt> following = memberDao.selectFollowList(mNo);
-		
-		member.setFollowing(following);
-		
-		int follower = memberDao.selectFollower(mNo);
-		
-		member.setFollower(follower);
-		
-		List<MemberExt> comment = memberDao.selectComment(mNo);
-		
-		if(!comment.isEmpty()) {
-			String commentText = comment.get(0).getComment().getCommentText();
-			String safeCommentText = Utils.newLineHandling(Utils.XSSHandling(commentText));  
+		log.info("member셀렉트={}", member);
+		if(!(member==null)) {
+
+			List<MemberExt> following = memberDao.selectFollowList(mNo);
 			
-			comment.get(0).getComment().setCommentText(safeCommentText);
+			member.setFollowing(following);
 			
+			int follower = memberDao.selectFollower(mNo);
+			
+			member.setFollower(follower);
+			
+			List<MemberExt> comment = memberDao.selectComment(mNo);
+			
+			if(!comment.isEmpty()) {
+				String commentText = comment.get(0).getComment().getCommentText();
+				String safeCommentText = Utils.newLineHandling(Utils.XSSHandling(commentText));  
+				
+				comment.get(0).getComment().setCommentText(safeCommentText);
+				
+				member.setCommentList(comment);
+			}
+				
 			member.setCommentList(comment);
-		}
 			
-		member.setCommentList(comment);
-		
-		if(!(member.getMemberIntroduce()==null)) {
-			String introduce = member.getMemberIntroduce();
-			String safeMemberIntroduce = Utils.newLineHandling(Utils.XSSHandling(introduce));
-		member.setMemberIntroduce(safeMemberIntroduce);
-		
+			if(!(member.getMemberIntroduce()==null)) {
+				String introduce = member.getMemberIntroduce();
+				String safeMemberIntroduce = Utils.newLineHandling(Utils.XSSHandling(introduce));
+			member.setMemberIntroduce(safeMemberIntroduce);
+			
+			}
+			return member;
 		}
-		
-		
-		log.info("commentList={}", member.getCommentList());
 		
 		return member;
 	}
@@ -119,6 +126,11 @@ public class MemberService {
 	public int deleteComment(HashMap<String, Object> param) {
 		
 		return memberDao.deleteComment(param);
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public int updateMemberStatus(int mNo) {
+		return memberDao.updateMemberStatus(mNo);
 	}
 
 }

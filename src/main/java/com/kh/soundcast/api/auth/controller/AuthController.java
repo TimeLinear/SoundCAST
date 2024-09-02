@@ -74,6 +74,10 @@ public class AuthController {
 			map = authService.authCheck(socialType, param);
 			break;
 			
+		    case "naver":
+		    map = authService.authCheck(socialType, param);
+			break;
+			
 		    default:
 				throw new IllegalArgumentException("Unsupported socialType: " + socialType);
 			}
@@ -94,6 +98,7 @@ public class AuthController {
 			
 			String clientId;
 			MemberExt member;
+		
 			switch (socialType) {
 		    case "google":
 		    	param.put("socialType", socialType);
@@ -101,12 +106,17 @@ public class AuthController {
 		    	clientId = authService.getClientId(param);
 		        
 		        break;
-//		    case "naver":
-//		        member = authService.naverLogin(socialType, credential);
-//		        break;
+		        
+		    case "naver":
+		    	log.info("Nparam={}",param);
+		    	String NaverAccessToken = param.get("naverCredential");
+		        member = authService.naverLogin(socialType, NaverAccessToken);
+		        clientId = member.getMemberSocial().getMemberSocialSocialId();
+		        break;
+		        
 		    case "kakao":
-		    	String accessToken = param.get("accessToken");
 		    	
+		    	String accessToken = param.get("accessToken");
 		        member = authService.kakaoLogin(socialType, accessToken);
 		        
 		        clientId = member.getMemberSocial().getMemberSocialSocialId();

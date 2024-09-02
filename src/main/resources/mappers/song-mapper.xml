@@ -40,13 +40,36 @@
 	</resultMap>
 	
 	<select id="selectSong" resultMap="songExtMap">
-		SELECT *
-		FROM SONG
-		WHERE SONG_NO = #{songNo} 
-			AND SONG_STATUS = 'Y'
-	</select>
+      SELECT 
+         SONG_NO,
+         SONG_MEMBER_NO,
+         SONG_MOOD_NO,
+         SONG_GENRE_NO, 
+         SONG_IMAGE_NO,
+         SONG_FILE_NO,
+         
+         S.SONG_PLACE_NO,
+         S.SONG_TITLE,
+         S.SONG_LICENSE, 
+         S.SONG_DETAIL,
+                  
+         M.MEMBER_NICKNAME,
+         
+         G.GENRE_NAME,
+         D.MOOD_NAME,
+                  
+         I.SONG_IMAGE_PATH_NO,
+         I.SONG_IMAGE_NAME,
+         IP.SONG_IMAGE_PATH_NAME,
+                  
+         F.SONG_FILE_SONG_PATH_NO,
+         F.SONG_FILE_CHANGE_NAME,
+         F.SONG_FILE_ORIGIN_NAME,
+         P.SONG_PATH_NAME 
+         
+         AND SONG_STATUS = 'Y'        
+    </select>       
 
-	
 	<select id="selectSongList" resultMap="songExtMap">
 		SELECT 
 			SONG_NO,
@@ -155,6 +178,35 @@
 		
 	</select>
 	
+
+	<insert id="insertNewSong" parameterType="songFile" useGeneratedKeys="true">
+		
+		INSERT INTO SONG_FILE 
+			VALUES (SEQ_SONG_FILE_NO.NEXTVAL, 
+					#{songFileSongPathNo}, 
+					#{songFileChangeName}, 
+					#{songFileOriginName})
+					
+		<selectKey keyProperty="songFileNo" resultType="int" order="AFTER">
+			SELECT SEQ_SONG_FILE_NO.CURRVAL FROM DUAL
+   		</selectKey>
+	
+	</insert>
+	
+	<insert id="insertNewImage" parameterType="songImage" useGeneratedKeys="true">
+		
+		INSERT INTO SONG_IMAGE 
+			VALUES (SEQ_SONG_IMAGE_NO.NEXTVAL, 
+					#{songImagePathNo}, 
+					#{songImageName})
+					
+		<selectKey keyProperty="songImageNo" resultType="int" order="AFTER">
+			SELECT SEQ_SONG_IMAGE_NO.CURRVAL FROM DUAL
+   		</selectKey>
+	
+	</insert>
+	
+			
 	<update id="updateSongBasicInfo">
 		UPDATE
 			SONG
@@ -165,11 +217,18 @@
 			SONG_LICENSE = #{songLicense},
 			SONG_DETAIL = #{songDetail},
 			SONG_MODIFY_DATE = SYSDATE
+			<if test="songFileNo != 0">
+				, SONG_FILE_NO = #{songFileNo}
+			</if>
+			<if test="songImageNo != 0">
+				, SONG_IMAGE_NO = #{songImageNo}
+			</if>
 			
 		WHERE
 			SONG_NO = #{songNo}
 	
 	</update>
+	
 	
 	<select id="getMemberSongList" resultMap="songExtMap">
 		SELECT
@@ -199,10 +258,7 @@
 			F.SONG_FILE_ORIGIN_NAME,
 			P.SONG_PATH_NAME			
 			
-			FROM (SELECT *
-			    FROM( SELECT * FROM SONG ORDER BY SONG_CREATE_DATE DESC)
-					WHERE ROWNUM <![CDATA[ <= ]]>20
-			    		AND SONG_PLACE_NO = #{placeNo} ) S
+			FROM SONG S
 			    		
 			LEFT JOIN MEMBER M ON (S.SONG_MEMBER_NO = M.MEMBER_NO)
 			LEFT JOIN GENRE G ON (S.SONG_GENRE_NO = G.GENRE_NO)
@@ -218,6 +274,71 @@
 	
 	</select>
 
+	
+	<select id="selectSongPath" resultType="string">
+		SELECT SONG_PATH_NAME
+		FROM SONG_PATH
+		WHERE SONG_PATH_NO = #{songPathNo}
+	</select>
+	
+	<select id="selectSongImagePath" resultType="string">
+		SELECT SONG_IMAGE_PATH_NAME
+		FROM SONG_IMAGE_PATH
+		WHERE SONG_IMAGE_PATH_NO = #{songImagePathNo}
+	</select>
+	
+	<insert id="insertSongFile" useGeneratedKeys="true">
+		
+		<selectKey keyProperty="songFileNo" resultType="int" order="BEFORE">
+			SELECT SEQ_SONG_FILE_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO SONG_FILE
+		VALUES(
+			#{songFileNo},
+			#{songFileSongPathNo},
+			#{songFileChangeName},
+			#{songFileOriginName}
+		)
+	</insert>
+
+	<insert id="insertSongImage" useGeneratedKeys="true">
+		
+		<selectKey keyProperty="songImageNo" resultType="int" order="BEFORE">
+			SELECT SEQ_SONG_IMAGE_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO SONG_IMAGE
+		VALUES(
+			#{songImageNo},
+			#{songImagePathNo},
+			#{songImageName}
+		)
+	</insert>
+	
+	<insert id="insertSong" useGeneratedKeys="true">
+	
+		<selectKey keyProperty="songNo" resultType="int" order="BEFORE">
+			SELECT SEQ_SONG_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO SONG
+		VALUES(
+			#{songNo},
+			#{songMemberNo},
+			#{songMoodNo},
+			#{songGenreNo},
+			#{songImageNo},
+			#{songFileNo},
+			#{songPlaceNo},
+			#{songTitle},
+			#{songLicense},
+			#{songDetail},
+			SYSDATE,
+			SYSDATE,
+			DEFAULT
+		)
+	</insert>
 
 
 

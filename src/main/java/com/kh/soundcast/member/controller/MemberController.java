@@ -11,6 +11,7 @@ import java.util.ListIterator;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -149,6 +150,15 @@ public class MemberController {
 	    	
 	    }
 	
+	  @PostMapping("/leave/{memberNo}")
+		public ResponseEntity<String> modifyMemberStatus(@PathVariable("memberNo") int memberNo){
+			int mNo = memberNo;
+			int member = memberService.updateMemberStatus(mNo);
+			
+			return ResponseEntity.ok("회원 탈퇴 성공");
+		}
+	  
+	  
 	
 	//유저 인포 페이지 
 	@GetMapping("/memberInfo/{memberNo}")
@@ -158,9 +168,16 @@ public class MemberController {
 		log.info("memberNo={}",memberNo);
 		int mNo = Integer.parseInt(memberNo);
 		MemberExt member = memberService.selectOneMember(mNo);
-		log.info("memberselect={}",member);
-		log.info("멤버페이지팔로잉정보={}",member.getFollowing());
-	
+		log.info("member={}",member);
+		if(!(member==null)) {
+			if(member.getFollowing().get(0) == null) {
+				member.setFollowing(new ArrayList<MemberExt>());
+			}
+			
+			return member;
+		}
+		
+		return member;
 //		HashMap<String, Object> map = new HashMap<>();
 //		
 //		if(member == null && member.getMemberNo() == 0) {
@@ -170,12 +187,6 @@ public class MemberController {
 //		}
 //		
 //		map.put("member", member);
-		
-		if(member.getFollowing().get(0) == null) {
-			member.setFollowing(new ArrayList<MemberExt>());
-		}
-		
-		return member;
 	}
 	
 	@PostMapping("/follow/{memberNo}")
@@ -230,12 +241,11 @@ public class MemberController {
 			){
 		int mNo = Integer.parseInt(memberNo);
 		param.put("mNo", mNo);
+		Map<String, Object> map  = new HashMap<>();
 		
 		log.info("commentParam={}", param);	
 		
 		int result = memberService.insertComment(param);
-		
-		Map<String, Object> map  = new HashMap<>();
 		
 		if(result>0) {
 			map.put("msg", "댓글 등록 완료");
@@ -249,7 +259,6 @@ public class MemberController {
 	
 	@DeleteMapping("/comment/delete")
 	public Map<String,Object> deleteComment(
-			
 			@RequestBody HashMap<String, Object>param
 			){
 		log.info("deletecomment param = {}",param);
@@ -272,17 +281,6 @@ public class MemberController {
 	
 
 	
-	@GetMapping("/song/{memberNo}")
-	public List<Song> getMemberSongList(
-			@PathVariable String memberNo
-			) {
-		int mNo = Integer.parseInt(memberNo);
-		List<Song> song = songService.getMemberSongList(mNo);
-		
-		log.info("songList?={}", song);
-		return song;
-		
-	}
 	
 	
 	

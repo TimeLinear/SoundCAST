@@ -85,5 +85,9 @@ public class MemberDao {
 		return session.delete("member.deleteComment",param);
 	}
 
+	public int updateMemberStatus(int mNo) {
+		return session.update("member.updateMemberStatus", mNo);
+	}
+
 	
 }
