@@ -226,6 +226,26 @@ private final SongService service;
 	
 	
 	
+	@CrossOrigin(origins = {"*"})
+	@GetMapping("/top5Music")
+	public List<SongExt> selectTop5Music(/*HttpServletResponse response*/){
+		
+		List<SongExt> list = songService.selectTop5Music();
+		log.debug("list {}", list);
+
+		return list;
+	}
+	
+	@CrossOrigin(origins = {"*"})
+	@GetMapping("/newMusic")
+	public List<SongExt> selectNewMusic(/*HttpServletResponse response*/){
+		
+		List<SongExt> list = songService.selectNewMusic();
+		log.debug("list {}", list);
+
+		return list;
+	}
+	
 }
 
 

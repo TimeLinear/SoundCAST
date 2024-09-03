@@ -38,7 +38,7 @@ public class AuthFilter extends GenericFilterBean  {
 			
 			
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-			
+			log.debug("검증 완료된 유저 정보 - {}", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		}
 		
 		chain.doFilter(request, response);

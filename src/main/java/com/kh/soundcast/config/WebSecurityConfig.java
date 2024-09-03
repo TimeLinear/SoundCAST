@@ -1,6 +1,7 @@
 package com.kh.soundcast.config;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -29,14 +30,15 @@ public class WebSecurityConfig {
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-		
+	
 		
 		http.cors(corsConfig -> corsConfig.configurationSource(new CorsConfigurationSource() {
 			
 			@Override
 			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 				CorsConfiguration config = new CorsConfiguration();
-				config.setAllowedOrigins(Collections.singletonList("http://localhost:3000/"));
+				//config.setAllowedOrigins(Collections.singletonList("http://localhost:3000/"));
+				config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:3001"));
 				config.setAllowedMethods(Collections.singletonList("*"));
 				config.setAllowCredentials(true); //jwt가 반드시 있어야만 사용가능
 				config.setAllowedHeaders(Collections.singletonList("*"));

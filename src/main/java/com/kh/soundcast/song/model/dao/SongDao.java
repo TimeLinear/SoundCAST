@@ -40,6 +40,29 @@ public interface SongDao {
 	int insertSongImage(SongImage songImageData);
 
 	int insertSong(Song song);
+import java.util.List;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.kh.soundcast.song.model.vo.SongExt;
+
+import lombok.RequiredArgsConstructor;
+
+@Repository
+@RequiredArgsConstructor
+public class SongDao {
+	
+	private final SqlSessionTemplate session;
+
+	public List<SongExt> selectTop5Music() {
+		return session.selectList("song.selectTop5Music");
+	}
+
+	public List<SongExt> selectNewMusic() {
+		return session.selectList("song.selectNewMusic");
+	}
+	
 	
 	List<Download> checkDownload(HashMap<String, Object> param);
 
