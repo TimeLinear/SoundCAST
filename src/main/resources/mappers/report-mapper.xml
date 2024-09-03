@@ -2,8 +2,33 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<<<<<<< HEAD
  <mapper namespace="report">
  	<select id="selectRecentReport" resultMap="reportResultMap">
+=======
+
+<mapper namespace="report">
+
+	<insert id="insertReport" useGeneratedKeys="true">
+	
+		<selectKey keyProperty="reportNo" resultType="int" order="BEFORE">
+			SELECT SEQ_REPORT_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO REPORT
+		VALUES(
+			#{reportNo},
+			#{reportSongNo},
+			#{reportMemberNo},
+			#{reportText},
+			SYSDATE,
+			DEFAULT
+		)
+	</insert>
+	
+	
+	<select id="selectRecentReport" resultMap="reportResultMap">
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
  		SELECT
  			REPORT_TEXT,
  			MEMBER_NICKNAME,
@@ -17,6 +42,7 @@
  		LEFT JOIN SONG_IMAGE_PATH USING (SONG_IMAGE_PATH_NO)
  		WHERE REPORT_STATUS = 'N'
  		ORDER BY REPORT_DATE DESC
+<<<<<<< HEAD
  	</select>
  	
  	<resultMap id="reportResultMap" type="reportExt">
@@ -38,3 +64,27 @@
  	</resultMap>
  	
  </mapper>
+=======
+	</select>
+
+	<resultMap id="reportResultMap" type="reportExt">
+		<result property="reportText" column="REPORT_TEXT" />
+
+		<association property="member" javaType="memberExt">
+			<result property="memberNickname" column="MEMBER_NICKNAME" />
+		</association>
+
+		<association property="song" javaType="songExt">
+			<result property="songTitle" column="SONG_TITLE" />
+
+			<association property="songImage" javaType="songImageExt">
+				<result property="songImagePathName"
+					column="SONG_IMAGE_PATH_NAME" />
+				<result property="songImageName" column="SONG_IMAGE_NAME" />
+			</association>
+		</association>
+
+	</resultMap>
+	
+</mapper>
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3

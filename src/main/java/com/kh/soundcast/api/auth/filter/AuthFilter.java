@@ -36,7 +36,6 @@ public class AuthFilter extends GenericFilterBean  {
 			
 			log.info("authentication={}",authentication );
 			
-			
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			
 		}

@@ -47,6 +47,11 @@ public interface SongDao {
 	int insertSongFile(SongFile songFileData);
 
 	String selectSongImagePath(int unofficialPathNo);
+	String selectSongPath(int songPathNo);
+
+	int insertSongFile(SongFile songFileData);
+
+	String selectSongImagePath(int songImagePathNo);
 
 	int insertSongImage(SongImage songImageData);
 
@@ -70,9 +75,14 @@ public class SongDao {
 	public List<SongExt> selectNewMusic() {
 		return session.selectList("song.selectNewMusic");
 	}
-	
-	
-	
+	SongExt selectSong(Song song);
 
+	int updateSongStatus(int songNo);
+
+	int insertReport(Report report);
+	
+	public List<SongExt> selectTop5Music();
+	
+	public List<SongExt> selectNewMusic();
 
 }

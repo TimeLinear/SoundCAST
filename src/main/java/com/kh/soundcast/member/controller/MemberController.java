@@ -207,6 +207,9 @@ public class MemberController {
 		}
 		
 		return member;
+		log.info("memberselect={}",member);
+		log.info("멤버페이지팔로잉정보={}",member.getFollowing());
+	}
 //		HashMap<String, Object> map = new HashMap<>();
 //		
 //		if(member == null && member.getMemberNo() == 0) {
@@ -215,7 +218,6 @@ public class MemberController {
 //			map.put("msg", "회원 팔로우 목록을 불러올 수 없습니다.");
 //		}
 //		
-
 	@PostMapping("/follow/{memberNo}")
 	public Map<String, Object> inesrtFollow(
 			@PathVariable String memberNo,
@@ -230,6 +232,8 @@ public class MemberController {
 		int result = memberService.insertFollow(param);
 		
 		if(result>0) {
+			MemberExt newFollowing = memberService.selectOneMember(Integer.parseInt(memberNo));
+			map.put("newFollowing", newFollowing);
 			map.put("msg", "팔로우 성공");
 		}else {
 			map.put("msg", "팔로우 실패");
@@ -268,6 +272,7 @@ public class MemberController {
 			){
 		int mNo = Integer.parseInt(memberNo);
 		param.put("mNo", mNo);
+		
 		Map<String, Object> map  = new HashMap<>();
 		
 		log.info("commentParam={}", param);	

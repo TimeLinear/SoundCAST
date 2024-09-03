@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+=======
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 
 <mapper namespace="song">
 
@@ -32,6 +36,7 @@
 		</association>
 
 		<association property="songFile" javaType="songFileExt">
+<<<<<<< HEAD
 			<id column="SONG_FILE_SONG_PATH_NO" property="songFileSongPathNo" />
 			<result column="SONG_FILE_CHANGE_NAME" property="songFileChangeName" />
 			<result column="SONG_FILE_ORIGIN_NAME" property="songFileOriginName" />
@@ -83,10 +88,65 @@
 	</select>
 
 	<select id="selectSongList" resultMap="songExtMap">
+=======
+			<id column="SONG_FILE_PATH_NO" property="songFilePathNo" />
+			<result column="SONG_FILE_CHANGE_NAME" property="songFileChangeName" />
+			<result column="SONG_FILE_ORIGIN_NAME" property="songFileOriginName" />
+			<result column="SONG_PATH_NAME" property="songFileSongPathName" />
+		</association>
+	</resultMap>
+
+	<select id="selectSong" resultMap="songExtMap">
+		SELECT
+		SONG_NO,
+		SONG_MEMBER_NO,
+		SONG_MOOD_NO,
+		SONG_GENRE_NO,
+		SONG_IMAGE_NO,
+		SONG_FILE_NO,
+
+		S.SONG_PLACE_NO,
+		S.SONG_TITLE,
+		S.SONG_LICENSE,
+		S.SONG_DETAIL,
+
+		M.MEMBER_NICKNAME,
+
+		G.GENRE_NAME,
+		D.MOOD_NAME,
+
+		I.SONG_IMAGE_PATH_NO,
+		I.SONG_IMAGE_NAME,
+		IP.SONG_IMAGE_PATH_NAME,
+
+		F.SONG_FILE_SONG_PATH_NO,
+		F.SONG_FILE_CHANGE_NAME,
+		F.SONG_FILE_ORIGIN_NAME,
+		P.SONG_PATH_NAME
+		FROM SONG S
+
+		LEFT JOIN MEMBER M ON (S.SONG_MEMBER_NO = M.MEMBER_NO)
+		LEFT JOIN GENRE G ON (S.SONG_GENRE_NO = G.GENRE_NO)
+		LEFT JOIN MOOD D ON (S.SONG_MOOD_NO = D.MOOD_NO)
+
+		LEFT JOIN SONG_IMAGE I USING (SONG_IMAGE_NO)
+		LEFT JOIN SONG_IMAGE_PATH IP ON (I.SONG_IMAGE_PATH_NO =
+		IP.SONG_IMAGE_PATH_NO)
+
+		LEFT JOIN SONG_FILE F USING (SONG_FILE_NO)
+		LEFT JOIN SONG_PATH P ON (P.SONG_PATH_NO = F.SONG_FILE_SONG_PATH_NO)
+		WHERE SONG_NO = #{songNo}
+		AND SONG_STATUS = 'Y'
+	</select>
+
+
+	<select id="selectSongList" resultMap="songExtMap"> 
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 		SELECT 
 			SONG_NO,
 			SONG_MEMBER_NO,
 			SONG_MOOD_NO,
+<<<<<<< HEAD
 			SONG_GENRE_NO, 
 			SONG_IMAGE_NO,
 			SONG_FILE_NO,
@@ -96,10 +156,21 @@
 			S.SONG_LICENSE, 
 			S.SONG_DETAIL,
 						
+=======
+			SONG_GENRE_NO,
+			SONG_IMAGE_NO,
+			SONG_FILE_NO,
+			S.SONG_PLACE_NO,
+			S.SONG_TITLE,
+			S.SONG_LICENSE,
+			S.SONG_DETAIL,
+			
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 			M.MEMBER_NICKNAME,
 			
 			G.GENRE_NAME,
 			D.MOOD_NAME,
+<<<<<<< HEAD
 						
 			I.SONG_IMAGE_PATH_NO,
 			I.SONG_IMAGE_NAME,
@@ -132,16 +203,58 @@
 				AND (UPPER(SONG_TITLE) LIKE '%'||#{keyword}||'%' OR UPPER(MEMBER_NICKNAME) LIKE '%'||#{keyword}||'%')
 			</if>
 			AND SONG_STATUS = 'Y'
+=======
+			
+			I.SONG_IMAGE_PATH_NO,
+			I.SONG_IMAGE_NAME,
+			IP.SONG_IMAGE_PATH_NAME,
+			
+			F.SONG_FILE_SONG_PATH_NO,
+			F.SONG_FILE_CHANGE_NAME,
+			F.SONG_FILE_ORIGIN_NAME,
+			P.SONG_PATH_NAME 
+			
+		FROM SONG S LEFT JOIN MEMBER M ON (S.SONG_MEMBER_NO = M.MEMBER_NO)
+			LEFT JOIN GENRE G ON (S.SONG_GENRE_NO = G.GENRE_NO)
+			LEFT JOIN MOOD D ON (S.SONG_MOOD_NO = D.MOOD_NO)
+			LEFT JOIN SONG_IMAGE I USING (SONG_IMAGE_NO)
+			LEFT JOIN SONG_IMAGE_PATH IP ON (I.SONG_IMAGE_PATH_NO = IP.SONG_IMAGE_PATH_NO)
+			LEFT JOIN SONG_FILE F USING (SONG_FILE_NO) 
+			LEFT JOIN SONG_PATH P ON (P.SONG_PATH_NO = F.SONG_FILE_SONG_PATH_NO)
+			
+		WHERE SONG_PLACE_NO = #{placeNo}
+		
+			<if test="genre > 0">
+				AND SONG_GENRE_NO = #{genre}
+			</if>
+			
+			<if test="mood > 0">
+				AND SONG_MOOD_NO = #{mood}
+			</if>
+			
+			<if test="!keyword.equals('')">
+				AND (UPPER(SONG_TITLE) LIKE '%'||#{keyword}||'%' OR
+				UPPER(MEMBER_NICKNAME) LIKE '%'||#{keyword}||'%')
+			</if>
+			
+		AND SONG_STATUS = 'Y' 
+		
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 	</select>
 
 	<select id="selectAllGenres" resultType="genre">
 		SELECT *
 		FROM GENRE
+<<<<<<< HEAD
+=======
+		ORDER BY GENRE_NO
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 	</select>
 
 	<select id="selectAllMoods" resultType="mood">
 		SELECT *
 		FROM MOOD
+<<<<<<< HEAD
 	</select>
 	
 	<select id="selectSongMainList" resultMap="songExtMap">
@@ -222,12 +335,68 @@
 		UPDATE
 			SONG
 		SET
+=======
+		ORDER BY MOOD_NO
+	</select>
+
+	<select id="selectSongMainList" resultMap="songExtMap">
+		SELECT
+		SONG_NO,
+		SONG_MEMBER_NO,
+		SONG_MOOD_NO,
+		SONG_GENRE_NO,
+		SONG_IMAGE_NO,
+		SONG_FILE_NO,
+
+		S.SONG_PLACE_NO,
+		S.SONG_TITLE,
+		S.SONG_LICENSE,
+		S.SONG_DETAIL,
+
+		M.MEMBER_NICKNAME,
+
+		G.GENRE_NAME,
+		D.MOOD_NAME,
+
+		I.SONG_IMAGE_PATH_NO,
+		I.SONG_IMAGE_NAME,
+		IP.SONG_IMAGE_PATH_NAME,
+
+		F.SONG_FILE_SONG_PATH_NO,
+		F.SONG_FILE_CHANGE_NAME,
+		F.SONG_FILE_ORIGIN_NAME,
+		P.SONG_PATH_NAME
+
+		FROM (SELECT *
+		FROM( SELECT * FROM SONG ORDER BY SONG_CREATE_DATE DESC)
+		WHERE ROWNUM <![CDATA[ <= ]]>20
+		AND SONG_PLACE_NO = #{placeNo} ) S
+
+		LEFT JOIN MEMBER M ON (S.SONG_MEMBER_NO = M.MEMBER_NO)
+		LEFT JOIN GENRE G ON (S.SONG_GENRE_NO = G.GENRE_NO)
+		LEFT JOIN MOOD D ON (S.SONG_MOOD_NO = D.MOOD_NO)
+
+		LEFT JOIN SONG_IMAGE I USING (SONG_IMAGE_NO)
+		LEFT JOIN SONG_IMAGE_PATH IP ON (I.SONG_IMAGE_PATH_NO =
+		IP.SONG_IMAGE_PATH_NO)
+
+		LEFT JOIN SONG_FILE F USING (SONG_FILE_NO)
+		LEFT JOIN SONG_PATH P ON (P.SONG_PATH_NO = F.SONG_FILE_SONG_PATH_NO)
+
+
+	</select>
+
+	<update id="updateSongBasicInfo">
+		UPDATE SONG
+		SET (
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 			SONG_MOOD_NO = #{songMoodNo},
 			SONG_GENRE_NO = #{songGenreNo},
 			SONG_TITLE = #{songTitle},
 			SONG_LICENSE = #{songLicense},
 			SONG_DETAIL = #{songDetail},
 			SONG_MODIFY_DATE = SYSDATE
+<<<<<<< HEAD
 			<if test="songFileNo != 0">
 				, SONG_FILE_NO = #{songFileNo}
 			</if>
@@ -287,17 +456,78 @@
 	</select>
 
 	
+=======
+		)
+
+		WHERE
+		SONG_NO = #{songNo}
+
+	</update>
+
+	<select id="getMemberSongList" resultMap="songExtMap">
+		SELECT
+		SONG_NO,
+		SONG_MEMBER_NO,
+		SONG_MOOD_NO,
+		SONG_GENRE_NO,
+		SONG_IMAGE_NO,
+		SONG_FILE_NO,
+
+		S.SONG_PLACE_NO,
+		S.SONG_TITLE,
+		S.SONG_LICENSE,
+		S.SONG_DETAIL,
+
+		M.MEMBER_NICKNAME,
+
+		G.GENRE_NAME,
+		D.MOOD_NAME,
+
+		I.SONG_IMAGE_PATH_NO,
+		I.SONG_IMAGE_NAME,
+		IP.SONG_IMAGE_PATH_NAME,
+
+		F.SONG_FILE_SONG_PATH_NO,
+		F.SONG_FILE_CHANGE_NAME,
+		F.SONG_FILE_ORIGIN_NAME,
+		P.SONG_PATH_NAME
+
+		FROM (SELECT *
+		FROM( SELECT * FROM SONG ORDER BY SONG_CREATE_DATE DESC)
+		WHERE ROWNUM <![CDATA[ <= ]]>20
+		AND SONG_PLACE_NO = #{placeNo} ) S
+
+		LEFT JOIN MEMBER M ON (S.SONG_MEMBER_NO = M.MEMBER_NO)
+		LEFT JOIN GENRE G ON (S.SONG_GENRE_NO = G.GENRE_NO)
+		LEFT JOIN MOOD D ON (S.SONG_MOOD_NO = D.MOOD_NO)
+
+		LEFT JOIN SONG_IMAGE I USING (SONG_IMAGE_NO)
+		LEFT JOIN SONG_IMAGE_PATH IP ON (I.SONG_IMAGE_PATH_NO =
+		IP.SONG_IMAGE_PATH_NO)
+
+		LEFT JOIN SONG_FILE F USING (SONG_FILE_NO)
+		LEFT JOIN SONG_PATH P ON (P.SONG_PATH_NO = F.SONG_FILE_SONG_PATH_NO)
+		WHERE SONG_MEMBER_NO = #{mNo}
+
+	</select>
+
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 	<select id="selectSongPath" resultType="string">
 		SELECT SONG_PATH_NAME
 		FROM SONG_PATH
 		WHERE SONG_PATH_NO = #{songPathNo}
 	</select>
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 	<select id="selectSongImagePath" resultType="string">
 		SELECT SONG_IMAGE_PATH_NAME
 		FROM SONG_IMAGE_PATH
 		WHERE SONG_IMAGE_PATH_NO = #{songImagePathNo}
 	</select>
+<<<<<<< HEAD
 	
 	<insert id="insertSongFile" useGeneratedKeys="true">
 		
@@ -330,6 +560,39 @@
 	
 	<insert id="insertSong" useGeneratedKeys="true">
 	
+=======
+
+	<insert id="insertSongFile" useGeneratedKeys="true">
+
+		<selectKey keyProperty="songFileNo" resultType="int" order="BEFORE">
+		SELECT SEQ_SONG_FILE_NO.NEXTVAL FROM DUAL
+		</selectKey>
+		
+		INSERT INTO SONG_FILE 
+		VALUES( 
+			#{songFileNo},
+			#{songFileSongPathNo},
+			#{songFileChangeName},
+			#{songFileOriginName} ) 
+			
+	</insert>
+
+	<insert id="insertSongImage" useGeneratedKeys="true">
+
+		<selectKey keyProperty="songImageNo" resultType="int" order="BEFORE">
+		SELECT SEQ_SONG_IMAGE_NO.NEXTVAL FROM DUAL
+		</selectKey> 
+		
+		INSERT INTO SONG_IMAGE
+		VALUES( 
+			#{songImageNo},
+			#{songImagePathNo},
+			#{songImageName} )
+	</insert>
+
+	<insert id="insertSong" useGeneratedKeys="true">
+
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 		<selectKey keyProperty="songNo" resultType="int" order="BEFORE">
 			SELECT SEQ_SONG_NO.NEXTVAL FROM DUAL
 		</selectKey>
@@ -348,6 +611,7 @@
 			#{songDetail},
 			SYSDATE,
 			SYSDATE,
+<<<<<<< HEAD
 			DEFAULT
 		)
 	</insert>
@@ -377,6 +641,19 @@
 </mapper>
 =======
  	
+=======
+			DEFAULT ) 
+	</insert>
+	
+	<update id="updateSongStatus">
+		UPDATE SONG
+		SET SONG_STATUS = 'N'
+		WHERE SONG_NO = #{songNO}
+	</update>
+	
+	
+	<!-- 관리자 파트 -->
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 	<select id="selectTop5Music" resultMap="songResultMap">
 		SELECT
 			DOWNLOAD_COUNT_NUMBER,
@@ -449,5 +726,10 @@
 	    </association>
 	</resultMap>
 	
+<<<<<<< HEAD
  </mapper>
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
+=======
+
+</mapper>
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3

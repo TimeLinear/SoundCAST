@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-
+import com.kh.soundcast.song.model.vo.Report;
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
 import com.kh.soundcast.song.model.vo.Song;
@@ -106,6 +106,27 @@ public class SongDaoImpl implements SongDao{
 		return session.insert("song.insertDownload", param);
 	}
 	
+
+	@Override
+	public int updateSongStatus(int songNo) {
+		return session.update("song.updateSongStatus", songNo);
+	}
+
+	@Override
+	public int insertReport(Report report) {
+		return session.insert("report.insertReport", report);
+	}
+	
+	
+	public List<SongExt> selectTop5Music() {
+		return session.selectList("song.selectTop5Music");
+	}
+
+	public List<SongExt> selectNewMusic() {
+		return session.selectList("song.selectNewMusic");
+	}
+}
+
 	
 	
 	

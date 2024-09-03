@@ -113,9 +113,10 @@ public class AuthService {
 			
 			member.setCommentList(commentList);
 			member.setFollower(follower);
+			
+			log.info("service m_getfollowing = {}", member.getFollowing());
 		}
 		
-		//log.info("service m_getfollowing = {}", member.getFollowing());
 		
 		HashMap<String, Object> map = new HashMap<>();	
 		HashMap<String, Object> userPk = new HashMap<>();	
@@ -131,10 +132,6 @@ public class AuthService {
 		
 		return map;
 	}
-	
-	
-	
-
 	
 	
 	@Transactional(readOnly = true, rollbackFor = Exception.class)

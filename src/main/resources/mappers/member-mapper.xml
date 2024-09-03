@@ -23,6 +23,7 @@
        
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
        
        <association property="comment" javaType="comment">
@@ -41,10 +42,13 @@
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
 =======
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+=======
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
        <association property="memberBanner" javaType="memberBanner">
            <id column="MEMBER_BANNER_NO" property="memberBannerNo"/>
            <result column="MEMBER_BANNER_PATH" property="memberBannerPath"/>
        </association>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -60,6 +64,9 @@
 =======
 
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+=======
+
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
        <association property="memberSocial" javaType="memberSocial">
            <id column="MEMBER_SOCIAL_MEMBER_NO" property="memberSocialMemberNo"/>
            <result column="MEMBER_SOCIAL_SOCIAL_NAME" property="memberSocialSocialName"/>
@@ -74,6 +81,9 @@
 		
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
       <collection property="authorities"
                javaType="list"
                ofType="simpleGrantedAuthority">
@@ -81,6 +91,7 @@
                <arg column="MEMBER_GRADE_NAME" javaType="string"/>
            </constructor>
       </collection>
+<<<<<<< HEAD
 =======
 		<collection property="authorities"
 =======
@@ -98,6 +109,8 @@
            </constructor>
       </collection>
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+=======
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
        
 
    </resultMap>
@@ -116,11 +129,14 @@
 	    MEMBER_GRADE.MEMBER_GRADE_NAME
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	   
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
 =======
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+=======
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 	   	
 	FROM
 	    MEMBER
@@ -131,12 +147,16 @@
 	    
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
 =======
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
 =======
 	    
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+=======
+	    
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 	WHERE
 	    MEMBER.MEMBER_NO =#{mNo}
 	    AND MEMBER.MEMBER_STATUS = 'Y'
@@ -157,6 +177,7 @@
    
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
    
    
@@ -167,6 +188,11 @@
    
    
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+=======
+
+   
+   
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 	<resultMap id="memberExtMap2" type="memberExt">
 		<id column="MEMBER_NO" property="memberNo" />
 		<result column="MEMBER_NICKNAME" property="memberNickname" />
@@ -174,8 +200,11 @@
 		
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+=======
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 		<association property="comment" javaType="comment">
            <id column="COMMENT_NO" property="commentNo"/>
            <result column="COMMENT_WRITER_MEMBER_NO" property="commentWriterMemberNo"/>
@@ -187,10 +216,13 @@
 		
 		
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
 =======
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+=======
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 		<association property="profileImage" javaType="profileImage">
 			<id column="PROFILE_IMAGE_NO" property="profileImageNo"/>
            	<result column="PROFILE_IMAGE_PATH" property="profileImagePath"/>
@@ -213,6 +245,7 @@
 		
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		WHERE MEMBER.MEMBER_NO = #{mNo}
 =======
 		WHERE MEMBER.MEMBER_NO =#{mNo}
@@ -220,6 +253,9 @@
 =======
 		WHERE MEMBER.MEMBER_NO = #{mNo}
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+=======
+		WHERE MEMBER.MEMBER_NO = #{mNo}
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 			AND MEMBER.MEMBER_STATUS = 'Y'
 
 	   		
@@ -228,8 +264,11 @@
   	
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+=======
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
   	<select id="selectComment" resultMap="memberExtMap2">
    		SELECT 
 			COMMENT_NO, 
@@ -251,11 +290,14 @@
    </select>
  
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
    
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
 =======
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+=======
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
    
    
    <insert id="insertFollow">
@@ -286,6 +328,9 @@
    </select>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 
    
    <delete id="deleteFollow">
@@ -321,6 +366,7 @@
    </delete>
    
      
+<<<<<<< HEAD
 =======
 =======
 
@@ -363,6 +409,8 @@
 =======
      
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+=======
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
    <!-- 회원 마이페이지 자기 수정 -->
    <insert id="insertMemberProfile" useGeneratedKeys="true"> <!-- 회원 프로필사진경로 삽입 -->
    		<selectKey keyProperty="profileImageNo" resultType="int" order="BEFORE">
@@ -408,6 +456,7 @@
    
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
    <update id="updateMemberStatus">
@@ -422,6 +471,8 @@
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
 =======
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+=======
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
    <!-- 회원 마이페이지 자기 수정 끝-->
    
 	<resultMap id="modifyMemberExtMap" type="memberExt">
@@ -463,6 +514,7 @@
    
    <!-- 수정한 회원 정보 가져오기 종료-->
    
+<<<<<<< HEAD
    
    
    
@@ -532,6 +584,9 @@ GROUP BY
  	
  
  	<!-- 관리자페이지 시작 -->
+=======
+   <!-- 관리자페이지 시작 -->
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
  	<select id="selectMembers" resultMap="memberResultMap">
 		SELECT
 			*
@@ -592,10 +647,18 @@ GROUP BY
         </foreach>
     </update>
     <!-- 관리자페이지 끝 -->
+<<<<<<< HEAD
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
 =======
 
  
  	
 >>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+=======
+   
+   
+
+ 
+ 	
+>>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
  </mapper>

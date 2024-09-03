@@ -123,10 +123,10 @@ public class JwtProvider {
 	public Authentication getAuthentication(String token) throws JsonMappingException, JsonProcessingException {
 		
 		Member member = (Member) service.loadUserByUsername(getUserPk(token));
-		
-		return new UsernamePasswordAuthenticationToken(member, "",member.getAuthorities());
-		
+
+		return new UsernamePasswordAuthenticationToken(member, "", member.getAuthorities());
 	}
+	
 	//토큰에서 userPk값을 꺼내는 메서드
 	public String getUserPk(String token) throws JsonMappingException, JsonProcessingException {
 		
@@ -136,11 +136,6 @@ public class JwtProvider {
 //		String SocialId =(String)userPks.get("SocialId");
 //		
 		return userPkString;
-		
-	
 	}
-	
 
-	
-	
 }

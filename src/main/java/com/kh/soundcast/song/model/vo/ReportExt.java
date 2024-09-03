@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class ReportExt extends Report {
 	private SongExt song;
 	private MemberExt member;
+
 }
