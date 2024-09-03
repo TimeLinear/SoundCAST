@@ -17,12 +17,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.soundcast.member.model.service.UserDetailServiceImpl;
 import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberExt;
-import com.kh.soundcast.member.model.vo.MemberSocial;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

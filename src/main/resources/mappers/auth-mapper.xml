@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
@@ -23,11 +24,14 @@
          <result column="MEMBER_STATUS" property="memberStatus"/>
        
 =======
+=======
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="auth">
+ <mapper namespace="auth">
+ 	
 
+<<<<<<< HEAD
 	
 	<resultMap id="authorityMap" type="simpleGrantedAuthority">
 		<constructor>
@@ -45,6 +49,24 @@
 			<result column="MEMBER_MODIFY_DATE" property="memberModifyDate"/>
 			<result column="MEMBER_STATUS" property="memberStatus"/>
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
+=======
+ <resultMap id="authorityMap" type="simpleGrantedAuthority">
+      <constructor>
+         <arg column="authority" javaType="string" />
+      </constructor>
+   </resultMap>
+   
+   
+   <resultMap id="memberExtMap" type="memberExt">
+         <id column="MEMBER_NO" property="memberNo"/>
+         <result column="MEMBER_NICKNAME" property="memberNickname"/>
+         <result column="MEMBER_EMAIL" property="memberEmail"/>
+         <result column="MEMBER_INTRODUCE" property="memberIntroduce"/>
+         <result column="MEMBER_CREATE_DATE" property="memberCreateDate"/>
+         <result column="MEMBER_MODIFY_DATE" property="memberModifyDate"/>
+         <result column="MEMBER_STATUS" property="memberStatus"/>
+       
+>>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
        
        <association property="comment" javaType="comment">
            <id column="COMMENT_NO" property="commentNo"/>
@@ -56,9 +78,13 @@
        </association>
        
 <<<<<<< HEAD
+<<<<<<< HEAD
        
 =======
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
+=======
+       
+>>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
        <association property="memberBanner" javaType="memberBanner">
            <id column="MEMBER_BANNER_NO" property="memberBannerNo"/>
            <result column="MEMBER_BANNER_PATH" property="memberBannerPath"/>
@@ -77,6 +103,9 @@
        </association>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
       <collection property="authorities"
                javaType="list"
                ofType="simpleGrantedAuthority">
@@ -84,6 +113,7 @@
                <arg column="MEMBER_GRADE_NAME" javaType="string"/>
            </constructor>
       </collection>
+<<<<<<< HEAD
    
      <collection property="profileImage" ofType="profileImage">
 =======
@@ -97,12 +127,19 @@
    
        <collection property="profileImage" ofType="profileImage">
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
+=======
+   
+     <collection property="profileImage" ofType="profileImage">
+>>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
            <id column="PROFILE_IMAGE_NO" property="profileImageNo"/>
            <result column="PROFILE_IMAGE_PATH" property="profileImagePath"/>
        </collection>
    </resultMap>
  
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
  <select id="loadUserByUsername" resultMap="memberExtMap">
       SELECT MEMBER_NO , PROFILE_IMAGE_PATH, MEMBER_BANNER_PATH, MEMBER_SOCIAL_SOCIAL_NAME, MEMBER_SOCIAL_SOCIAL_ID,
             MEMBER_NICKNAME, MEMBER_EMAIL, MEMBER_INTRODUCE, MEMBER_GRADE_NAME
@@ -159,6 +196,7 @@
 			
 			WHERE MEMBER.MEMBER_NO =#{mNo}
 				AND MEMBER.MEMBER_STATUS = 'Y'
+<<<<<<< HEAD
 	
 		   		
 		</select>
@@ -203,20 +241,46 @@
 	
 	<insert id="insertProfileImage" parameterType="memberExt" useGeneratedKeys="true">
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
+=======
+	
+		   		
+		</select>
+		
+		
+		
+  	<select id="selectComment">
+   		SELECT 
+   			COMMENT_NO, COMMENT_WRITER_MEMBER_NO, COMMENT_TEXT
+   		FROM "COMMENT"
+   		WHERE COMMENT_MEMBER_NO = #{mNo}
+   		ORDER BY COMMENT_NO DESC
+   
+   </select>
+ 	
+ 	
+ 	<insert id="insertProfileImage" parameterType="memberExt" useGeneratedKeys="true">
+>>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
  		<selectKey resultType="int" order="BEFORE" keyProperty="profileImage.profileImageNo" >
  			SELECT SEQ_MEMBER_PROFILE_IMAGE_NO.NEXTVAL FROM DUAL
  		</selectKey>
  	
 <<<<<<< HEAD
+<<<<<<< HEAD
  	<!-- 1번 selectKey 사용하여 MemberExt 객체에 profileImageNo 얻어오기 -->
 =======
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
+=======
+ 	<!-- 1번 selectKey 사용하여 MemberExt 객체에 profileImageNo 얻어오기 -->
+>>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
  		INSERT INTO PROFILE_IMAGE
  		VALUES(
 			#{profileImage.profileImageNo},
 			#{profileImage.profileImagePath}
 		)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
  		
  	</insert>
  	
@@ -225,6 +289,7 @@
  	
  	
  	<insert id="insertMember" useGeneratedKeys="true">
+<<<<<<< HEAD
 	
 		<selectKey resultType="int" order="BEFORE" keyProperty="memberNo">
 			SELECT SEQ_MEMBER_NO.NEXTVAL FROM DUAL
@@ -251,11 +316,13 @@
  		VALUES(
 =======
 	</insert>
+=======
+>>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
 	
-	<insert id="insertMember" useGeneratedKeys="true">
 		<selectKey resultType="int" order="BEFORE" keyProperty="memberNo">
 			SELECT SEQ_MEMBER_NO.NEXTVAL FROM DUAL
 		</selectKey>
+<<<<<<< HEAD
 		INSERT INTO MEMBER
 		VALUES(
 			#{memberNo},
@@ -275,11 +342,36 @@
 		INSERT INTO MEMBER_SOCIAL
 		VALUES(
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
+=======
+		
+		 	INSERT INTO MEMBER
+		 	VALUES(
+				#{memberNo},
+				#{profileImage.profileImageNo},
+				DEFAULT,
+				DEFAULT,
+				#{memberNickname},
+				#{memberEmail},
+				DEFAULT,
+				DEFAULT,
+				DEFAULT,
+				DEFAULT
+			)
+ 	
+ 	</insert>
+ 	
+ 	 <insert id="insertMemberSocial">
+ 		INSERT INTO MEMBER_SOCIAL
+ 		VALUES(
+>>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
 			#{memberNo},
 			#{memberSocial.memberSocialSocialName},
 			#{memberSocial.memberSocialSocialId}
 		)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
  	
  	</insert>
  	
@@ -290,6 +382,7 @@
  
  
  	
+<<<<<<< HEAD
  </mapper>
 =======
 	</insert>
@@ -300,3 +393,6 @@
 
 </mapper>
 >>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
+=======
+ </mapper>
+>>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d

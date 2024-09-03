@@ -25,14 +25,18 @@ import java.io.IOException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +49,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.kh.soundcast.api.auth.jwt.JwtProvider;
+import com.kh.soundcast.api.auth.model.service.AuthService;
+
+
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.kh.soundcast.common.Utils;
 import com.kh.soundcast.member.model.service.MemberService;
@@ -70,27 +80,6 @@ public class MemberController {
 	private final WebApplicationContext applicationContext;
 	
 
-import com.kh.soundcast.api.auth.jwt.JwtProvider;
-import com.kh.soundcast.api.auth.model.service.AuthService;
-import com.kh.soundcast.common.Utils;
-import com.kh.soundcast.member.model.service.MemberService;
-import com.kh.soundcast.member.model.vo.MemberBanner;
-import com.kh.soundcast.member.model.vo.MemberExt;
-import com.kh.soundcast.member.model.vo.ProfileImage;
-
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-@RestController
-@RequestMapping("/member")
-@RequiredArgsConstructor
-@Slf4j
-public class MemberController {
-	
-	private final MemberService memberService;
-	private final WebApplicationContext applicationContext;
-	
 	@Value("${file.upload-dir}")
 	private String uploadBaseDir; // SoundCast 프로젝트 파일/src/main/resources/static/images 의 상대 경로
 	// java.nio.file.Paths 클래스의 스태틱 메소드를 통해 폴더 or 파일의 절대 경로 얻어올 수 있음
@@ -226,9 +215,7 @@ public class MemberController {
 //			map.put("msg", "회원 팔로우 목록을 불러올 수 없습니다.");
 //		}
 //		
-//		map.put("member", member);
-	}
-	
+
 	@PostMapping("/follow/{memberNo}")
 	public Map<String, Object> inesrtFollow(
 			@PathVariable String memberNo,
@@ -319,35 +306,9 @@ public class MemberController {
 		
 	}
 	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
 	
-    @PostMapping("/modify")
-    //@CrossOrigin(origins = "http://localhost:3000")
-    @Transactional(rollbackFor = {Exception.class})
-    public MemberExt updateProfile(
-            @RequestParam(value = "backgroundImage", required = false) MultipartFile backgroundImage,
-            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
-            @RequestParam HashMap<String, Object> params) throws Exception {
-    		
-    		log.debug("가져온 데이터들 - {}", params);
-    		
-    		Path path = FileSystems.getDefault().getRootDirectories().iterator().next();
-    		final String osRootPath = path.toString().replace("\\\\", "");
-    	
-    		// 현재 로그인한 회원의 회원 정보
-    		MemberExt loginMember = (MemberExt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	////----------------------------------??? 
 
     		final String bannerSavePath = osRootPath + uploadBaseDir + "images/member/banner/";
     		final String profileSavePath = osRootPath + uploadBaseDir + "images/member/profile/";
