@@ -375,3 +375,79 @@
 
 
 </mapper>
+=======
+ 	
+	<select id="selectTop5Music" resultMap="songResultMap">
+		SELECT
+			DOWNLOAD_COUNT_NUMBER,
+			SONG_IMAGE_NAME,
+			SONG_IMAGE_PATH_NAME,
+			SONG_TITLE,
+			MEMBER_NICKNAME,
+			GENRE_NAME,
+			MOOD_NAME,
+			SONG_LICENSE,
+			SONG_NO
+		FROM SONG
+		LEFT JOIN SONG_IMAGE USING (SONG_IMAGE_NO)
+		LEFT JOIN SONG_IMAGE_PATH USING (SONG_IMAGE_PATH_NO)
+		LEFT JOIN MEMBER ON (SONG_MEMBER_NO = MEMBER_NO)
+		JOIN DOWNLOAD_COUNT ON (SONG_NO = DOWNLOAD_COUNT_SONG_NO)
+		LEFT JOIN MOOD ON (MOOD_NO = SONG_MOOD_NO)
+		LEFT JOIN GENRE ON (GENRE_NO = SONG_GENRE_NO)
+		WHERE SONG_STATUS = 'Y'
+		AND TO_DATE(SONG_CREATE_DATE, 'YY/MM/DD') >= ADD_MONTHS(SYSDATE, -1)
+		ORDER BY DOWNLOAD_COUNT_NUMBER DESC
+	</select>
+	
+	<resultMap id="songResultMap" type="songExt">
+	    <id property="songNo" column="SONG_NO"/>    
+	    <result property="memberNickname" column="MEMBER_NICKNAME"/>    
+	    <result property="songTitle" column="SONG_TITLE"/>
+	    <result property="moodName" column="MOOD_NAME"/>
+	    <result property="genreName" column="GENRE_NAME"/>
+	    <result property="songLicense" column="SONG_LICENSE"/>
+	    <result property="downloadCountNumber" column="DOWNLOAD_COUNT_NUMBER"/>
+	    
+	    <association property="songImage" javaType="songImageExt">
+	        <result property="songImagePathName" column="SONG_IMAGE_PATH_NAME"/>
+	        <result property="songImageName" column="SONG_IMAGE_NAME"/>
+	    </association>
+	</resultMap>
+ 
+ 	<select id="selectNewMusic" resultMap="songResultMap2">
+ 		SELECT
+			SONG_IMAGE_NAME,
+			SONG_IMAGE_PATH_NAME,
+			SONG_TITLE,
+			MEMBER_NICKNAME,
+			GENRE_NAME,
+			MOOD_NAME,
+			SONG_LICENSE,
+			SONG_CREATE_DATE
+		FROM SONG
+		LEFT JOIN SONG_IMAGE USING (SONG_IMAGE_NO)
+		LEFT JOIN SONG_IMAGE_PATH USING (SONG_IMAGE_PATH_NO)
+		LEFT JOIN MEMBER ON (SONG_MEMBER_NO = MEMBER_NO)
+		LEFT JOIN MOOD ON (MOOD_NO = SONG_MOOD_NO)
+		LEFT JOIN GENRE ON (GENRE_NO = SONG_GENRE_NO)
+		WHERE SONG_STATUS = 'Y'
+		ORDER BY SONG_CREATE_DATE DESC, SONG_TITLE ASC
+ 	</select>
+ 	
+ 	<resultMap id="songResultMap2" type="songExt">
+	    <result property="memberNickname" column="MEMBER_NICKNAME"/>    
+	    <result property="songTitle" column="SONG_TITLE"/>
+	    <result property="moodName" column="MOOD_NAME"/>
+	    <result property="genreName" column="GENRE_NAME"/>
+	    <result property="songLicense" column="SONG_LICENSE"/>
+	    <result property="songCreateDate" column="SONG_CREATE_DATE"/>
+	    
+	    <association property="songImage" javaType="songImageExt">
+	        <result property="songImagePathName" column="SONG_IMAGE_PATH_NAME"/>
+	        <result property="songImageName" column="SONG_IMAGE_NAME"/>
+	    </association>
+	</resultMap>
+	
+ </mapper>
+>>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
