@@ -1,39 +1,14 @@
 package com.kh.soundcast.member.model.service;
 
-import java.net.URL;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.WebApplicationContext;
-
-import com.kh.soundcast.common.Utils;
-import com.kh.soundcast.member.model.dao.MemberDao;
-import com.kh.soundcast.member.model.dto.GoogleUserInfoResponse;
-import com.kh.soundcast.member.model.vo.Comment;
-import com.kh.soundcast.member.model.vo.Follow;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.WebApplicationContext;
 
 import com.kh.soundcast.common.Utils;
 import com.kh.soundcast.member.model.dao.MemberDao;
-import com.kh.soundcast.member.model.dto.GoogleUserInfoResponse;
-import com.kh.soundcast.member.model.vo.Comment;
-import com.kh.soundcast.member.model.vo.Follow;
 import com.kh.soundcast.member.model.vo.MemberBanner;
 import com.kh.soundcast.member.model.vo.MemberExt;
 import com.kh.soundcast.member.model.vo.ProfileImage;
@@ -47,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 	
 	private final MemberDao memberDao;
-	private final WebApplicationContext applicationContext;
 
 	@Transactional(rollbackFor = Exception.class)
 	public void updateMemberProfile(HashMap<String, Object> params) {
@@ -149,6 +123,25 @@ public class MemberService {
 		return memberDao.updateMemberStatus(mNo);
 	}
 
+	
+ 	// 관리자페이지 시작
+ 	public List<MemberExt> selectMembers() {
+ 		return memberDao.selectMembers();
+ 	}
+
+ 	public List<MemberExt> searchMembers(Map<String, Object> param) {
+ 		return memberDao.searchMembers(param);
+ 	}
+
+ 	public int deleteMembers(List<Long> deleteList) {
+ 		return memberDao.deleteMembers(deleteList);
+ 	}
+ 	// 관리자페이지 끝
+	
+ 	
+ 	
+	
+	
 // @Service
 // @RequiredArgsConstructor
 // public class MemberService {
@@ -184,19 +177,7 @@ public class MemberService {
 // 		return memberDao.selectModifymember(memberNo);
 // 	}
 	
-// 	// 관리자페이지 시작
-// 	public List<MemberExt> selectMembers() {
-// 		return dao.selectMembers();
-// 	}
 
-// 	public List<MemberExt> searchMembers(Map<String, Object> param) {
-// 		return dao.searchMembers(param);
-// 	}
-
-// 	public int deleteMembers(List<Long> deleteList) {
-// 		return dao.deleteMembers(deleteList);
-// 	}
-// 	// 관리자페이지 끝
 // 	public MemberExt selectOneMember(int mNo) {
 		
 // 		MemberExt member = memberDao.selectOneMember(mNo);

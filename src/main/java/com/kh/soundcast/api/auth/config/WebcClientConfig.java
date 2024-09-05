@@ -40,10 +40,4 @@ public class WebcClientConfig {
 				new ReactorClientHttpConnector(resourceFactory(), mapper)).build();
 				
 	}
-<<<<<<< HEAD:src/main/java/com/kh/soundcast/config/WebClientConfig.java
-=======
-	
-	
-	
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d:src/main/java/com/kh/soundcast/api/auth/config/WebcClientConfig.java
 }

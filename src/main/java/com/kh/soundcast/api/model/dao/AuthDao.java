@@ -8,16 +8,10 @@ import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.soundcast.common.Utils;
-import com.kh.soundcast.member.model.dto.GoogleUserInfoResponse;
-import com.kh.soundcast.member.model.vo.Comment;
-import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberExt;
-import com.kh.soundcast.member.model.vo.ProfileImage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -95,23 +89,23 @@ public class AuthDao {
 	}
 
 
-//	public void countFollow(String socialType, String sub) {
-//		Map<String,Object> param = new HashMap<>();
-//		param.put("socialId", sub);
-//		param.put("socialType", socialType);
-//		
-//		session.selectList("auth.countFollow",param );
-//		
-//	}
-//
-//	public void countFollower(String socialType, String sub) {
-//		Map<String,Object> param = new HashMap<>();
-//		param.put("socialId", sub);
-//		param.put("socialType", socialType);
-//		
-//		session.selectList("auth.countFollower",param );
-//		
-//	}
+	public void countFollow(String socialType, String sub) {
+		Map<String,Object> param = new HashMap<>();
+		param.put("socialId", sub);
+		param.put("socialType", socialType);
+		
+		session.selectList("auth.countFollow",param );
+		
+	}
+
+	public void countFollower(String socialType, String sub) {
+		Map<String,Object> param = new HashMap<>();
+		param.put("socialId", sub);
+		param.put("socialType", socialType);
+		
+		session.selectList("auth.countFollower",param );
+		
+	}
 
 	
 	

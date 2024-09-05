@@ -1,17 +1,13 @@
 package com.kh.soundcast.song.model.service;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
-import java.util.List;
-
-import com.kh.soundcast.song.model.dao.SongDao;
-import com.kh.soundcast.song.model.vo.SongExt;
 
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
+import com.kh.soundcast.song.model.vo.Report;
 import com.kh.soundcast.song.model.vo.Song;
 import com.kh.soundcast.song.model.vo.SongExt;
 import com.kh.soundcast.statistic.model.vo.Download;
@@ -39,23 +35,12 @@ public interface SongService {
 	int updateSongStatus(int songNo);
 
 	int insertReport(Report report);
+
+	List<SongExt> selectTop5Music();
+
+	List<SongExt> selectNewMusic();
 	
 	
-
-	public List<SongExt> selectTop5Music() {
-		return songDao.selectTop5Music();
-	}
-
-	public List<SongExt> selectNewMusic() {
-		return songDao.selectNewMusic();
-	}
-
-	public List<SongExt> selectTop5Music();
-	
-	public List<SongExt> selectNewMusic();
-
-	
-
 	
 	
 

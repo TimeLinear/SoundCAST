@@ -30,23 +30,13 @@ public class WebSecurityConfig {
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-	
-		
-<<<<<<< HEAD:src/main/java/com/kh/soundcast/config/WebSecurityConfig.java
-=======
-		
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d:src/main/java/com/kh/soundcast/api/auth/config/WebSecurityConfig.java
 		http.cors(corsConfig -> corsConfig.configurationSource(new CorsConfigurationSource() {
 			
 			@Override
 			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 				CorsConfiguration config = new CorsConfiguration();
 				//config.setAllowedOrigins(Collections.singletonList("http://localhost:3000/"));
-<<<<<<< HEAD:src/main/java/com/kh/soundcast/config/WebSecurityConfig.java
-				config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:3001"));
-=======
 				config.setAllowedOrigins(List.of("http://localhost:3000","http://localhost:3001"));
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d:src/main/java/com/kh/soundcast/api/auth/config/WebSecurityConfig.java
 				config.setAllowedMethods(Collections.singletonList("*"));
 				config.setAllowCredentials(true); //jwt가 반드시 있어야만 사용가능
 				config.setAllowedHeaders(Collections.singletonList("*"));
@@ -60,16 +50,10 @@ public class WebSecurityConfig {
 			config.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				)
 		.authorizeHttpRequests((authorizeRequest) -> authorizeRequest
-<<<<<<< HEAD:src/main/java/com/kh/soundcast/config/WebSecurityConfig.java
 				.requestMatchers("/member/**").permitAll()  // 누구나 이용가능한 url
 				.requestMatchers("/auth/**").permitAll()
 				.requestMatchers("/song/**").permitAll()
-=======
-//				.requestMatchers("/member/**").permitAll()  // 누구나 이용가능한 url
-//				.requestMatchers("/auth/**").permitAll()
-//				.requestMatchers("/song/**").permitAll()
 				.requestMatchers("/**").permitAll()
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d:src/main/java/com/kh/soundcast/api/auth/config/WebSecurityConfig.java
 				.requestMatchers("/**").hasRole("USER") //그외는 user권한이 필요
 				//.requestMatcher("/admin/**").hasRole("ADMIN") authority테이블에 ROLE_ADMIN
 				.anyRequest().authenticated()
