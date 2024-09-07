@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
+
+import com.kh.soundcast.song.model.dao.SongDao;
+import com.kh.soundcast.song.model.vo.SongExt;
 
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
@@ -21,17 +25,17 @@ public interface SongService {
 
 	List<Mood> selectAllMoods();
 
-	int updateSong(int songNo, SongExt song);
-
 	List<Song> getMemberSongList(int mNo);
+
+	int updateSong(int songNo, SongExt songInfo, MultipartFile songFile, MultipartFile songImage);
 
 	SongExt insertUnofficialSong(MultipartFile songFile, MultipartFile songImage, Song song) throws Exception;
 	
-	public List<Download> checkDownload(HashMap<String, Object> param);
+	List<Download> checkDownload(HashMap<String, Object> param);
 	
-	public int insertDownload(HashMap<String, Object> param);
+	int insertDownload(HashMap<String, Object> param);
 
-	public SongExt selectSong(int songNo);
+	SongExt selectSong(int songNo);
 	
 	int updateSongStatus(int songNo);
 

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReportExt extends Report {
-	private SongExt song; // association
-	private MemberExt member; // association
+	private SongExt song;
+	private MemberExt member;
+
 }

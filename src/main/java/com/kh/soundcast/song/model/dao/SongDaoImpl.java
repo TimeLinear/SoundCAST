@@ -5,10 +5,9 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-
+import com.kh.soundcast.song.model.vo.Report;
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
-import com.kh.soundcast.song.model.vo.Report;
 import com.kh.soundcast.song.model.vo.Song;
 import com.kh.soundcast.song.model.vo.SongExt;
 import com.kh.soundcast.song.model.vo.SongFile;
@@ -19,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class SongDaoImpl implements SongDao{
+public class SongDaoImpl implements SongDao {
 
 	private final SqlSession session;
 
@@ -43,12 +42,24 @@ public class SongDaoImpl implements SongDao{
 	public List<Song> selectSongMainList(int placeNo) {
 		return session.selectList("song.selectSongMainList", placeNo);
 	}
-	
+
 	@Override
 	public SongExt selectSong(int songNo) {
 		return session.selectOne("song.selectSong", songNo);
 	}
 
+	@Override
+	public int insertNewSong(SongFile fileParam) {
+		return session.insert("song.insertNewSong", fileParam);
+		
+	}
+
+	@Override
+	public int insertNewImage(SongImage imageParam) {
+		return session.insert("song.insertNewImage", imageParam);
+	}
+
+	
 	@Override
 	public int updateSongBasicInfo(Song updateSong) {
 		return session.update("song.updateSongBasicInfo", updateSong);
@@ -58,6 +69,7 @@ public class SongDaoImpl implements SongDao{
 	public List<Song> getMemberSongList(int mNo) {
 		return session.selectList("song.getMemberSongList", mNo);
 	}
+
 
 	@Override
 	public String selectSongPath(int songPathNo) {
@@ -93,11 +105,7 @@ public class SongDaoImpl implements SongDao{
 	public int insertDownload(HashMap<String, Object> param) {
 		return session.insert("song.insertDownload", param);
 	}
-
-	@Override
-	public SongExt selectSong(Song song) {
-		return session.selectOne("song.selectSong", song);
-	}
+	
 
 	@Override
 	public int updateSongStatus(int songNo) {
@@ -108,7 +116,6 @@ public class SongDaoImpl implements SongDao{
 	public int insertReport(Report report) {
 		return session.insert("report.insertReport", report);
 	}
-	
 	
 	public List<SongExt> selectTop5Music() {
 		return session.selectList("song.selectTop5Music");

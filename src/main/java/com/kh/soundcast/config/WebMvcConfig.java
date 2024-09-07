@@ -22,7 +22,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		Path path = FileSystems.getDefault().getRootDirectories().iterator().next();
-		final String osRootPath = path.toString().substring(0, path.toString().length() - 1);
+		final String osRootPath = path.toString().replace("\\\\", "");
+		//final String osRootPath = path.toString().substring(0, path.toString().length() - 1);
 		log.debug("리소스 요청 url = {}", osRootPath + uploadBaseDir);
 		
         // "/images/**" URL 패턴을 외부 디렉토리와 매핑

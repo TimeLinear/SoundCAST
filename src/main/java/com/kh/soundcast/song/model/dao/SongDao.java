@@ -12,13 +12,15 @@ import com.kh.soundcast.song.model.vo.SongFile;
 import com.kh.soundcast.song.model.vo.SongImage;
 import com.kh.soundcast.statistic.model.vo.Download;
 
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.stereotype.Repository;
+
+
 public interface SongDao {
 
 	List<Song> selectSongList(HashMap<String, Object> param);
 
 	List<Song> selectSongMainList(int placeNo);
-	
-	public SongExt selectSong(int songNo);
 
 	List<Genre> selectAllGenres();
 
@@ -28,28 +30,31 @@ public interface SongDao {
 
 	List<Song> getMemberSongList(int mNo);
 
-	String selectSongPath(int songPathNo);
+	SongExt selectSong(int songNo);
+
+	int insertNewSong(SongFile fileParam);
+
+	int insertNewImage(SongImage imageParam);
+
+	String selectSongPath(int unofficialPathNo);
+
+	String selectSongImagePath(int unofficialPathNo);
 
 	int insertSongFile(SongFile songFileData);
-
-	String selectSongImagePath(int songImagePathNo);
 
 	int insertSongImage(SongImage songImageData);
 
 	int insertSong(Song song);
-	
-	public List<Download> checkDownload(HashMap<String, Object> param);
-	
-	public int insertDownload(HashMap<String, Object> param);
 
-	SongExt selectSong(Song song);
+	List<Download> checkDownload(HashMap<String, Object> param);
+
+	int insertDownload(HashMap<String, Object> param);
 
 	int updateSongStatus(int songNo);
 
 	int insertReport(Report report);
-	
-	public List<SongExt> selectTop5Music();
-	
-	public List<SongExt> selectNewMusic();
 
+	List<SongExt> selectTop5Music();
+
+	List<SongExt> selectNewMusic();
 }

@@ -1,14 +1,19 @@
 package com.kh.soundcast.song.controller;
 
 import java.net.MalformedURLException;
+import java.io.FileNotFoundException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;										   
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +33,7 @@ import com.kh.soundcast.song.model.vo.Mood;
 import com.kh.soundcast.song.model.vo.Report;
 import com.kh.soundcast.song.model.vo.Song;
 import com.kh.soundcast.song.model.vo.SongExt;
-import com.kh.soundcast.statistic.model.vo.Download;
-import com.nimbusds.jose.util.Resource;
+import com.kh.soundcast.statistic.model.vo.Download;						
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class SongController {
 	
-	private final SongService service;
-	
+private final SongService service;
 	
 	@CrossOrigin(origins = {"http://localhost:3000"})
 	@GetMapping("/search")
@@ -94,27 +97,45 @@ public class SongController {
 	}
 	
 	
+	//update 수정 - 2024-08-30
 	@CrossOrigin(origins = {"http://localhost:3000"})
 	@PutMapping("/update/{songNo}")
-	public int updateSong(
+	public ResponseEntity<List<Song>> updateSong(
 			@PathVariable int songNo,
-			@RequestBody SongExt song
+			@RequestPart("songInfo") SongExt songInfo,
+			@RequestPart(required = false, value="songFile") MultipartFile songFile,
+			@RequestPart(required = false, value="songImage") MultipartFile songImage
 			) {
 		
 		log.info("songNo ? {}", songNo);
-		log.info("song ? {}", song);
+		log.info("songInfo ? {}", songInfo);
+		log.info("songFile ? {}", songFile);
+		log.info("songImage ? {}", songImage);
+	
 		
-		int result = service.updateSong(songNo, song);
+		int result = service.updateSong(songNo, songInfo, songFile, songImage);
 		
 		
-		return result;
+		if(result > 0) {
+			
+			List<Song> list = service.getMemberSongList(songInfo.getSongMemberNo());
+			
+			return ResponseEntity.ok(list);
+			
+		
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+		
 	}
+	
 	
 	@GetMapping("/memberSongList/{memberNo}")
 	public List<Song> getMemberSongList(
 			@PathVariable String memberNo
 			) {
 		int mNo = Integer.parseInt(memberNo);
+		log.info("songListMno={}", mNo);
 		List<Song> song = service.getMemberSongList(mNo);
 		
 		log.info("songList?={}", song);
@@ -136,73 +157,6 @@ public class SongController {
 		return insertedSong;
 	}
 	
-//	@Value("${file.upload-dir}")
-//	private String uploadBaseDir;
-//	
-//	@CrossOrigin(origins = {"http://localhost:3000"})
-//	@GetMapping("/download/{songNo}")
-//	public ResponseEntity<Resource> downloadSong(
-//			@PathVariable int songNo,
-//			@RequestParam int memberNo
-//			) {
-//		
-//		//다운로드 기록 확인 후 다운로드 insert (미로그인 시에는 다운로드 기록 안함. memberNo==0 => 미로그인 상태)
-//		if(memberNo != 0) {
-//			//다운로드 기록 검색
-//			log.info("memberNo ? {}", memberNo);
-//			
-//			HashMap<String, Object> param = new HashMap<>();
-//			param.put("songNo", songNo);
-//			param.put("memberNo", memberNo);
-//			
-//			List<Download> history = service.checkDownload(param);
-//			
-//			log.info("history ? {}", history);
-//			
-//			//위 select 결과가 null 일때 insert			
-//			if(history == null || history.size() == 0) {
-//				int result = service.insertDownload(param);
-//				if(result < 1) {
-//					log.info("다운로드 기록 실패");
-//				}
-//			}
-//		}
-//		//다운로드 파일 보내기 
-//		log.info("songNo ? {}", songNo);
-//		
-//		SongExt song = service.selectSong(songNo);
-//		log.info("song ? {}", song);
-//		
-//		Path path = FileSystems.getDefault().getRootDirectories().iterator().next();
-//		final String osRootPath = path.toString().replace("\\\\", "");
-//		
-//		String fileReadPath = "file:///"+osRootPath+uploadBaseDir+song.getSongFile().getSongFileSongPathName()
-//								+song.getSongFile().getSongFileChangeName();
-//		log.info("fileReadPath ? {}", fileReadPath);
-//		
-//		try {
-//			Resource resource = new UrlResource(fileReadPath);
-//			
-//			if(!resource.exists()) {
-//				return ResponseEntity.notFound().build();
-//			}
-//			
-//			String contentType = "application/octet-stream";
-//			HttpHeaders headers = new HttpHeaders();
-//			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"");
-//			
-//			return ResponseEntity.ok()
-//					.headers(headers)
-//					.contentType(org.springframework.http.MediaType.parseMediaType(contentType))
-//					.body(resource);			
-//			
-//		} catch (MalformedURLException e) {
-//			e.printStackTrace();
-//			
-//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//		}
-//		
-//	}
 	
 	@DeleteMapping("/delete")
 	public int takeDownSong(
@@ -210,14 +164,74 @@ public class SongController {
 			) {
 		return service.updateSongStatus(songNo);
 	}
+
 	
-	@PostMapping("/report")
-	public int reportSong(
-		@RequestBody Report report
+	@Value("${file.upload-dir}")
+	private String uploadBaseDir;
+	
+	@CrossOrigin(origins = {"http://localhost:3000"})
+	@GetMapping("/download/{songNo}")
+	public ResponseEntity<Resource> downloadSong(
+			@PathVariable int songNo,
+			@RequestParam int memberNo
 			) {
-		service.insertReport(report);
-		log.debug("삽입 결과 - {}", report);
-		return report.getReportNo();
+		
+		//다운로드 기록 확인 후 다운로드 insert (미로그인 시에는 다운로드 기록 안함. memberNo==0 => 미로그인 상태)
+		if(memberNo != 0) {
+			//다운로드 기록 검색
+			log.info("memberNo ? {}", memberNo);
+			
+			HashMap<String, Object> param = new HashMap<>();
+			param.put("songNo", songNo);
+			param.put("memberNo", memberNo);
+			
+			List<Download> history = service.checkDownload(param);
+			
+			log.info("history ? {}", history);
+			
+			//위 select 결과가 null 일때 insert			
+			if(history == null || history.size() == 0) {
+				int result = service.insertDownload(param);
+				if(result < 1) {
+					log.info("다운로드 기록 실패");
+				}
+			}
+		}
+		//다운로드 파일 보내기 
+		log.info("songNo ? {}", songNo);
+		
+		SongExt song = service.selectSong(songNo);
+		log.info("song ? {}", song);
+		
+		Path path = FileSystems.getDefault().getRootDirectories().iterator().next();
+		final String osRootPath = path.toString().replace("\\\\", "");
+		
+		String fileReadPath = "file:///"+osRootPath+uploadBaseDir+song.getSongFile().getSongFileSongPathName()
+								+song.getSongFile().getSongFileChangeName();
+		log.info("fileReadPath ? {}", fileReadPath);
+		
+		try {
+			Resource resource = new UrlResource(fileReadPath);
+			
+			if(!resource.exists()) {
+				return ResponseEntity.notFound().build();
+			}
+			
+			String contentType = "application/octet-stream";
+			HttpHeaders headers = new HttpHeaders();
+			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"");
+			
+			return ResponseEntity.ok()
+					.headers(headers)
+					.contentType(org.springframework.http.MediaType.parseMediaType(contentType))
+					.body(resource);			
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
 	}
 	
 	@CrossOrigin(origins = {"*"})
@@ -239,4 +253,5 @@ public class SongController {
 
 		return list;
 	}
+
 }

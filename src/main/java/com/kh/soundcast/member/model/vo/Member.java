@@ -32,7 +32,6 @@ public class Member implements UserDetails {
 
 	private List<SimpleGrantedAuthority> authorities;
 	
-	
 	public Collection<? extends GrantedAuthority> getAuthorities(){
 		return authorities;
 	}
@@ -46,8 +45,6 @@ public class Member implements UserDetails {
 	public String getUsername() {
 		return null;
 	}
-	
-	
 	
 	
 }

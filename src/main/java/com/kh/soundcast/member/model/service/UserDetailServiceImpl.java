@@ -11,8 +11,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.kh.soundcast.api.model.dao.AuthDao;
+import com.kh.soundcast.member.model.vo.Member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,5 +45,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
 		}
 	
 		return authDao.loadUserByUsername(socialType, socialId);
+		
 	}
+
+
+
 }

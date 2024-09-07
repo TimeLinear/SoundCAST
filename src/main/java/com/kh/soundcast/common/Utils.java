@@ -31,11 +31,12 @@ public class Utils {
 		
 		// 파일 저장
 		try {
-			upfile.transferTo(new File(path + changeName));
+			upfile.transferTo(new File(Paths.get(path + changeName).toAbsolutePath().toString()));
 		} catch (IllegalStateException | IOException e) {
 			e.printStackTrace();
 		}
 		
+		log.info("result changeName={}", changeName);
 		return changeName;
 	}
 	
