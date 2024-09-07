@@ -93,7 +93,7 @@ public class SongServiceImpl implements SongService {
 		
 		if(songFile != null) {
 			
-			String fileReadPath = osRootPath+uploadBaseDir+song.getSongFile().getSongFileSongPathName();
+			String fileReadPath = osRootPath+uploadBaseDir+song.getSongFile().getSongPathName();
 			log.info("fileReadPath ? {}", fileReadPath);
 			File readSong = new File(fileReadPath+"/"+song.getSongFile().getSongFileChangeName());
 			log.info("readSong ? {}", readSong);
@@ -104,7 +104,7 @@ public class SongServiceImpl implements SongService {
 			
 				if(!(fileCon1 && fileCon2)) {
 					
-					String fileSavePath = osRootPath+uploadBaseDir+song.getSongFile().getSongFileSongPathName();
+					String fileSavePath = osRootPath+uploadBaseDir+song.getSongFile().getSongPathName();
 					String songFileOriginName = songFile.getOriginalFilename();
 					String songFileChangeName = Utils.saveFile(songFile, fileSavePath);
 					int songFileSongPathNo = song.getSongFile().getSongFileSongPathNo();

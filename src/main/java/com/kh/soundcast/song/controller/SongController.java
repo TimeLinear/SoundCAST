@@ -199,7 +199,7 @@ private final SongService service;
 		Path path = FileSystems.getDefault().getRootDirectories().iterator().next();
 		final String osRootPath = path.toString().replace("\\\\", "");
 		
-		String fileReadPath = "file:///"+osRootPath+uploadBaseDir+song.getSongFile().getSongFileSongPathName()
+		String fileReadPath = "file:///"+osRootPath+uploadBaseDir+song.getSongFile().getSongPathName()
 								+song.getSongFile().getSongFileChangeName();
 		log.info("fileReadPath ? {}", fileReadPath);
 		
@@ -243,10 +243,7 @@ private final SongService service;
 	 	log.debug("삽입 결과 - {}", report);
 	 	return report.getReportNo();
 	 }
-	
-	
-	
-	
+		
 	
 	// 관리자 dashboard 관련 음원
 	@CrossOrigin(origins = {"*"})
