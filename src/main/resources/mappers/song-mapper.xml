@@ -240,8 +240,7 @@
 
 		FROM (SELECT *
 		FROM( SELECT * FROM SONG ORDER BY SONG_CREATE_DATE DESC)
-		WHERE ROWNUM <![CDATA[ <= ]]>20
-		AND SONG_PLACE_NO = #{placeNo} ) S
+		WHERE ROWNUM <![CDATA[ <= ]]> 20) S
 
 		LEFT JOIN MEMBER M ON (S.SONG_MEMBER_NO = M.MEMBER_NO)
 		LEFT JOIN GENRE G ON (S.SONG_GENRE_NO = G.GENRE_NO)
@@ -254,7 +253,7 @@
 		LEFT JOIN SONG_FILE F USING (SONG_FILE_NO)
 		LEFT JOIN SONG_PATH P ON (P.SONG_PATH_NO = F.SONG_FILE_SONG_PATH_NO)
 		WHERE SONG_MEMBER_NO = #{mNo}
-
+		  AND SONG_STATUS = 'Y'
 	</select>
 
 	<select id="selectSongPath" resultType="string">
@@ -318,6 +317,23 @@
 			SYSDATE,
 			SYSDATE,
 			DEFAULT ) 
+	</insert>
+	
+	<select id="checkDownload" resultType="download">
+		SELECT *
+			FROM DOWNLOAD
+		WHERE DOWNLOAD_SONG_NO = #{songNo}
+			AND DOWNLOAD_MEMBER_NO = #{memberNo}
+			AND DOWNLOAD_DATE = TRUNC(SYSDATE,'DD')
+	</select>
+	
+	<insert id="insertDownload">
+		INSERT INTO DOWNLOAD
+		VALUES (
+			#{songNo},
+			#{memberNo},
+			TRUNC(SYSDATE,'DD')
+		)
 	</insert>
 	
 	<update id="updateSongStatus">

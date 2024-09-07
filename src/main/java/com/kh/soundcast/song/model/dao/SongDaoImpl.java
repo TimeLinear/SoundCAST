@@ -13,6 +13,7 @@ import com.kh.soundcast.song.model.vo.Song;
 import com.kh.soundcast.song.model.vo.SongExt;
 import com.kh.soundcast.song.model.vo.SongFile;
 import com.kh.soundcast.song.model.vo.SongImage;
+import com.kh.soundcast.statistic.model.vo.Download;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,6 +42,11 @@ public class SongDaoImpl implements SongDao{
 	@Override
 	public List<Song> selectSongMainList(int placeNo) {
 		return session.selectList("song.selectSongMainList", placeNo);
+	}
+	
+	@Override
+	public SongExt selectSong(int songNo) {
+		return session.selectOne("song.selectSong", songNo);
 	}
 
 	@Override
@@ -76,6 +82,16 @@ public class SongDaoImpl implements SongDao{
 	@Override
 	public int insertSong(Song song) {
 		return session.insert("song.insertSong", song);
+	}
+	
+	@Override
+	public List<Download> checkDownload(HashMap<String, Object> param) {
+		return session.selectList("song.checkDownload", param);
+	}
+
+	@Override
+	public int insertDownload(HashMap<String, Object> param) {
+		return session.insert("song.insertDownload", param);
 	}
 
 	@Override

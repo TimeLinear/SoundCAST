@@ -10,12 +10,15 @@ import com.kh.soundcast.song.model.vo.Song;
 import com.kh.soundcast.song.model.vo.SongExt;
 import com.kh.soundcast.song.model.vo.SongFile;
 import com.kh.soundcast.song.model.vo.SongImage;
+import com.kh.soundcast.statistic.model.vo.Download;
 
 public interface SongDao {
 
 	List<Song> selectSongList(HashMap<String, Object> param);
 
 	List<Song> selectSongMainList(int placeNo);
+	
+	public SongExt selectSong(int songNo);
 
 	List<Genre> selectAllGenres();
 
@@ -34,6 +37,10 @@ public interface SongDao {
 	int insertSongImage(SongImage songImageData);
 
 	int insertSong(Song song);
+	
+	public List<Download> checkDownload(HashMap<String, Object> param);
+	
+	public int insertDownload(HashMap<String, Object> param);
 
 	SongExt selectSong(Song song);
 

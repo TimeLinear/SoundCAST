@@ -23,6 +23,7 @@ import com.kh.soundcast.song.model.vo.Song;
 import com.kh.soundcast.song.model.vo.SongExt;
 import com.kh.soundcast.song.model.vo.SongFile;
 import com.kh.soundcast.song.model.vo.SongImage;
+import com.kh.soundcast.statistic.model.vo.Download;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -177,6 +178,21 @@ public class SongServiceImpl implements SongService {
 		}
 		
 		return dao.selectSong(song);
+	}
+	
+	@Override
+	public List<Download> checkDownload(HashMap<String, Object> param) {
+		return dao.checkDownload(param);
+	}
+
+	@Override
+	public int insertDownload(HashMap<String, Object> param) {
+		return dao.insertDownload(param);
+	}
+	
+	@Override
+	public SongExt selectSong(int songNo) {
+		return dao.selectSong(songNo);
 	}
 
 	@Override
