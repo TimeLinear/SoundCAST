@@ -22,7 +22,6 @@ public class StatisticService {
 	private final StatisticDao stDao;
 
 	public List<Map<String, Object>> getDownload() {
-		// TODO Auto-generated method stub
 		return stDao.getDownload();
 	}
 }

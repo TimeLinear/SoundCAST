@@ -22,7 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		Path path = FileSystems.getDefault().getRootDirectories().iterator().next();
-		final String osRootPath = path.toString().replace("\\\\", "");
+		final String osRootPath = path.toString().replace("\\", "");
 		//final String osRootPath = path.toString().substring(0, path.toString().length() - 1);
 		log.debug("리소스 요청 url = {}", osRootPath + uploadBaseDir);
 		

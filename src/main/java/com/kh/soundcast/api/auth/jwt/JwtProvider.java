@@ -14,7 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kh.soundcast.member.model.service.UserDetailServiceImpl;
+import com.kh.soundcast.api.auth.model.service.UserDetailServiceImpl;
 import com.kh.soundcast.member.model.vo.Member;
 import com.kh.soundcast.member.model.vo.MemberExt;
 
@@ -46,7 +46,7 @@ public class JwtProvider {
 		String userPkStr = new ObjectMapper().writeValueAsString(userPk);
 		
 		Claims claims = Jwts.claims().setSubject(userPkStr);		
-		Date now =new Date();
+		Date now = new Date();
 		return Jwts.builder()
 			.setClaims(claims)
 			.setIssuedAt(now)
@@ -87,17 +87,11 @@ public class JwtProvider {
 			
 			String subJson = (String) claims.get("sub");
 			log.info("vali-sub={}",subJson);
-//			ObjectMapper objectMapper = new ObjectMapper();
-//            Map<String, Object> sub = objectMapper.readValue(subJson, new TypeReference<Map<String, Object>>() {});
-//
-//	        String socialId = (String) sub.get("SocialId");
-//	        log.info("SocialId={}", socialId);
-//	        
-//	        String socialType = (String)sub.get("SocialType");
 	        
 	        MemberExt member = (MemberExt) service.loadUserByUsername(subJson);
 			
-			return (!claimsJws.getBody().getExpiration().before(new Date()) && !(member == null) );
+	        log.debug("인증한 member - {}", member);
+			return (!claimsJws.getBody().getExpiration().before(new Date()) && member != null );
 					//!claims.getBody().getExpiration().before(new Date());
 			//여기서 && 조건걸어줌 멤버가 null x , 데이트가 지낫는지 확인 
 			//디코드후 loadbyusername으로 호출해서 멤버객체 가져오기
@@ -108,8 +102,7 @@ public class JwtProvider {
 			return false;
 		}
 		
-		
-		
+
 	}
 	
 	/*

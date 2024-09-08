@@ -4,6 +4,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,9 @@ import com.kh.soundcast.member.model.vo.MemberExt;
 import com.kh.soundcast.member.model.vo.MemberSocial;
 import com.kh.soundcast.member.model.vo.ProfileImage;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,8 +36,10 @@ public class AuthService {
 	private final AuthDao dao;
 	private final JwtProvider jwtProvider;
 	
+	@Value("${jwt.secret}")
+	private String secretKey;
 	
-public HashMap<String, Object> authCheck(String socialType, HashMap<String, String> param) throws Exception {
+	public HashMap<String, Object> authCheck(String socialType, HashMap<String, String> param) throws Exception {
 		
 		String socialId = null;
 		String crebody = null;
@@ -105,7 +111,8 @@ public HashMap<String, Object> authCheck(String socialType, HashMap<String, Stri
 		userPk.put("socialType", socialType);
 		String ACCESS_TOKEN = jwtProvider.createToken(userPk);	
 		
-		
+		log.debug("만든 엑세스 토큰 - {}", ACCESS_TOKEN);
+
 		map.put("jwtToken", ACCESS_TOKEN);
 		map.put("member", member);
 		map.put("Credential", crebody);

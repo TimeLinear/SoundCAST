@@ -3,11 +3,8 @@ package com.kh.soundcast.member.controller;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -20,28 +17,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,20 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.kh.soundcast.api.auth.jwt.JwtProvider;
-import com.kh.soundcast.api.auth.model.service.AuthService;
-
-import jakarta.servlet.http.HttpServletResponse;
-
 import com.kh.soundcast.common.Utils;
 import com.kh.soundcast.member.model.service.MemberService;
-import com.kh.soundcast.member.model.vo.Comment;
 import com.kh.soundcast.member.model.vo.MemberBanner;
 import com.kh.soundcast.member.model.vo.MemberExt;
 import com.kh.soundcast.member.model.vo.ProfileImage;
 import com.kh.soundcast.song.model.service.SongService;
-import com.kh.soundcast.song.model.vo.Song;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -75,8 +44,6 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 
 	private final MemberService memberService;
-	private final SongService songService;
-	private final WebApplicationContext applicationContext;
 
 	@Value("${file.upload-dir}")
 	private String uploadBaseDir; // SoundCast 프로젝트 파일/src/main/resources/static/images 의 상대 경로
@@ -198,9 +165,9 @@ public class MemberController {
 
 			return member;
 		}
-
+		
 		log.info("memberselect={}", member);
-		log.info("멤버페이지팔로잉정보={}", member.getFollowing());
+		log.info("멤버페이지팔로잉정보={}",member.getFollowing());
 		return member;
 	}
 
@@ -278,13 +245,15 @@ public class MemberController {
 		} else {
 			map.put("msg", "댓글 삭제 실패");
 		}
-
+				
 		return map;
-
+		
 	}
+	
 
+	
 	// 관리자페이지 시작
-	@CrossOrigin(origins = { "*" })
+    @CrossOrigin(origins = {"*"})
 	@GetMapping("/selectMembers")
 	public List<MemberExt> selectMembers(HttpServletResponse response) {
 

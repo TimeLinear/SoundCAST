@@ -12,10 +12,6 @@ import com.kh.soundcast.song.model.vo.SongFile;
 import com.kh.soundcast.song.model.vo.SongImage;
 import com.kh.soundcast.statistic.model.vo.Download;
 
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.stereotype.Repository;
-
-
 public interface SongDao {
 
 	List<Song> selectSongList(HashMap<String, Object> param);
@@ -49,12 +45,13 @@ public interface SongDao {
 	List<Download> checkDownload(HashMap<String, Object> param);
 
 	int insertDownload(HashMap<String, Object> param);
-
+	
 	int updateSongStatus(int songNo);
 
 	int insertReport(Report report);
 
 	List<SongExt> selectTop5Music();
-
+	
 	List<SongExt> selectNewMusic();
+
 }

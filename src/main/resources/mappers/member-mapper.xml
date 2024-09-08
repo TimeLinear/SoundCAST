@@ -21,11 +21,6 @@
          <result column="MEMBER_MODIFY_DATE" property="memberModifyDate"/>
          <result column="MEMBER_STATUS" property="memberStatus"/>
        
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-       
        <association property="comment" javaType="comment">
            <id column="COMMENT_NO" property="commentNo"/>
            <result column="COMMENT_WRITER_MEMBER_NO" property="commentWriterMemberNo"/>
@@ -35,83 +30,33 @@
            <result column="COMMENT_MODIFY_DATE" property="commentModifyDate"/>
        </association>
        
-        
-       
-       
-       
->>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
-=======
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-=======
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
        <association property="memberBanner" javaType="memberBanner">
            <id column="MEMBER_BANNER_NO" property="memberBannerNo"/>
            <result column="MEMBER_BANNER_PATH" property="memberBannerPath"/>
        </association>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
-       
 <!--       <association property="memberGrade" javaType="memberGrade">
            <id column="MEMBER_GRADE_NO" property="memberGradeNo"/>
            <result column="MEMBER_GRADE_NAME" property="memberGradeName"/>
        </association>
        -->
-       
->>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
-=======
-
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-=======
-
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
        <association property="memberSocial" javaType="memberSocial">
            <id column="MEMBER_SOCIAL_MEMBER_NO" property="memberSocialMemberNo"/>
            <result column="MEMBER_SOCIAL_SOCIAL_NAME" property="memberSocialSocialName"/>
            <result column="MEMBER_SOCIAL_SOCIAL_ID" property="memberSocialSocialId"/>
        </association>
-       
-       
+              
        <association property="profileImage" javaType="profileImage">
 			<id column="PROFILE_IMAGE_NO" property="profileImageNo"/>
            	<result column="PROFILE_IMAGE_PATH" property="profileImagePath"/>
 		</association>
-		
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
-      <collection property="authorities"
+
+	  <collection property="authorities"
                javaType="list"
                ofType="simpleGrantedAuthority">
          <constructor>
                <arg column="MEMBER_GRADE_NAME" javaType="string"/>
            </constructor>
       </collection>
-<<<<<<< HEAD
-=======
-		<collection property="authorities"
-=======
-      <collection property="authorities"
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-               javaType="list"
-               ofType="simpleGrantedAuthority">
-         <constructor>
-               <arg column="MEMBER_GRADE_NAME" javaType="string"/>
-<<<<<<< HEAD
-			</constructor>
-		</collection>
->>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
-=======
-           </constructor>
-      </collection>
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-=======
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
-       
 
    </resultMap>
    
@@ -127,36 +72,14 @@
 	    MEMBER.MEMBER_EMAIL,
 	    MEMBER.MEMBER_INTRODUCE,
 	    MEMBER_GRADE.MEMBER_GRADE_NAME
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-	   
->>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
-=======
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-=======
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
-	   	
+
 	FROM
 	    MEMBER
 	    JOIN MEMBER_SOCIAL ON MEMBER_SOCIAL.MEMBER_SOCIAL_MEMBER_NO = MEMBER.MEMBER_NO
 	    JOIN MEMBER_GRADE ON MEMBER.MEMBER_GRADE_NO = MEMBER_GRADE.MEMBER_GRADE_NO
 	    JOIN MEMBER_BANNER ON MEMBER.MEMBER_BANNER_NO = MEMBER_BANNER.MEMBER_BANNER_NO
 	    JOIN PROFILE_IMAGE ON MEMBER.MEMBER_PROFILE_IMAGE_NO = PROFILE_IMAGE.PROFILE_IMAGE_NO
-	    
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	    
-=======
->>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
-=======
-	    
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-=======
-	    
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
+
 	WHERE
 	    MEMBER.MEMBER_NO =#{mNo}
 	    AND MEMBER.MEMBER_STATUS = 'Y'
@@ -174,37 +97,12 @@
    		GROUP BY FOLLOW_TARGET_MEMBER_NO
 
    </select>
-   
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-   
-   
-=======
->>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
-=======
-
-   
-   
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-=======
-
-   
-   
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
+  
 	<resultMap id="memberExtMap2" type="memberExt">
 		<id column="MEMBER_NO" property="memberNo" />
 		<result column="MEMBER_NICKNAME" property="memberNickname" />
 		<result column="MEMBER_EMAIL" property="memberEmail" />
-		
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-=======
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
+
 		<association property="comment" javaType="comment">
            <id column="COMMENT_NO" property="commentNo"/>
            <result column="COMMENT_WRITER_MEMBER_NO" property="commentWriterMemberNo"/>
@@ -213,23 +111,14 @@
            <result column="COMMENT_CREATE_DATE" property="commentCreateDate"/>
            <result column="COMMENT_MODIFY_DATE" property="commentModifyDate"/>
        </association>
-		
-		
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
-=======
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-=======
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
+
 		<association property="profileImage" javaType="profileImage">
 			<id column="PROFILE_IMAGE_NO" property="profileImageNo"/>
            	<result column="PROFILE_IMAGE_PATH" property="profileImagePath"/>
 		</association>
-		
-		
 	</resultMap>
+   
+   
    
 	<select id="selectFollowList" resultMap="memberExtMap2">
 		SELECT
@@ -243,32 +132,11 @@
 			LEFT JOIN MEMBER TARGET_MEMBER ON FOLLOW.FOLLOW_TARGET_MEMBER_NO = TARGET_MEMBER.MEMBER_NO
 			LEFT JOIN PROFILE_IMAGE ON TARGET_MEMBER.MEMBER_PROFILE_IMAGE_NO = PROFILE_IMAGE.PROFILE_IMAGE_NO
 		
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 		WHERE MEMBER.MEMBER_NO = #{mNo}
-=======
-		WHERE MEMBER.MEMBER_NO =#{mNo}
->>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
-=======
-		WHERE MEMBER.MEMBER_NO = #{mNo}
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-=======
-		WHERE MEMBER.MEMBER_NO = #{mNo}
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 			AND MEMBER.MEMBER_STATUS = 'Y'
-
 	   		
 	</select>
-   
-  	
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-=======
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
+
   	<select id="selectComment" resultMap="memberExtMap2">
    		SELECT 
 			COMMENT_NO, 
@@ -289,17 +157,7 @@
    
    </select>
  
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-   
->>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
-=======
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-=======
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
-   
-   
+  
    <insert id="insertFollow">
    		INSERT INTO FOLLOW
    		VALUES(
@@ -326,11 +184,6 @@
 	    fm.MEMBER_NO, ft.MEMBER_NO;
 
    </select>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
 
    
    <delete id="deleteFollow">
@@ -351,9 +204,7 @@
 			#{safeComment},
 			DEFAULT,
 			DEFAULT
-			)
-		
-	
+			)	
 	</insert>
    
    <delete id="deleteComment">
@@ -364,53 +215,8 @@
 			AND
 			COMMENT_NO = #{commentNo}
    </delete>
+  
    
-     
-<<<<<<< HEAD
-=======
-=======
-
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-   
-   <delete id="deleteFollow">
-	DELETE
-		FROM FOLLOW
-	WHERE FOLLOW_MEMBER_NO = #{followerMno}
-	AND
-		FOLLOW_TARGET_MEMBER_NO = #{mNo}		   
-   </delete>
-   
-
-	<insert id="insertComment">
-		INSERT INTO "COMMENT"
-		VALUES(
-			SEQ_COMMENT_NO.NEXTVAL,
-			#{writerNo},
-			#{mNo},
-			#{safeComment},
-			DEFAULT,
-			DEFAULT
-			)
-		
-	
-	</insert>
-   
-   <delete id="deleteComment">
-		DELETE
-			FROM "COMMENT"
-		WHERE
-			COMMENT_WRITER_MEMBER_NO = #{writerNo}
-			AND
-			COMMENT_NO = #{commentNo}
-   </delete>
-   
-<<<<<<< HEAD
->>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
-=======
-     
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-=======
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
    <!-- 회원 마이페이지 자기 수정 -->
    <insert id="insertMemberProfile" useGeneratedKeys="true"> <!-- 회원 프로필사진경로 삽입 -->
    		<selectKey keyProperty="profileImageNo" resultType="int" order="BEFORE">
@@ -453,26 +259,13 @@
    		WHERE
    			MEMBER_NO = #{memberNo}
    </update>
-   
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
+
    <update id="updateMemberStatus">
    		UPDATE MEMBER
    		SET MEMBER_STATUS = 'N'
    		WHERE MEMBER_NO =#{mNo}
    </update>
-   
-   
-<<<<<<< HEAD
-=======
->>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
-=======
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-=======
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
+
    <!-- 회원 마이페이지 자기 수정 끝-->
    
 	<resultMap id="modifyMemberExtMap" type="memberExt">
@@ -513,38 +306,6 @@
    	</select>
    
    <!-- 수정한 회원 정보 가져오기 종료-->
-   
-<<<<<<< HEAD
-   
-   
-   
-<<<<<<< HEAD
-<<<<<<< HEAD
-
- 
- 	
-=======
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
  
  <select id="loadUserByUsername" resultMap="memberExtMap">
       SELECT MEMBER_NO , PROFILE_IMAGE_PATH, MEMBER_BANNER_PATH, MEMBER_SOCIAL_SOCIAL_NAME, MEMBER_SOCIAL_SOCIAL_ID,
@@ -584,9 +345,7 @@ GROUP BY
  	
  
  	<!-- 관리자페이지 시작 -->
-=======
-   <!-- 관리자페이지 시작 -->
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
+
  	<select id="selectMembers" resultMap="memberResultMap">
 		SELECT
 			*
@@ -647,18 +406,5 @@ GROUP BY
         </foreach>
     </update>
     <!-- 관리자페이지 끝 -->
-<<<<<<< HEAD
->>>>>>> 27a32552d755c04550be2f6a22e1aab664efa6cf
-=======
 
- 
- 	
->>>>>>> a6e1b7780d0f1506a5bbee4622bc89241faa9c6d
-=======
-   
-   
-
- 
- 	
->>>>>>> 37207d4ecaa4099e099692d8a68cddb6f6398cf3
  </mapper>

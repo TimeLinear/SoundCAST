@@ -14,7 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;										   
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -157,15 +156,6 @@ private final SongService service;
 		return insertedSong;
 	}
 	
-	
-	@DeleteMapping("/delete")
-	public int takeDownSong(
-		@RequestParam int songNo
-			) {
-		return service.updateSongStatus(songNo);
-	}
-
-	
 	@Value("${file.upload-dir}")
 	private String uploadBaseDir;
 	
@@ -234,6 +224,24 @@ private final SongService service;
 		
 	}
 	
+	@DeleteMapping("/delete")
+	 public int takeDownSong(
+	 	@RequestParam int songNo
+	 		) {
+	 	return service.updateSongStatus(songNo);
+	 }
+	
+	 @PostMapping("/report")
+	 public int reportSong(
+	 	@RequestBody Report report
+	 		) {
+	 	service.insertReport(report);
+	 	log.debug("삽입 결과 - {}", report);
+	 	return report.getReportNo();
+	 }
+		
+	
+	// 관리자 dashboard 관련 음원
 	@CrossOrigin(origins = {"*"})
 	@GetMapping("/top5Music")
 	public List<SongExt> selectTop5Music(/*HttpServletResponse response*/){

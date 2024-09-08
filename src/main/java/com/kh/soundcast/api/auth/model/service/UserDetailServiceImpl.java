@@ -37,6 +37,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
 			return null;
 		}
 		
-		return dao.loadUserByUsername((String)userPk.get("socialId"), (String)userPk.get("socialType"));
+		return dao.loadUserByUsername((String)userPk.get("socialType"), (String)userPk.get("socialId"));
 	}
 }
