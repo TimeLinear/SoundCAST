@@ -86,16 +86,20 @@ public class AuthService {
 		//현재 app 에 사용자 정보 유무 조회
 		MemberExt member = dao.loadUserByUsername(socialType, socialId);
 		
-		int mNo = member.getMemberNo();
 		
 		if(member != null) {
+			
+			int mNo = member.getMemberNo();
+			
 			// 팔로우 정보들 가져오기
 			List<MemberExt> following = dao.selectFollowList(mNo);
 			int follower = dao.selectFollower(mNo);
 			log.debug("팔로잉, 팔로워 = {}, {}", following, follower);
 			log.debug("mNo = {}", mNo);
 			
-			
+			if(following.get(0) == null) {
+				following.clear();
+			}
 			member.setFollowing(following);
 			member.setFollower(follower);
 		}
