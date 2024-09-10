@@ -226,10 +226,11 @@
 
 	<update id="updateSongBasicInfo">
 		UPDATE SONG
-		SET (
+		SET 
 			SONG_MOOD_NO = #{songMoodNo},
 			SONG_GENRE_NO = #{songGenreNo},
 			SONG_TITLE = #{songTitle},
+			SONG_DURATION = #{songDuration}, 
 			SONG_LICENSE = #{songLicense},
 			SONG_DETAIL = #{songDetail},
 			SONG_MODIFY_DATE = SYSDATE
@@ -239,7 +240,6 @@
 			<if test="songImageNo != 0">
 				, SONG_IMAGE_NO = #{songImageNo}
 			</if>
-		)
 		WHERE SONG_NO = #{songNo}
 	
 	</update>
@@ -347,6 +347,7 @@
 			#{songFileNo},
 			#{songPlaceNo},
 			#{songTitle},
+			60,
 			#{songLicense},
 			#{songDetail},
 			SYSDATE,
