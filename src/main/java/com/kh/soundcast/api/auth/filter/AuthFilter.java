@@ -20,9 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthFilter extends GenericFilterBean  {
 	private final JwtProvider jwtProvider;
 	
+	private static int ACCESS_COUNT = 0;
+	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 		throws IOException, ServletException{
+		
+		log.debug("서버 구동 중 접근 수 - {}", ++ACCESS_COUNT);
 		
 		String token = jwtProvider.resolveToken((HttpServletRequest)request);
 		
@@ -35,7 +39,6 @@ public class AuthFilter extends GenericFilterBean  {
 			Authentication authentication = jwtProvider.getAuthentication(token);
 			
 			log.info("authentication={}",authentication );
-			
 			
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			

@@ -30,11 +30,16 @@ public class Utils {
 		String changeName = "soundcast-" + currentTime + random + ext;
 		
 		// 파일 저장
-		try {
-			upfile.transferTo(new File(path + changeName));
-		} catch (IllegalStateException | IOException e) {
-			e.printStackTrace();
-		}
+				try {
+					upfile.transferTo(new File(path + changeName));
+				} catch (IllegalStateException | IOException e) {
+					e.printStackTrace();
+				}		
+//		try {
+//			upfile.transferTo(new File(Paths.get(path + changeName).toAbsolutePath().toString()));
+//		} catch (IllegalStateException | IOException e) {
+//			e.printStackTrace();
+//		}
 		
 		log.info("result changeName={}", changeName);
 		return changeName;

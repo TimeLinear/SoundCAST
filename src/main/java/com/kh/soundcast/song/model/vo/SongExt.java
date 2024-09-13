@@ -24,4 +24,6 @@ public class SongExt extends Song {
 	// 음원 파일 객체(songFileNo 필드와 짝)
 	// 폴더까지의 경로 번호만 있는 SoneFile 클래스에 경로명까지 추가한 클래스
 	private SongFileExt songFile;
+	
+	private int downloadCountNumber;
 }

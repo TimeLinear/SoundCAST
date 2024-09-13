@@ -8,16 +8,18 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
+import com.kh.soundcast.song.model.vo.Report;
 import com.kh.soundcast.song.model.vo.Song;
 import com.kh.soundcast.song.model.vo.SongExt;
 import com.kh.soundcast.song.model.vo.SongFile;
 import com.kh.soundcast.song.model.vo.SongImage;
+import com.kh.soundcast.statistic.model.vo.Download;
 
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class SongDaoImpl implements SongDao{
+public class SongDaoImpl implements SongDao {
 
 	private final SqlSession session;
 
@@ -93,5 +95,34 @@ public class SongDaoImpl implements SongDao{
 	@Override
 	public int insertSong(Song song) {
 		return session.insert("song.insertSong", song);
+	}
+	
+	@Override
+	public List<Download> checkDownload(HashMap<String, Object> param) {
+		return session.selectList("song.checkDownload", param);
+	}
+
+	@Override
+	public int insertDownload(HashMap<String, Object> param) {
+		return session.insert("song.insertDownload", param);
+	}
+	
+
+	@Override
+	public int updateSongStatus(int songNo) {
+		return session.update("song.updateSongStatus", songNo);
+	}
+
+	@Override
+	public int insertReport(Report report) {
+		return session.insert("report.insertReport", report);
+	}
+	
+	public List<SongExt> selectTop5Music() {
+		return session.selectList("song.selectTop5Music");
+	}
+
+	public List<SongExt> selectNewMusic() {
+		return session.selectList("song.selectNewMusic");
 	}
 }

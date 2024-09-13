@@ -7,8 +7,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.soundcast.song.model.vo.Genre;
 import com.kh.soundcast.song.model.vo.Mood;
+import com.kh.soundcast.song.model.vo.Report;
 import com.kh.soundcast.song.model.vo.Song;
 import com.kh.soundcast.song.model.vo.SongExt;
+import com.kh.soundcast.statistic.model.vo.Download;
 
 public interface SongService {
 
@@ -23,7 +25,19 @@ public interface SongService {
 	int updateSong(int songNo, SongExt songInfo, MultipartFile songFile, MultipartFile songImage);
 
 	SongExt insertUnofficialSong(MultipartFile songFile, MultipartFile songImage, Song song) throws Exception;
+	
+	List<Download> checkDownload(HashMap<String, Object> param);
+	
+	int insertDownload(HashMap<String, Object> param);
 
+	SongExt selectSong(int songNo);
+	
+	int updateSongStatus(int songNo);
 
+	int insertReport(Report report);
+
+	List<SongExt> selectTop5Music();
+
+	List<SongExt> selectNewMusic();
 
 }

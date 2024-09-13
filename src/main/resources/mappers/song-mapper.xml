@@ -32,43 +32,57 @@
 		</association>
 
 		<association property="songFile" javaType="songFileExt">
-			<id column="SONG_FILE_PATH_NO" property="songFilePathNo" />
+			<id column="SONG_FILE_SONG_PATH_NO" property="songFileSongPathNo" />
 			<result column="SONG_FILE_CHANGE_NAME" property="songFileChangeName" />
 			<result column="SONG_FILE_ORIGIN_NAME" property="songFileOriginName" />
-			<result column="SONG_PATH_NAME" property="songPathName" />
+			<result column="SONG_PATH_NAME" property="songFileSongPathName" />
 		</association>
 	</resultMap>
 	
+	
 	<select id="selectSong" resultMap="songExtMap">
-      SELECT 
-         SONG_NO,
-         SONG_MEMBER_NO,
-         SONG_MOOD_NO,
-         SONG_GENRE_NO, 
-         SONG_IMAGE_NO,
-         SONG_FILE_NO,
-         
-         S.SONG_PLACE_NO,
-         S.SONG_TITLE,
-         S.SONG_LICENSE, 
-         S.SONG_DETAIL,
-                  
-         M.MEMBER_NICKNAME,
-         
-         G.GENRE_NAME,
-         D.MOOD_NAME,
-                  
-         I.SONG_IMAGE_PATH_NO,
-         I.SONG_IMAGE_NAME,
-         IP.SONG_IMAGE_PATH_NAME,
-                  
-         F.SONG_FILE_SONG_PATH_NO,
-         F.SONG_FILE_CHANGE_NAME,
-         F.SONG_FILE_ORIGIN_NAME,
-         P.SONG_PATH_NAME 
-         
-         AND SONG_STATUS = 'Y'        
-    </select>       
+		SELECT 
+			SONG_NO,
+			SONG_MEMBER_NO,
+			SONG_MOOD_NO,
+			SONG_GENRE_NO, 
+			SONG_IMAGE_NO,
+			SONG_FILE_NO,
+			
+			S.SONG_PLACE_NO,
+			S.SONG_TITLE,
+			S.SONG_LICENSE, 
+			S.SONG_DETAIL,
+						
+			M.MEMBER_NICKNAME,
+			
+			G.GENRE_NAME,
+			D.MOOD_NAME,
+						
+			I.SONG_IMAGE_PATH_NO,
+			I.SONG_IMAGE_NAME,
+			IP.SONG_IMAGE_PATH_NAME,
+						
+			F.SONG_FILE_SONG_PATH_NO,
+			F.SONG_FILE_CHANGE_NAME,
+			F.SONG_FILE_ORIGIN_NAME,
+			P.SONG_PATH_NAME			
+								
+			FROM SONG S
+			LEFT JOIN MEMBER M ON (S.SONG_MEMBER_NO = M.MEMBER_NO)
+			LEFT JOIN GENRE G ON (S.SONG_GENRE_NO = G.GENRE_NO)
+			LEFT JOIN MOOD D ON (S.SONG_MOOD_NO = D.MOOD_NO)
+			
+			LEFT JOIN SONG_IMAGE I USING (SONG_IMAGE_NO)
+			LEFT JOIN SONG_IMAGE_PATH IP ON (I.SONG_IMAGE_PATH_NO = IP.SONG_IMAGE_PATH_NO)
+			
+			LEFT JOIN SONG_FILE F USING (SONG_FILE_NO)
+			LEFT JOIN SONG_PATH P ON (P.SONG_PATH_NO = F.SONG_FILE_SONG_PATH_NO)
+			
+			WHERE SONG_NO = #{songNo}
+				AND SONG_STATUS = 'Y'
+	</select>
+
 
 	<select id="selectSongList" resultMap="songExtMap">
 		SELECT 
@@ -125,11 +139,13 @@
 	<select id="selectAllGenres" resultType="genre">
 		SELECT *
 		FROM GENRE
+		ORDER BY GENRE_NO
 	</select>
 
 	<select id="selectAllMoods" resultType="mood">
 		SELECT *
 		FROM MOOD
+		ORDER BY MOOD_NO
 	</select>
 	
 	<select id="selectSongMainList" resultMap="songExtMap">
@@ -175,8 +191,10 @@
 			LEFT JOIN SONG_FILE F USING (SONG_FILE_NO)
 			LEFT JOIN SONG_PATH P ON (P.SONG_PATH_NO = F.SONG_FILE_SONG_PATH_NO)
 			
+			WHERE SONG_STATUS = 'Y'
 		
 	</select>
+	
 	
 
 	<insert id="insertNewSong" parameterType="songFile" useGeneratedKeys="true">
@@ -205,12 +223,10 @@
    		</selectKey>
 	
 	</insert>
-	
-			
+
 	<update id="updateSongBasicInfo">
-		UPDATE
-			SONG
-		SET
+		UPDATE SONG
+		SET (
 			SONG_MOOD_NO = #{songMoodNo},
 			SONG_GENRE_NO = #{songGenreNo},
 			SONG_TITLE = #{songTitle},
@@ -223,9 +239,8 @@
 			<if test="songImageNo != 0">
 				, SONG_IMAGE_NO = #{songImageNo}
 			</if>
-			
-		WHERE
-			SONG_NO = #{songNo}
+		)
+		WHERE SONG_NO = #{songNo}
 	
 	</update>
 	
@@ -271,10 +286,10 @@
 			LEFT JOIN SONG_PATH P ON (P.SONG_PATH_NO = F.SONG_FILE_SONG_PATH_NO)
 			
 			WHERE SONG_MEMBER_NO = #{mNo}
+				AND SONG_STATUS = 'Y'
 	
 	</select>
 
-	
 	<select id="selectSongPath" resultType="string">
 		SELECT SONG_PATH_NAME
 		FROM SONG_PATH
@@ -339,7 +354,102 @@
 			DEFAULT
 		)
 	</insert>
+	
+	<select id="checkDownload" resultType="download">
+		SELECT *
+			FROM DOWNLOAD
+		WHERE DOWNLOAD_SONG_NO = #{songNo}
+			AND DOWNLOAD_MEMBER_NO = #{memberNo}
+			AND DOWNLOAD_DATE = TRUNC(SYSDATE,'DD')
+	</select>
+	
+	<insert id="insertDownload">
+		INSERT INTO DOWNLOAD
+		VALUES (
+			#{songNo},
+			#{memberNo},
+			TRUNC(SYSDATE,'DD')
+		)
+	</insert>
+	
+	<update id="updateSongStatus">
+		UPDATE SONG
+		SET SONG_STATUS = 'N'
+		WHERE SONG_NO = #{songNO}
+	</update>
+	
 
-
+	<!-- 관리자 파트 -->
+	<select id="selectTop5Music" resultMap="songResultMap">
+		SELECT
+			DOWNLOAD_COUNT_NUMBER,
+			SONG_IMAGE_NAME,
+			SONG_IMAGE_PATH_NAME,
+			SONG_TITLE,
+			MEMBER_NICKNAME,
+			GENRE_NAME,
+			MOOD_NAME,
+			SONG_LICENSE,
+			SONG_NO
+		FROM SONG
+		LEFT JOIN SONG_IMAGE USING (SONG_IMAGE_NO)
+		LEFT JOIN SONG_IMAGE_PATH USING (SONG_IMAGE_PATH_NO)
+		LEFT JOIN MEMBER ON (SONG_MEMBER_NO = MEMBER_NO)
+		JOIN DOWNLOAD_COUNT ON (SONG_NO = DOWNLOAD_COUNT_SONG_NO)
+		LEFT JOIN MOOD ON (MOOD_NO = SONG_MOOD_NO)
+		LEFT JOIN GENRE ON (GENRE_NO = SONG_GENRE_NO)
+		WHERE SONG_STATUS = 'Y'
+		AND TO_DATE(SONG_CREATE_DATE, 'YY/MM/DD') <![CDATA[>=]]> ADD_MONTHS(SYSDATE, -1)
+		ORDER BY DOWNLOAD_COUNT_NUMBER DESC
+	</select>
+	
+	<resultMap id="songResultMap" type="songExt">
+	    <id property="songNo" column="SONG_NO"/>    
+	    <result property="memberNickname" column="MEMBER_NICKNAME"/>    
+	    <result property="songTitle" column="SONG_TITLE"/>
+	    <result property="moodName" column="MOOD_NAME"/>
+	    <result property="genreName" column="GENRE_NAME"/>
+	    <result property="songLicense" column="SONG_LICENSE"/>
+	    <result property="downloadCountNumber" column="DOWNLOAD_COUNT_NUMBER"/>
+	    
+	    <association property="songImage" javaType="songImageExt">
+	        <result property="songImagePathName" column="SONG_IMAGE_PATH_NAME"/>
+	        <result property="songImageName" column="SONG_IMAGE_NAME"/>
+	    </association>
+	</resultMap>
+ 
+ 	<select id="selectNewMusic" resultMap="songResultMap2">
+ 		SELECT
+			SONG_IMAGE_NAME,
+			SONG_IMAGE_PATH_NAME,
+			SONG_TITLE,
+			MEMBER_NICKNAME,
+			GENRE_NAME,
+			MOOD_NAME,
+			SONG_LICENSE,
+			SONG_CREATE_DATE
+		FROM SONG
+		LEFT JOIN SONG_IMAGE USING (SONG_IMAGE_NO)
+		LEFT JOIN SONG_IMAGE_PATH USING (SONG_IMAGE_PATH_NO)
+		LEFT JOIN MEMBER ON (SONG_MEMBER_NO = MEMBER_NO)
+		LEFT JOIN MOOD ON (MOOD_NO = SONG_MOOD_NO)
+		LEFT JOIN GENRE ON (GENRE_NO = SONG_GENRE_NO)
+		WHERE SONG_STATUS = 'Y'
+		ORDER BY SONG_CREATE_DATE DESC, SONG_TITLE ASC
+ 	</select>
+ 	
+ 	<resultMap id="songResultMap2" type="songExt">
+	    <result property="memberNickname" column="MEMBER_NICKNAME"/>    
+	    <result property="songTitle" column="SONG_TITLE"/>
+	    <result property="moodName" column="MOOD_NAME"/>
+	    <result property="genreName" column="GENRE_NAME"/>
+	    <result property="songLicense" column="SONG_LICENSE"/>
+	    <result property="songCreateDate" column="SONG_CREATE_DATE"/>
+	    
+	    <association property="songImage" javaType="songImageExt">
+	        <result property="songImagePathName" column="SONG_IMAGE_PATH_NAME"/>
+	        <result property="songImageName" column="SONG_IMAGE_NAME"/>
+	    </association>
+	</resultMap>
 
 </mapper>

@@ -1,4 +1,4 @@
-package com.kh.soundcast.member.model.dto;
+package com.kh.soundcast.api.auth.model.dto;
 
 import lombok.Getter;
 import lombok.ToString;
