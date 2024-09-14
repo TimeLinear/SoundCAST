@@ -21,4 +21,8 @@ public class ReportService {
 		return reportDao.selectRecentReport();
 	}
 
+	public List<ReportExt> selectReportList() {
+		return reportDao.selectReportList();
+	}
+
 }

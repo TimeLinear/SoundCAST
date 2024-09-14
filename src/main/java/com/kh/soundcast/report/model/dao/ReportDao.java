@@ -19,4 +19,8 @@ public class ReportDao {
 		return session.selectList("report.selectRecentReport");
 	}
 
+	public List<ReportExt> selectReportList() {
+		return session.selectList("report.selectReportList");
+	}
+
 }

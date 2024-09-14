@@ -46,7 +46,7 @@ public interface SongDao {
 
 	int insertDownload(HashMap<String, Object> param);
 	
-	int updateSongStatus(int songNo);
+	int updateSongStatus(List<Integer> deleteList);
 
 	int insertReport(Report report);
 

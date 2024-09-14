@@ -31,4 +31,13 @@ private final ReportService reportService;
 		return list;
 	}
 	
+	
+	@GetMapping("/report/list")
+	public List<ReportExt> selectReportList() {
+		
+		List<ReportExt> list = reportService.selectReportList();
+		log.debug("모든 신고 목록 - {}", list);
+		
+		return list;
+	}
 }

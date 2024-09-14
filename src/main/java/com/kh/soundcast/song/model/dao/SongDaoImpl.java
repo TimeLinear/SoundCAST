@@ -109,8 +109,8 @@ public class SongDaoImpl implements SongDao {
 	
 
 	@Override
-	public int updateSongStatus(int songNo) {
-		return session.update("song.updateSongStatus", songNo);
+	public int updateSongStatus(List<Integer> deleteList) {
+		return session.update("song.updateSongStatus", deleteList);
 	}
 
 	@Override

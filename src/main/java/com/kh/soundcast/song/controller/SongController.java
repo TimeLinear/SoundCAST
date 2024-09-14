@@ -4,8 +4,10 @@ import java.net.MalformedURLException;
 import java.io.FileNotFoundException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -225,20 +227,24 @@ private final SongService service;
 	}
 	
 	@DeleteMapping("/delete")
-	 public int takeDownSong(
-	 	@RequestParam int songNo
-	 		) {
-	 	return service.updateSongStatus(songNo);
-	 }
+	public int disableSong(
+			@RequestParam String deleteListStr
+			) {
+		List<Integer> deleteList = Arrays.stream(deleteListStr.split(","))
+										.map(Integer::parseInt)
+										.collect(Collectors.toList());
+		
+		return service.updateSongStatus(deleteList);
+	}
 	
-	 @PostMapping("/report")
-	 public int reportSong(
-	 	@RequestBody Report report
-	 		) {
-	 	service.insertReport(report);
-	 	log.debug("삽입 결과 - {}", report);
-	 	return report.getReportNo();
-	 }
+	@PostMapping("/report")
+	public int reportSong(
+		@RequestBody Report report
+			) {
+		service.insertReport(report);
+//		log.debug("삽입 결과 - {}", report);
+		return report.getReportNo();
+	}
 		
 	
 	// 관리자 dashboard 관련 음원

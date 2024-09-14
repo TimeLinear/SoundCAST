@@ -55,7 +55,7 @@ public class WebSecurityConfig {
 				.requestMatchers("/member/**").permitAll()  // 누구나 이용가능한 url
 				.requestMatchers("/auth/**").permitAll()
 				.requestMatchers("/song/**").permitAll()
-//				.requestMatchers("/**").permitAll()
+				.requestMatchers("/resource/**").permitAll()
 				.requestMatchers("/**").hasRole("USER") //그외는 user권한이 필요
 				//.requestMatcher("/admin/**").hasRole("ADMIN") authority테이블에 ROLE_ADMIN
 				.anyRequest().authenticated()

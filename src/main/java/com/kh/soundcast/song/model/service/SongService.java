@@ -32,7 +32,7 @@ public interface SongService {
 
 	SongExt selectSong(int songNo);
 	
-	int updateSongStatus(int songNo);
+	int updateSongStatus(List<Integer> deleteList);
 
 	int insertReport(Report report);
 

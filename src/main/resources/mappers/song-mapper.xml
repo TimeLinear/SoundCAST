@@ -375,7 +375,10 @@
 	<update id="updateSongStatus">
 		UPDATE SONG
 		SET SONG_STATUS = 'N'
-		WHERE SONG_NO = #{songNO}
+		WHERE SONG_NO in
+		<foreach collection="list" item="songNo" open="(" separator="," close=")">
+			#{songNo}
+		</foreach>
 	</update>
 	
 
