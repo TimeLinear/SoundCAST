@@ -23,9 +23,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		Path path = FileSystems.getDefault().getRootDirectories().iterator().next();
 		final String osRootPath = path.toString().replace("\\", "");
+		//final String osRootPath = path.toString().substring(0, path.toString().length() - 1);
+		log.debug("리소스 요청 url = {}", osRootPath + uploadBaseDir);
 		
+        // "/images/**" URL 패턴을 외부 디렉토리와 매핑
         registry.addResourceHandler("/resource/**")
                 .addResourceLocations("file:/" + osRootPath + uploadBaseDir)
-                .setCachePeriod(0);
+                .setCachePeriod(0);  // 캐시 기간을 0으로 설정하여 즉시 반영
     }
 }

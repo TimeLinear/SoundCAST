@@ -68,7 +68,7 @@
 			F.SONG_FILE_ORIGIN_NAME,
 			P.SONG_PATH_NAME			
 								
-			FROM SONG S
+		FROM SONG S
 			LEFT JOIN MEMBER M ON (S.SONG_MEMBER_NO = M.MEMBER_NO)
 			LEFT JOIN GENRE G ON (S.SONG_GENRE_NO = G.GENRE_NO)
 			LEFT JOIN MOOD D ON (S.SONG_MOOD_NO = D.MOOD_NO)
@@ -79,8 +79,8 @@
 			LEFT JOIN SONG_FILE F USING (SONG_FILE_NO)
 			LEFT JOIN SONG_PATH P ON (P.SONG_PATH_NO = F.SONG_FILE_SONG_PATH_NO)
 			
-			WHERE SONG_NO = #{songNo}
-				AND SONG_STATUS = 'Y'
+		WHERE SONG_NO = #{songNo}
+		  AND SONG_STATUS = 'Y'
 	</select>
 
 
@@ -112,7 +112,7 @@
 			F.SONG_FILE_ORIGIN_NAME,
 			P.SONG_PATH_NAME			
 								
-			FROM SONG S
+		FROM SONG S
 			LEFT JOIN MEMBER M ON (S.SONG_MEMBER_NO = M.MEMBER_NO)
 			LEFT JOIN GENRE G ON (S.SONG_GENRE_NO = G.GENRE_NO)
 			LEFT JOIN MOOD D ON (S.SONG_MOOD_NO = D.MOOD_NO)
@@ -176,10 +176,16 @@
 			F.SONG_FILE_ORIGIN_NAME,
 			P.SONG_PATH_NAME			
 								
-			FROM (SELECT *
-			    	FROM( SELECT * FROM SONG ORDER BY SONG_CREATE_DATE DESC)
-					WHERE ROWNUM <![CDATA[ <= ]]>20
-			    		AND SONG_PLACE_NO = #{placeNo} ) S
+		FROM (
+			SELECT *
+				FROM(
+					SELECT * 
+					FROM SONG 
+					ORDER BY SONG_CREATE_DATE DESC
+				)
+			WHERE ROWNUM <![CDATA[ <= ]]>20
+			  AND SONG_PLACE_NO = #{placeNo}
+		) S
 			    		
 			LEFT JOIN MEMBER M ON (S.SONG_MEMBER_NO = M.MEMBER_NO)
 			LEFT JOIN GENRE G ON (S.SONG_GENRE_NO = G.GENRE_NO)
@@ -191,7 +197,7 @@
 			LEFT JOIN SONG_FILE F USING (SONG_FILE_NO)
 			LEFT JOIN SONG_PATH P ON (P.SONG_PATH_NO = F.SONG_FILE_SONG_PATH_NO)
 			
-			WHERE SONG_STATUS = 'Y'
+		WHERE SONG_STATUS = 'Y'
 		
 	</select>
 	
@@ -200,10 +206,12 @@
 	<insert id="insertNewSong" parameterType="songFile" useGeneratedKeys="true">
 		
 		INSERT INTO SONG_FILE 
-			VALUES (SEQ_SONG_FILE_NO.NEXTVAL, 
-					#{songFileSongPathNo}, 
-					#{songFileChangeName}, 
-					#{songFileOriginName})
+			VALUES (
+				SEQ_SONG_FILE_NO.NEXTVAL, 
+				#{songFileSongPathNo}, 
+				#{songFileChangeName}, 
+				#{songFileOriginName}
+			)
 					
 		<selectKey keyProperty="songFileNo" resultType="int" order="AFTER">
 			SELECT SEQ_SONG_FILE_NO.CURRVAL FROM DUAL
@@ -214,9 +222,11 @@
 	<insert id="insertNewImage" parameterType="songImage" useGeneratedKeys="true">
 		
 		INSERT INTO SONG_IMAGE 
-			VALUES (SEQ_SONG_IMAGE_NO.NEXTVAL, 
-					#{songImagePathNo}, 
-					#{songImageName})
+			VALUES (
+				SEQ_SONG_IMAGE_NO.NEXTVAL, 
+				#{songImagePathNo}, 
+				#{songImageName}
+			)
 					
 		<selectKey keyProperty="songImageNo" resultType="int" order="AFTER">
 			SELECT SEQ_SONG_IMAGE_NO.CURRVAL FROM DUAL
@@ -273,7 +283,7 @@
 			F.SONG_FILE_ORIGIN_NAME,
 			P.SONG_PATH_NAME			
 			
-			FROM SONG S
+		FROM SONG S
 			    		
 			LEFT JOIN MEMBER M ON (S.SONG_MEMBER_NO = M.MEMBER_NO)
 			LEFT JOIN GENRE G ON (S.SONG_GENRE_NO = G.GENRE_NO)
@@ -285,8 +295,8 @@
 			LEFT JOIN SONG_FILE F USING (SONG_FILE_NO)
 			LEFT JOIN SONG_PATH P ON (P.SONG_PATH_NO = F.SONG_FILE_SONG_PATH_NO)
 			
-			WHERE SONG_MEMBER_NO = #{mNo}
-				AND SONG_STATUS = 'Y'
+		WHERE SONG_MEMBER_NO = #{mNo}
+		  AND SONG_STATUS = 'Y'
 	
 	</select>
 

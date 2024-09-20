@@ -47,7 +47,6 @@ public class SongController {
 	
 private final SongService service;
 	
-	@CrossOrigin(origins = {"http://localhost:3000"})
 	@GetMapping("/search")
 	public List<Song> selectSongList(
 			@RequestParam String keyword,
@@ -76,9 +75,6 @@ private final SongService service;
 		return result;
 	}
 	
-
-	
-	@CrossOrigin(origins = {"http://localhost:3000"})
 	@GetMapping("/genres")
 	public List<Genre> selectAllGenres() {
 		
@@ -88,7 +84,6 @@ private final SongService service;
 		return genres;
 	}
 	
-	@CrossOrigin(origins = {"http://localhost:3000"})
 	@GetMapping("/moods")
 	public List<Mood> selectAllMoods(){
 		
@@ -99,7 +94,6 @@ private final SongService service;
 	
 	
 	//update 수정 - 2024-08-30
-	@CrossOrigin(origins = {"http://localhost:3000"})
 	@PutMapping("/update/{songNo}")
 	public ResponseEntity<List<Song>> updateSong(
 			@PathVariable int songNo,
@@ -161,7 +155,6 @@ private final SongService service;
 	@Value("${file.upload-dir}")
 	private String uploadBaseDir;
 	
-	@CrossOrigin(origins = {"http://localhost:3000"})
 	@GetMapping("/download/{songNo}")
 	public ResponseEntity<Resource> downloadSong(
 			@PathVariable int songNo,
@@ -248,9 +241,8 @@ private final SongService service;
 		
 	
 	// 관리자 dashboard 관련 음원
-	@CrossOrigin(origins = {"*"})
 	@GetMapping("/top5Music")
-	public List<SongExt> selectTop5Music(/*HttpServletResponse response*/){
+	public List<SongExt> selectTop5Music(){
 		
 		List<SongExt> list = service.selectTop5Music();
 		log.debug("list {}", list);
@@ -258,9 +250,8 @@ private final SongService service;
 		return list;
 	}
 	
-	@CrossOrigin(origins = {"*"})
 	@GetMapping("/newMusic")
-	public List<SongExt> selectNewMusic(/*HttpServletResponse response*/){
+	public List<SongExt> selectNewMusic(){
 		
 		List<SongExt> list = service.selectNewMusic();
 		log.debug("list {}", list);

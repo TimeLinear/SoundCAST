@@ -32,12 +32,6 @@
 			<result column="MEMBER_BANNER_PATH" property="memberBannerPath" />
 		</association>
 
-		<!--       <association property="memberGrade" javaType="memberGrade">
-           <id column="MEMBER_GRADE_NO" property="memberGradeNo"/>
-           <result column="MEMBER_GRADE_NAME" property="memberGradeName"/>
-       </association>
-       -->
-
 		<association property="memberSocial" javaType="memberSocial">
 			<id column="MEMBER_SOCIAL_MEMBER_NO" property="memberSocialMemberNo" />
 			<result column="MEMBER_SOCIAL_SOCIAL_NAME"
@@ -61,28 +55,28 @@
 	</resultMap>
 
 	<select id="loadUserByUsername" resultMap="memberExtMap">
-		SELECT 
-			MEMBER_NO ,
-			PROFILE_IMAGE_PATH,
-			MEMBER_BANNER_PATH,
-			MEMBER_SOCIAL_SOCIAL_NAME,
-			MEMBER_SOCIAL_SOCIAL_ID,
-			MEMBER_NICKNAME, 
-			MEMBER_EMAIL, 
-			MEMBER_INTRODUCE, 
-			MEMBER_GRADE_NAME
+		SELECT
+		MEMBER_NO ,
+		PROFILE_IMAGE_PATH,
+		MEMBER_BANNER_PATH,
+		MEMBER_SOCIAL_SOCIAL_NAME,
+		MEMBER_SOCIAL_SOCIAL_ID,
+		MEMBER_NICKNAME,
+		MEMBER_EMAIL,
+		MEMBER_INTRODUCE,
+		MEMBER_GRADE_NAME
 		FROM MEMBER
-			JOIN MEMBER_SOCIAL ON MEMBER_SOCIAL_MEMBER_NO = MEMBER_NO
-			JOIN MEMBER_GRADE USING(MEMBER_GRADE_NO)
-			JOIN MEMBER_BANNER USING(MEMBER_BANNER_NO)
-			JOIN PROFILE_IMAGE ON MEMBER_PROFILE_IMAGE_NO = PROFILE_IMAGE_NO
+		JOIN MEMBER_SOCIAL ON MEMBER_SOCIAL_MEMBER_NO = MEMBER_NO
+		JOIN MEMBER_GRADE USING(MEMBER_GRADE_NO)
+		JOIN MEMBER_BANNER USING(MEMBER_BANNER_NO)
+		JOIN PROFILE_IMAGE ON MEMBER_PROFILE_IMAGE_NO = PROFILE_IMAGE_NO
 
 		WHERE
-			MEMBER_SOCIAL_SOCIAL_ID = #{socialId}
-				AND
-			MEMBER_SOCIAL_SOCIAL_NAME = #{socialType}
-				AND
-			MEMBER_STATUS = 'Y'
+		MEMBER_SOCIAL_SOCIAL_ID = #{socialId}
+		AND
+		MEMBER_SOCIAL_SOCIAL_NAME = #{socialType}
+		AND
+		MEMBER_STATUS = 'Y'
 	</select>
 
 	<resultMap id="memberExtMap2" type="memberExt">
@@ -100,37 +94,39 @@
 
 	<select id="selectFollowerCount" resultType="int">
 		SELECT
-			COUNT(FOLLOW_TARGET_MEMBER_NO) AS FOLLOWER_COUNT
+		COUNT(FOLLOW_TARGET_MEMBER_NO) AS FOLLOWER_COUNT
 		FROM
-			FOLLOW
+		FOLLOW
 		WHERE
-			FOLLOW_TARGET_MEMBER_NO = #{mNo}
+		FOLLOW_TARGET_MEMBER_NO = #{mNo}
 		GROUP BY FOLLOW_TARGET_MEMBER_NO
 
 	</select>
 
 	<select id="selectFollowList" resultMap="memberExtMap2">
 		SELECT
-			FOLLOW.FOLLOW_TARGET_MEMBER_NO AS MEMBER_NO,
-			TARGET_MEMBER.MEMBER_NICKNAME AS MEMBER_NICKNAME,
-			TARGET_MEMBER.MEMBER_EMAIL AS MEMBER_EMAIL,
-			PROFILE_IMAGE.PROFILE_IMAGE_PATH AS PROFILE_IMAGE_PATH,
-			PROFILE_IMAGE.PROFILE_IMAGE_NO AS PROFILE_IMAGE_NO
+		FOLLOW.FOLLOW_TARGET_MEMBER_NO AS MEMBER_NO,
+		TARGET_MEMBER.MEMBER_NICKNAME AS MEMBER_NICKNAME,
+		TARGET_MEMBER.MEMBER_EMAIL AS MEMBER_EMAIL,
+		PROFILE_IMAGE.PROFILE_IMAGE_PATH AS PROFILE_IMAGE_PATH,
+		PROFILE_IMAGE.PROFILE_IMAGE_NO AS PROFILE_IMAGE_NO
 		FROM MEMBER
-			LEFT JOIN FOLLOW ON FOLLOW.FOLLOW_MEMBER_NO = MEMBER.MEMBER_NO
-			LEFT JOIN MEMBER TARGET_MEMBER ON FOLLOW.FOLLOW_TARGET_MEMBER_NO = TARGET_MEMBER.MEMBER_NO
-			LEFT JOIN PROFILE_IMAGE ON TARGET_MEMBER.MEMBER_PROFILE_IMAGE_NO = PROFILE_IMAGE.PROFILE_IMAGE_NO
+		LEFT JOIN FOLLOW ON FOLLOW.FOLLOW_MEMBER_NO = MEMBER.MEMBER_NO
+		LEFT JOIN MEMBER TARGET_MEMBER ON FOLLOW.FOLLOW_TARGET_MEMBER_NO =
+		TARGET_MEMBER.MEMBER_NO
+		LEFT JOIN PROFILE_IMAGE ON TARGET_MEMBER.MEMBER_PROFILE_IMAGE_NO =
+		PROFILE_IMAGE.PROFILE_IMAGE_NO
 
 		WHERE MEMBER.MEMBER_NO =#{mNo}
-		  AND MEMBER.MEMBER_STATUS = 'Y'
+		AND MEMBER.MEMBER_STATUS = 'Y'
 
 	</select>
 
 	<select id="selectComment">
 		SELECT
-			COMMENT_NO, COMMENT_WRITER_MEMBER_NO, COMMENT_TEXT
+		COMMENT_NO, COMMENT_WRITER_MEMBER_NO, COMMENT_TEXT
 		FROM "COMMENT"
-			WHERE COMMENT_MEMBER_NO = #{mNo}
+		WHERE COMMENT_MEMBER_NO = #{mNo}
 		ORDER BY COMMENT_NO DESC
 
 	</select>
@@ -139,43 +135,29 @@
 	<insert id="insertMember" useGeneratedKeys="true">
 		<selectKey resultType="int" order="BEFORE" keyProperty="memberNo">
 			SELECT SEQ_MEMBER_NO.NEXTVAL FROM DUAL
-		</selectKey>
-		INSERT INTO
-			MEMBER 
-		VALUES ( 
-			#{memberNo},
-			#{profileImage.profileImageNo}, 
-			DEFAULT,
-			DEFAULT, 
-			#{memberNickname}, 
-			#{memberEmail}, 
-			DEFAULT, 
-			DEFAULT, 
-			DEFAULT, 
-			DEFAULT ) 
-	</insert>
+		</selectKey> INSERT INTO
+		MEMBER VALUES ( #{memberNo}, #{profileImage.profileImageNo}, DEFAULT,
+		DEFAULT, #{memberNickname}, #{memberEmail}, DEFAULT, DEFAULT, DEFAULT,
+		DEFAULT ) </insert>
 
 
-	<insert id="insertProfileImage" parameterType="memberExt" useGeneratedKeys="true">
-	
+	<insert id="insertProfileImage" parameterType="memberExt"
+		useGeneratedKeys="true">
+
 		<selectKey resultType="int" order="BEFORE"
 			keyProperty="profileImage.profileImageNo">
 			SELECT SEQ_MEMBER_PROFILE_IMAGE_NO.NEXTVAL FROM DUAL
 		</selectKey>
+		INSERT INTO PROFILE_IMAGE VALUES( #{profileImage.profileImageNo},
+		#{profileImage.profileImagePath} ) </insert>
 
-		INSERT INTO PROFILE_IMAGE 
-		VALUES( #{profileImage.profileImageNo},
-		#{profileImage.profileImagePath} )
-	 </insert>
-	 
-	 
-	 
+
 	<insert id="insertMemberSocial">
 		INSERT INTO MEMBER_SOCIAL
 		VALUES(
-			#{memberNo},
-			#{memberSocial.memberSocialSocialName},
-			#{memberSocial.memberSocialSocialId}
+		#{memberNo},
+		#{memberSocial.memberSocialSocialName},
+		#{memberSocial.memberSocialSocialId}
 		)
 
 	</insert>

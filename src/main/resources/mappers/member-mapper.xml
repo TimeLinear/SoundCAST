@@ -34,11 +34,7 @@
            <id column="MEMBER_BANNER_NO" property="memberBannerNo"/>
            <result column="MEMBER_BANNER_PATH" property="memberBannerPath"/>
        </association>
-<!--       <association property="memberGrade" javaType="memberGrade">
-           <id column="MEMBER_GRADE_NO" property="memberGradeNo"/>
-           <result column="MEMBER_GRADE_NAME" property="memberGradeName"/>
-       </association>
-       -->
+
        <association property="memberSocial" javaType="memberSocial">
            <id column="MEMBER_SOCIAL_MEMBER_NO" property="memberSocialMemberNo"/>
            <result column="MEMBER_SOCIAL_SOCIAL_NAME" property="memberSocialSocialName"/>
@@ -307,43 +303,31 @@
    
    <!-- 수정한 회원 정보 가져오기 종료-->
  
- <select id="loadUserByUsername" resultMap="memberExtMap">
-      SELECT MEMBER_NO , PROFILE_IMAGE_PATH, MEMBER_BANNER_PATH, MEMBER_SOCIAL_SOCIAL_NAME, MEMBER_SOCIAL_SOCIAL_ID,
-            MEMBER_NICKNAME, MEMBER_EMAIL, MEMBER_INTRODUCE, MEMBER_GRADE_NAME
-      FROM MEMBER
+	<select id="loadUserByUsername" resultMap="memberExtMap">
+		SELECT 
+			MEMBER_NO,
+			PROFILE_IMAGE_PATH,
+			MEMBER_BANNER_PATH,
+			MEMBER_SOCIAL_SOCIAL_NAME,
+			MEMBER_SOCIAL_SOCIAL_ID,
+            MEMBER_NICKNAME,
+            MEMBER_EMAIL,
+            MEMBER_INTRODUCE,
+            MEMBER_GRADE_NAME
+		FROM MEMBER
       		JOIN MEMBER_SOCIAL ON MEMBER_SOCIAL_MEMBER_NO = MEMBER_NO
       		JOIN MEMBER_GRADE USING(MEMBER_GRADE_NO)
       		JOIN MEMBER_BANNER USING(MEMBER_BANNER_NO)
       		JOIN PROFILE_IMAGE ON MEMBER_PROFILE_IMAGE_NO = PROFILE_IMAGE_NO
       		
-      WHERE
-         MEMBER_SOCIAL_SOCIAL_ID = #{socialId} 
-         AND
-         MEMBER_SOCIAL_SOCIAL_NAME = #{socialType}
-         AND
-         MEMBER_STATUS = 'Y'
+		WHERE
+			MEMBER_SOCIAL_SOCIAL_ID = #{socialId} 
+			AND
+			MEMBER_SOCIAL_SOCIAL_NAME = #{socialType}
+			AND
+			MEMBER_STATUS = 'Y'
    </select>
  	
- 	<!--각 칼럼의 FOLLOW 리스트와 COUNT를 구하는 쿼리
-SELECT
-    fm.MEMBER_NO AS FOLLOW_MEMBER_NO,
-    ft.MEMBER_NO AS FOLLOW_TARGET_MEMBER_NO,
-    COUNT(f.FOLLOW_MEMBER_NO) AS FOLLOW_COUNT,
-    GROUP_CONCAT(f.FOLLOW_TARGET_MEMBER_NO) AS FOLLOW_LIST
-FROM
-    FOLLOW f
-JOIN
-    MEMBER fm ON f.FOLLOW_MEMBER_NO = fm.MEMBER_NO
-JOIN
-    MEMBER ft ON f.FOLLOW_TARGET_MEMBER_NO = ft.MEMBER_NO
-GROUP BY
-    f.FOLLOW_MEMBER_NO;
- 	
- 	-->
- 	
- 	
- 	
- 
  	<!-- 관리자페이지 시작 -->
 
  	<select id="selectMembers" resultMap="memberResultMap">
@@ -356,7 +340,7 @@ GROUP BY
 	</select>
 	
 	<resultMap id="memberResultMap" type="memberExt">
-	    <id property="memberNo" column="member_no"/>
+		<id property="memberNo" column="member_no"/>
 	    <result property="memberNickname" column="member_nickname"/>
 	    <result property="memberEmail" column="member_email"/>
 	    

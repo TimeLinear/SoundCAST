@@ -20,41 +20,4 @@ public class GoogleApi {
 	@Value("{google.client.id")
 	private String clientId;
 	
-	
-	
-	
-	
-	
-//
-//	private final WebClient webClient;
-//	private static final String GOOGLE_USER_INFO_URI ="https://www.googleapis.com/userinfo/v2/me";
-//	
-//	public String token(String credential) {
-//		Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(credential);
-//		System.out.println(claims.getBody().getSubject());
-//		return claims.getBody().getSubject();
-//		
-//	}
-//	
-//	
-//	
-//	
-//	
-//	public GoogleUserInfoResponse getuserInfo(String credential) {
-//		
-//		
-//		
-//		
-//		
-////		
-////		webClient.get()
-////				.uri(GOOGLE_USER_INFO_URI)
-////				.header("Authorization", "Bearer "+)
-////		
-//		
-//		
-//		
-//		return null;
-//	}
-
 }
