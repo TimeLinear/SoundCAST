@@ -41,22 +41,18 @@ public class AuthController {
 
 		switch (socialType) {
 		case "kakao":
-
 			map = authService.authCheck(socialType, param);
-
 			break;
 
 		case "google":
-
 			// 1) 회원 가입되어있는지 체크
 			log.info("구글로그인회원가입체크={}", param);
 			map = authService.authCheck(socialType, param);
 			break;
 			
-		 case "naver":
-			    map = authService.authCheck(socialType, param);
-				break;
-				
+		case "naver":
+			map = authService.authCheck(socialType, param);
+			break;
 
 		default:
 			throw new IllegalArgumentException("Unsupported socialType: " + socialType);
