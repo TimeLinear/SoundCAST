@@ -29,12 +29,10 @@ private final SqlSessionTemplate session;
 	private String uploadBaseDir; 
 
 	public MemberExt loadUserByUsername(String socialType, String socialId) {
-		log.debug("전달된 loadUser param - socialType={}, socialId={}", socialType, socialId);
 		Map<String,Object> param = new HashMap<>();
 		param.put("socialType", socialType);
 		param.put("socialId", socialId);
 		
-		log.info("Dao param={}",param);
 		return session.selectOne("auth.loadUserByUsername", param);
 		
 	}

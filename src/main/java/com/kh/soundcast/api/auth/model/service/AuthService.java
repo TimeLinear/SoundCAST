@@ -101,19 +101,14 @@ public class AuthService {
 		
 		}
 		
-		
 		//현재 app 에 사용자 정보 유무 조회
 		MemberExt member = dao.loadUserByUsername(socialType, socialId);
-		
-		int mNo = member.getMemberNo();
-		
+
 		if(member != null) {
+			int mNo = member.getMemberNo();
 			// 팔로우 정보들 가져오기
 			List<MemberExt> following = dao.selectFollowList(mNo);
 			int follower = dao.selectFollower(mNo);
-			log.debug("팔로잉, 팔로워 = {}, {}", following, follower);
-			log.debug("mNo = {}", mNo);
-			
 			if(following.get(0) == null) {
 				following.clear();
 			}
@@ -122,18 +117,12 @@ public class AuthService {
 			member.setFollower(follower);
 		}
 		
-		
-		
-		log.info("service m = {}", member);
-		
 		HashMap<String, Object> map = new HashMap<>();	
 		HashMap<String, Object> userPk = new HashMap<>();	
 		
 		userPk.put("socialId", socialId);
 		userPk.put("socialType", socialType);
 		String ACCESS_TOKEN = jwtProvider.createToken(userPk);	
-		
-		log.debug("만든 엑세스 토큰 - {}", ACCESS_TOKEN);
 
 		map.put("jwtToken", ACCESS_TOKEN);
 		map.put("member", member);
@@ -153,7 +142,8 @@ public class AuthService {
 		if (member == null) {
 
 			MemberExt m = MemberExt.builder().profileImage(new ProfileImage(0, googleUserInfo(credential).getPicture()))
-					.memberSocial(new MemberSocial(0, googleUserInfo(credential).getSub(), socialType)).memberNickname(googleUserInfo(credential).getName())
+					.memberSocial(new MemberSocial(0, googleUserInfo(credential).getSub(), socialType))
+					.memberNickname(googleUserInfo(credential).getName())
 					.memberEmail(googleUserInfo(credential).getEmail()).build();
 
 			result *= dao.insertProfileImage(m);
@@ -166,8 +156,6 @@ public class AuthService {
 
 			member = (MemberExt) dao.loadUserByUsername(socialType, googleUserInfo(credential).getSub());
 
-//		authDao.countFollow(socialType, userInfo.getSub());
-//		authDao.countFollower(socialType, userInfo.getSub());
 		}
 
 		log.debug("로그인 시도 유저 정보 - {}", member);
