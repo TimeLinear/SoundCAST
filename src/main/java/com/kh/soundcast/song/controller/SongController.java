@@ -55,11 +55,6 @@ private final SongService service;
 			@RequestParam int placeNo 
 			){
 		
-		log.info("keyword ? {}", keyword);
-		log.info("genre ? {}", genre);
-		log.info("mood ? {}", mood);
-		log.info("placeNo ? {}", placeNo);
-		
 		HashMap<String, Object> params = new HashMap<>();
 		
 		params.put("keyword", keyword.toUpperCase());
@@ -69,17 +64,22 @@ private final SongService service;
 		
 		List<Song> result = service.selectSongList(params);
 		
-		log.info("result ? {}", result);
-		log.info("size ? {}", result.size());		
-		
 		return result;
+	}
+	
+	@GetMapping("/detail/{songNo}")
+	public Song selectOneSong(
+				@PathVariable int songNo
+			) {
+		SongExt song = service.selectSong(songNo);
+		
+		return song;
 	}
 	
 	@GetMapping("/genres")
 	public List<Genre> selectAllGenres() {
 		
 		List<Genre> genres = service.selectAllGenres();
-		log.info("genres ? {}", genres);
 		
 		return genres;
 	}
@@ -101,12 +101,6 @@ private final SongService service;
 			@RequestPart(required = false, value="songFile") MultipartFile songFile,
 			@RequestPart(required = false, value="songImage") MultipartFile songImage
 			) {
-		
-		log.info("songNo ? {}", songNo);
-		log.info("songInfo ? {}", songInfo);
-		log.info("songFile ? {}", songFile);
-		log.info("songImage ? {}", songImage);
-	
 		
 		int result = service.updateSong(songNo, songInfo, songFile, songImage);
 		
@@ -130,10 +124,8 @@ private final SongService service;
 			@PathVariable String memberNo
 			) {
 		int mNo = Integer.parseInt(memberNo);
-		log.info("songListMno={}", mNo);
 		List<Song> song = service.getMemberSongList(mNo);
 		
-		log.info("songList?={}", song);
 		return song;
 		
 	}
@@ -182,18 +174,15 @@ private final SongService service;
 				}
 			}
 		}
-		//다운로드 파일 보내기 
-		log.info("songNo ? {}", songNo);
 		
 		SongExt song = service.selectSong(songNo);
-		log.info("song ? {}", song);
 		
 		Path path = FileSystems.getDefault().getRootDirectories().iterator().next();
 		final String osRootPath = path.toString().replace("\\\\", "");
 		
-		String fileReadPath = "file:///"+osRootPath+uploadBaseDir+song.getSongFile().getSongFileSongPathName()
-								+song.getSongFile().getSongFileChangeName();
-		log.info("fileReadPath ? {}", fileReadPath);
+		String fileReadPath = "file:///" + osRootPath + uploadBaseDir
+								+ song.getSongFile().getSongFileSongPathName()
+								+ song.getSongFile().getSongFileChangeName();
 		
 		try {
 			Resource resource = new UrlResource(fileReadPath);

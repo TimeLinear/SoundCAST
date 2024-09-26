@@ -15,6 +15,7 @@
 		<result column="SONG_PLACE_NO" property="songPlaceNo" />
 		<result column="SONG_TITLE" property="songTitle" />
 		<result column="SONG_LICENSE" property="songLicense" />
+		<result column="SONG_DURATION" property="songDuration" />
 		<result column="SONG_DETAIL" property="songDetail" />
 		<result column="SONG_CREATE_DATE" property="songCreateDate" />
 		<result column="SONG_MODIFY_DATE" property="songModifyDate" />
@@ -48,6 +49,7 @@
 			SONG_GENRE_NO, 
 			SONG_IMAGE_NO,
 			SONG_FILE_NO,
+			SONG_DURATION,
 			
 			S.SONG_PLACE_NO,
 			S.SONG_TITLE,
@@ -92,6 +94,7 @@
 			SONG_GENRE_NO, 
 			SONG_IMAGE_NO,
 			SONG_FILE_NO,
+			SONG_DURATION,
 			
 			S.SONG_PLACE_NO,
 			S.SONG_TITLE,
@@ -156,6 +159,7 @@
 			SONG_GENRE_NO, 
 			SONG_IMAGE_NO,
 			SONG_FILE_NO,
+			SONG_DURATION,
 			
 			S.SONG_PLACE_NO,
 			S.SONG_TITLE,
@@ -263,6 +267,7 @@
 			SONG_GENRE_NO, 
 			SONG_IMAGE_NO,
 			SONG_FILE_NO,
+			SONG_DURATION,
 			
 			S.SONG_PLACE_NO,
 			S.SONG_TITLE,
@@ -361,7 +366,8 @@
 			#{songDetail},
 			SYSDATE,
 			SYSDATE,
-			DEFAULT
+			DEFAULT,
+			#{songDuration}
 		)
 	</insert>
 	

@@ -154,10 +154,8 @@ public class MemberController {
 
 	@GetMapping("/memberInfo/{memberNo}")
 	public MemberExt selectOneMember(@PathVariable String memberNo) {
-		log.info("memberNo={}", memberNo);
 		int mNo = Integer.parseInt(memberNo);
 		MemberExt member = memberService.selectOneMember(mNo);
-		log.info("member={}", member);
 		if (!(member == null)) {
 			if (member.getFollowing().get(0) == null) {
 				member.setFollowing(new ArrayList<MemberExt>());
@@ -166,8 +164,6 @@ public class MemberController {
 			return member;
 		}
 		
-		log.info("memberselect={}", member);
-		log.info("멤버페이지팔로잉정보={}",member.getFollowing());
 		return member;
 	}
 
